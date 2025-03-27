@@ -1,0 +1,76 @@
+﻿.sidebar {
+    width: 50px; /* Initially collapsed */
+    height: 100vh;
+    background: #29699A;
+    color: white;
+    padding: 10px;
+    position: fixed;
+    left: 0;
+    top: 0;
+    font-family: Arial, sans-serif;
+    overflow: hidden; /* Prevent content from being visible initially */
+    transition: width 0.3s ease-in-out; /* Smooth transition */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.sidebar.expanded {
+    width: 200px; /* Full width when expanded */
+    overflow: visible;
+}
+
+.sidebar-container {
+    width: 100%;
+}
+
+.sidebar-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%; /* Make sure it takes the full width */
+}
+
+.sidebar-menu li {
+    width: 100%; /* Ensure each list item takes full width */
+}
+
+.sidebar-menu a {
+    display: block;
+    width: 100%;
+    padding: 10px 15px;
+    color: white;
+    text-decoration: none;
+    background: transparent;
+    border-radius: 5px;
+    transition: background 0.3s;
+}
+
+.sidebar-menu a:hover {
+    background: #34495E;
+}
+
+.expand {
+    cursor: pointer;
+    margin-bottom: 10px;
+    text-align: center;
+    width: 100%; /* Make sure expand button is properly aligned */
+}
+
+.submenu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    display: none; /* Hidden initially */
+}
+
+.submenu.active {
+    display: block; /* Show submenu when active */
+}
+
+.submenu a {
+    padding-left: 25px; /* Indent submenu items */
+    width: 100%;
+    display: block;
+}
