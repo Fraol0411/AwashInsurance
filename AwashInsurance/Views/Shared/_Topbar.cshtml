@@ -1,0 +1,86 @@
+﻿<div class="topbar">
+    <div class="topbar-title">
+        <h2>Dashboard</h2>
+    </div>
+    <div class="topbar-actions">
+        <button class="profile-btn">👤 Profile</button>
+        <button class="settings-btn">⚙️ Settings</button>
+
+        <a asp-controller="Login" asp-action="Login" class="logout-btn">
+            🚪 Logout
+        </a>
+    </div>
+
+</div>
+
+<style>
+    .topbar {
+        position: fixed; /* Makes it stay at the top */
+        top: 0; /* Sticks to the top */
+        left: 0;
+        width: 100%; /* Ensures the topbar spans the full width */
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 5px 10px;
+        background-color: #29699A;
+        color: white;
+        font-family: Arial, sans-serif;
+        z-index: 1000; /* Ensures it stays above other elements */
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Optional: Adds shadow effect */
+    }
+
+    .topbar-title h2 {
+        margin: 0;
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .topbar-actions {
+        padding-right: 30px;
+        display: flex;
+        gap: 20px;
+    }
+
+        .topbar-actions button {
+            background: white;
+            color: #29699A;
+            border: none;
+            padding: 4px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+            .topbar-actions button:hover {
+                background: #f0f0f0;
+                transform: scale(1.05);
+            }
+
+            .topbar-actions button:active {
+                transform: scale(0.95);
+            }
+
+    .logout-btn {
+        display: inline-block;
+        padding: 4px 10px;
+        background-color: white; /* Red Logout Button */
+        color: #29699A;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+        transition: background 0.3s ease-in-out;
+       font-size:15px;
+    }
+
+        .logout-btn:hover {
+            background-color: #f0f0f0;
+        }
+
+
+    /* Prevent content from hiding under the fixed topbar */
+    body {
+        padding-top: 60px; /* Adjust this based on topbar height */
+    }
+</style>

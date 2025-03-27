@@ -1,0 +1,281 @@
+﻿@{
+    ViewData["Title"] = "LoginPage";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        /* General Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #1B4F72, #29699A);
+            overflow: hidden;
+        }
+
+        /* Background Bubbles */
+        .bubble {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            filter: blur(3px);
+            animation: float 10s infinite alternate ease-in-out;
+        }
+
+            .bubble:nth-child(1) {
+                left: 10%;
+                top: 20%;
+                animation-duration: 12s;
+            }
+
+            .bubble:nth-child(2) {
+                left: 80%;
+                top: 30%;
+                animation-duration: 10s;
+            }
+
+            .bubble:nth-child(3) {
+                left: 30%;
+                top: 70%;
+                animation-duration: 15s;
+            }
+
+            .bubble:nth-child(4) {
+                left: 60%;
+                top: 80%;
+                animation-duration: 8s;
+            }
+
+            .bubble:nth-child(5) {
+                left: 40%;
+                top: 10%;
+                animation-duration: 13s;
+            }
+
+        @@keyframes float {
+            from
+
+        {
+            transform: translateY(0);
+        }
+
+        to {
+            transform: translateY(-30px);
+        }
+
+        }
+
+        /* Glassmorphism Login Container */
+        .login-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            width: 350px;
+            border-radius: 12px;
+            box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+            .login-container h2 {
+                color: white;
+                font-size: 24px;
+                margin-bottom: 20px;
+            }
+
+        /* Input Fields */
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+            .input-group label {
+                color: white;
+                font-size: 14px;
+                position: absolute;
+                top: 12px;
+                left: 15px;
+                transition: 0.3s;
+            }
+
+            .input-group input {
+                width: 100%;
+                padding: 12px;
+                padding-left: 40px;
+                border: 1px solid rgba(255, 255, 255, 0.3);
+                border-radius: 8px;
+                background: transparent;
+                color: white;
+                font-size: 14px;
+                outline: none;
+            }
+
+                .input-group input:focus {
+                    border-color: white;
+                }
+
+                    .input-group input:focus + label,
+                    .input-group input:not(:placeholder-shown) + label {
+                        top: -10px;
+                        left: 10px;
+                        font-size: 12px;
+                        color: #FFEB3B;
+                    }
+
+        /* Button */
+        .login-btn {
+            background: #FFEB3B;
+            color: #29699A;
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: 0.3s;
+            box-shadow: 0px 4px 0px #C0A905;
+        }
+
+            .login-btn:hover {
+                background: #FFC107;
+            }
+
+            .login-btn:active {
+                transform: translateY(3px);
+                box-shadow: none;
+            }
+
+        /* Forgot Password */
+        .forgot-password {
+            display: block;
+            margin-top: 10px;
+            font-size: 14px;
+            color: white;
+            text-decoration: none;
+            opacity: 0.8;
+        }
+
+            .forgot-password:hover {
+                opacity: 1;
+                text-decoration: underline;
+            }
+
+        /* Dashboard Link */
+        .dashboard-link {
+            margin-top: 15px;
+            display: block;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            opacity: 0.8;
+        }
+
+            .dashboard-link:hover {
+                opacity: 1;
+                text-decoration: underline;
+            }
+
+        /* Animation */
+        @@keyframes fadeIn {
+            from
+
+        {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        }
+
+        .main-container{
+            display: flex;
+            align-items:center;
+            justify-content:center;
+            gap:30px;
+        }
+        .left{
+            width: 350px;
+            background: rgba(255, 255, 255, 0.1);
+            height:354px;
+            background: #eef3f8; /* Soft bluish white */
+            background: #f0f8ff; /* AliceBlue */
+            background: linear-gradient(to right, whitesmoke, #A7BBEC);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            width: 350px;
+            border-radius: 12px;
+            box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: fadeIn 0.8s ease-in-out;
+
+            display:flex;
+            justify-content:center;
+            align-items:center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Floating Bubbles for Background Effect -->
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+
+    <div class="main-container">
+
+        <div class="left">
+            <img src="~/images/logo.png" alt="Login Illustration" style="width: 100%; height: auto; border-radius: 10px;">
+        </div>
+
+
+        <div class="login-container">
+            <h2>Welcome Back</h2>
+
+            <div class="input-group">
+                <input type="text" id="username" placeholder=" " required>
+                <label for="username">Username</label>
+            </div>
+
+            <div class="input-group">
+                <input type="password" id="password" placeholder=" " required>
+                <label for="password">Password</label>
+            </div>
+
+            <button class="login-btn">Login</button>
+
+            <a href="#" class="forgot-password">Forgot Password?</a>
+
+            <a asp-controller="Dashboard" asp-action="Dashboard" class="dashboard-link">Go to Dashboard</a>
+        </div>
+    </div>
+
+  
+
+</body>
+</html>

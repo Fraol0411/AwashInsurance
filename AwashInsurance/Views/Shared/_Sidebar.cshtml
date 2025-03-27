@@ -1,0 +1,139 @@
+﻿
+<div class="sidebar">
+    <div class="sidebar-header">
+        <h2></h2>
+    </div>
+    <ul class="sidebar-menu">
+
+        <li>
+        
+            <a href="#" class="menu-item">Side selection</a>
+            <ul class="submenu">
+                <li><a asp-controller="Styleview" asp-action="Styleview">Layout page</a></li>
+                <li><a href="#">Side selection</a></li>
+                <li>
+                    <a href="#" class="menu-item">Side selection</a>
+                    <ul class="submenu">
+                        <li><a asp-controller="Employees" asp-action="Employees">Side selection</a></li>
+                    </ul>
+                </li>
+               
+            </ul>
+        </li>
+        <li><a asp-controller="Login" asp-action="Login">Logout</a></li>
+    </ul>
+</div>
+
+<style>
+    .sidebar {
+        width: 210px;
+        height: 100vh;
+        background: #29699A;
+        color: white;
+        padding: 20px;
+        position: fixed;
+        left: 0;
+        top: 0;
+        font-family: Arial, sans-serif;
+    }
+
+    .sidebar-header {
+        text-align: center;
+        font-size: 1rem;
+        margin-bottom: 30px;
+        font-weight: bold;
+        margin-bottom: 4rem;
+    }
+
+    .sidebar-menu {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+        .sidebar-menu li {
+            margin: 5px 0; /* Space between list items */
+            border-bottom: 1px solid #2C3E50; /* Add line between items */
+        }
+
+        .sidebar-menu a {
+            text-decoration: none;
+            color: white;
+            font-size: 0.7rem;
+            display: block;
+            padding: 5px;
+            border-radius: 5px;
+            transition: 0.3s;
+            text-align: left; /* Align text to the left */
+        }
+
+            .sidebar-menu a:hover {
+                background: #34495E; /* Highlight on hover */
+            }
+
+    /* Submenu Styles */
+    .menu-item {
+        background-color: #08435F;
+    }
+
+    .submenu {
+        display: none;
+        list-style: none;
+        padding: 0;
+        margin-top: 8px;
+    }
+
+        .submenu li {
+            margin: 1px 0;
+        }
+
+        .submenu a {
+            font-size: 0.7rem;
+            padding-left: 30px; /* Indentation for submenu items */
+            transition: 0.3s;
+        }
+
+            .submenu a:hover {
+                background: #3A5371; /* Change on hover for sub-items */
+            }
+
+        /* Active Submenu */
+        .submenu.active {
+            display: block;
+        }
+
+    /* Indicator for active menu items */
+    .menu-item::after {
+        content: ' ▼';
+        float: right;
+    }
+
+    .submenu.active + .menu-item::after {
+        content: ' ▲';
+    }
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Select all menu items with submenus
+        const menuItems = document.querySelectorAll(".menu-item");
+
+        menuItems.forEach(item => {
+            item.addEventListener("click", function (event) {
+                event.preventDefault(); // Prevent default link behavior
+
+                const submenu = item.nextElementSibling; // Find submenu directly below it
+
+                // If submenu exists, toggle it
+                if (submenu && submenu.classList.contains("submenu")) {
+                    submenu.classList.toggle("active"); // Toggle visibility
+                    item.classList.toggle("active"); // Change indicator
+
+                    // Prevent closing other submenus inside the same parent
+                    event.stopPropagation();
+                }
+            });
+        });
+    });
+
+</script>

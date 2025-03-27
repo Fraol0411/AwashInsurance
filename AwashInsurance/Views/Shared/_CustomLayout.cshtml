@@ -1,0 +1,61 @@
+﻿@{
+    Layout = null; // No master layout, this is the base layout
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/css/style.css" />
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #E9E9E9;
+        }
+
+        .dashboard-container {
+        }
+
+        .main-content {
+            margin-left: 252px;
+            margin-right:30px;
+            padding:20px;
+            
+        }
+
+        .sidebar {
+            
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            @await Html.PartialAsync("_Sidebar") <!-- Sidebar remains fixed -->
+        </aside>
+
+        <main class="dashboard-content">
+            <header class="topbar">
+                @await Html.PartialAsync("_Topbar") <!-- Topbar remains fixed -->
+            </header>
+
+            <section class="main-content" >
+
+                @RenderBody() <!-- The page content loads here -->
+
+                <script src="~/js/transition.js"></script>
+
+            </section>
+        </main>
+    </div>
+
+</body>
+</html>
+
+            @* class="page-transition" *@
