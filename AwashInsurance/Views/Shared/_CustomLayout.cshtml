@@ -21,6 +21,7 @@
         }
 
         .main-content {
+            border:1px,solid,black;
             margin-left: 252px;
             margin-right:30px;
             padding:20px;
@@ -30,6 +31,33 @@
         .sidebar {
             
         }
+
+
+        /*             */
+        .dashboard-container {
+            display: flex;
+            flex-direction:column;
+        }
+
+        .sidebar {
+            width: 60px; /* Collapsed width */
+            transition: width 0.3s ease-in-out;
+        }
+
+            .sidebar.expanded {
+                width: 230px; /* Expanded width */
+            }
+
+        .dashboard-content {
+            flex-grow: 1;
+            transition: margin-left 0.3s ease-in-out;
+            margin-left: 60px; /* Default margin when sidebar is collapsed */
+        }
+
+        .sidebar.expanded + .dashboard-content {
+            margin-left: 230px; /* Adjust margin when sidebar expands */
+        }
+
 
     </style>
 </head>
