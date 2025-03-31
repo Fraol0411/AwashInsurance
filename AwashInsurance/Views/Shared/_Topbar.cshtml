@@ -1,49 +1,48 @@
-﻿<div class="topbar">
-    <div class="topbar-title">
+﻿<div class="custom-topbar">
+    <div class="custom-topbar__title">
         <h2>Dashboard</h2>
     </div>
-    <div class="topbar-actions">
-        <button class="profile-btn">👤 Profile</button>
-        <button class="settings-btn">⚙️ Settings</button>
-
-        <a asp-controller="Login" asp-action="Login" class="logout-btn">
-            🚪 Logout
-        </a>
+    <div class="custom-topbar__actions">
+        <button class="custom-topbar__profile-btn">👤 Profile</button>
+        <form asp-controller="Dashboard" asp-action="Settings" method="get">
+            <button type="submit" class="custom-topbar__settings-btn">⚙️ Settings</button>
+        </form>
+        <form asp-controller="Login" asp-action="Login" method="get">
+            <button type="submit" class="custom-topbar__logout-btn">🚪 Logout</button>
+        </form>
     </div>
-
 </div>
 
 <style>
-    .topbar {
-        position: fixed; /* Makes it stay at the top */
-        top: 0; /* Sticks to the top */
+    .custom-topbar {
+        position: fixed;
+        top: 0;
         left: 0;
-        width: 100%; /* Ensures the topbar spans the full width */
+        width: 100%;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 5px 10px;
+        padding: 8px;
         background-color: #29699A;
         color: white;
         font-family: Arial, sans-serif;
-        z-index: 1000; /* Ensures it stays above other elements */
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Optional: Adds shadow effect */
-        padding:8px;
+        z-index: 1000;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     }
 
-    .topbar-title h2 {
+    .custom-topbar__title h2 {
         margin: 0;
         font-size: 20px;
         font-weight: bold;
     }
 
-    .topbar-actions {
+    .custom-topbar__actions {
         padding-right: 30px;
         display: flex;
         gap: 20px;
     }
 
-        .topbar-actions button {
+        .custom-topbar__actions button {
             background: white;
             color: #29699A;
             border: none;
@@ -51,34 +50,17 @@
             border-radius: 5px;
             cursor: pointer;
             font-weight: bold;
-            font-size:0.75rem;
+            font-size: 0.75rem;
             transition: background 0.3s ease, transform 0.2s ease;
         }
 
-            .topbar-actions button:hover {
+            .custom-topbar__actions button:hover {
                 background: #f0f0f0;
                 transform: scale(1.05);
             }
 
-            .topbar-actions button:active {
+            .custom-topbar__actions button:active {
                 transform: scale(0.95);
             }
 
-    .logout-btn {
-        display: inline-block;
-        padding: 4px 10px;
-        background-color: white; /* Red Logout Button */
-        color: #29699A;
-        text-decoration: none;
-        border-radius: 5px;
-        font-weight: bold;
-        font-size: 0.75rem;
-        transition: background 0.3s ease-in-out;
-    }
-
-        .logout-btn:hover {
-            background-color: #f0f0f0;
-        }
-    body {
-        padding-top: 60px; 
 </style>

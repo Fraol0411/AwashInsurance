@@ -8,5 +8,9 @@ namespace AwashInsurance.Controllers
         {
             return View();
         }
+        public IActionResult Settings()
+        {
+            return View();
+        }
     }
 }

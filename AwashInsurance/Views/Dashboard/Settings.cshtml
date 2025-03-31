@@ -1,0 +1,233 @@
+﻿@{
+    ViewData["Title"] = "Setting";
+    Layout = "~/Views/Shared/_CustomLayout.cshtml";
+}
+
+<style>
+    /* Scoped Styles */
+    .settings-page {
+        font-family: 'Arial', sans-serif;
+        margin: 0;
+        padding: 0;
+ /*        background: #f4f4f4; */
+        margin-top:50px;
+        color: #080808
+
+        
+    }
+
+        /* Settings Page Layout */
+        .settings-page .settings-container {
+            display: flex;
+            /* min-height: 100vh; */
+        }
+
+        /* Sidebar */
+        .settings-page .settings-sidebar {
+            width: 200px;
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            border-radius:8px;
+   
+
+        }
+
+
+            .settings-page .settings-sidebar ul {
+                list-style: none;
+                padding: 0;
+            }
+
+            .settings-page .settings-sidebar li {
+                padding: 12px 15px;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                transition: background 0.3s;
+            }
+
+                .settings-page .settings-sidebar li:hover,
+                .settings-page .settings-sidebar .active {
+                    background: #34495e;
+                }
+
+        /* Main Content */
+        .settings-page .settings-content {
+            flex-grow: 1;
+            padding: 30px;
+        }
+
+        /* Settings Card */
+        .settings-page .settings-card {
+            width:250px;
+            padding: 50px;
+            border-radius: 8px;
+            gap: 201px;
+        }
+
+        /* Profile Section */
+        .settings-page .profile-container {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .settings-page .profile-card{
+            display: flex;
+            align-items: center;
+            flex-direction:column;
+
+        }
+
+        .settings-page .avatar-upload {
+            text-align: center;
+        }
+
+            .settings-page .avatar-upload img {
+                width: 100px;
+                height: 100px;
+                border-radius: 50%;
+                object-fit: cover;
+                border: 3px solid #ddd;
+            }
+
+            .settings-page .avatar-upload label {
+                display: block;
+                margin-top: 10px;
+                color: #2980b9;
+                cursor: pointer;
+                font-weight: bold;
+            }
+
+            .settings-page .avatar-upload input {
+                display: none;
+            }
+
+        /* Forms */
+        .settings-page form {
+            display: flex;
+            flex-direction: column;
+        }
+
+            .settings-page form label {
+                margin-top: 10px;
+                font-weight: bold;
+            }
+
+            .settings-page form input {
+                padding: 10px;
+                margin-top: 5px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+
+            }
+
+        .settings-page button {
+            margin-top: 15px;
+            padding: 10px;
+            background: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+            .settings-page button:hover {
+                background: #219150;
+            }
+
+        .settings-page .edit-btn {
+            background: #2980b9;
+        }
+
+            .settings-page .edit-btn:hover {
+                background: #1f6ea5;
+            }
+
+        /* Two-column layout for forms */
+        .settings-page .settings-grid {
+            display: flex;
+            gap: 20px;
+        }
+
+            .settings-page .settings-grid .settings-card {
+                flex: 1;
+            }
+</style>
+
+
+
+
+<div class="settings-page">
+    <div class="settings-container">
+        <!-- Sidebar -->
+        <aside class="settings-sidebar">
+            <div class="profile-card">
+                <div class="avatar-upload">
+                    <img src="~/images/user.png" id="avatarPreview" alt="User Avatar">
+                </div>
+                <h3>John Doe</h3>
+                <p class="profile-role">Software Developer</p>
+                <p class="profile-role">Adama Branch</p>
+                
+            </div>
+
+@*             <div class="profile-info-card">
+                <ul>
+                    <li><i class="fas fa-briefcase"></i> Founder at XYZ</li>
+                    <li><i class="fas fa-map-marker-alt"></i> Lives in Addis Ababa, Ethiopia</li>
+                    <li><i class="fas fa-envelope"></i> johndoe@example.com</li>
+                    <li><i class="fab fa-twitter"></i> johndoe</li>
+                </ul>
+            </div> *@
+
+@*             <div class="profile-progress-card">
+                <p>Complete Your Profile</p>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 80%;"></div>
+                </div>
+                <button class="complete-profile-btn">Complete Profile</button>
+            </div> *@
+        </aside>
+
+
+        <!-- Main Settings Content -->
+        <main class="settings-content">
+            <!-- Two-column layout for password & email sections -->
+            <div class="settings-grid">
+                <!-- Change Password Section -->
+                <div class="settings-card">
+                    <h2>Change Password</h2>
+                    <form>
+                        <label>Current Password</label>
+                        <input type="password" placeholder="Enter current password">
+
+                        <label>New Password</label>
+                        <input type="password" placeholder="Enter new password">
+
+                        <label>Confirm New Password</label>
+                        <input type="password" placeholder="Confirm new password">
+
+                        <button type="submit">Update Password</button>
+                    </form>
+                </div>
+
+                <!-- Change Email Section -->
+                <div class="settings-card">
+                    <h2>Change Email</h2>
+                    <form>
+                        <label>Current Email</label>
+                        <input type="email" value="johndoe@example.com" readonly>
+
+                        <label>New Email</label>
+                        <input type="email" placeholder="Enter new email">
+
+                        <button type="submit">Update Email</button>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
