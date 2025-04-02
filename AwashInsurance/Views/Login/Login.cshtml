@@ -8,9 +8,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Login | Trading Edge</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* General Styles */
+        /* Modern Reset & Base Styles */
         * {
             margin: 0;
             padding: 0;
@@ -19,263 +20,438 @@
         }
 
         body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0F2D52, #29699A);
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            background: linear-gradient(135deg, #1B4F72, #29699A);
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Animated Background Elements */
+        .bg-element {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(2px);
+            z-index: 0;
+        }
+
+        .bg-element-1 {
+            width: 600px;
+            height: 600px;
+            top: -300px;
+            right: -200px;
+            background: radial-gradient(circle, rgba(41,105,154,0.2) 0%, rgba(15,45,82,0) 70%);
+        }
+
+        .bg-element-2 {
+            width: 400px;
+            height: 400px;
+            bottom: -150px;
+            left: -100px;
+            background: radial-gradient(circle, rgba(255,235,59,0.1) 0%, rgba(41,105,154,0) 70%);
+        }
+
+        /* Trading-Themed Particles */
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+        }
+
+        @@keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+            }
+
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+            }
+        }
+
+        /* Main Container */
+        .hero-container {
+            display: flex;
+            max-width: 1000px;
+            width: 90%;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 1;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @@keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Left Side - Branding */
+        .branding-side {
+            flex: 1;
+            padding: 3rem;
+            background: linear-gradient(135deg, rgba(41,105,154,0.9), rgba(15,45,82,0.9));
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            position: relative;
             overflow: hidden;
         }
 
-        /* Background Bubbles */
-        .bubble {
-            position: absolute;
-            width: 50px;
-            height: 50px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            filter: blur(3px);
-            animation: float 10s infinite alternate ease-in-out;
-        }
-
-            .bubble:nth-child(1) {
-                left: 10%;
-                top: 20%;
-                animation-duration: 12s;
-            }
-
-            .bubble:nth-child(2) {
-                left: 80%;
-                top: 30%;
-                animation-duration: 10s;
-            }
-
-            .bubble:nth-child(3) {
-                left: 30%;
-                top: 70%;
-                animation-duration: 15s;
-            }
-
-            .bubble:nth-child(4) {
-                left: 60%;
-                top: 80%;
-                animation-duration: 8s;
-            }
-
-            .bubble:nth-child(5) {
-                left: 40%;
-                top: 10%;
-                animation-duration: 13s;
-            }
-
-        @@keyframes float {
-            from
-
-        {
-            transform: translateY(0);
-        }
-
-        to {
-            transform: translateY(-30px);
-        }
-
-        }
-
-        /* Glassmorphism Login Container */
-        .login-container {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            padding: 2rem;
-            width: 350px;
-            border-radius: 12px;
-            box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.3);
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            animation: fadeIn 0.8s ease-in-out;
-        }
-
-            .login-container h2 {
-                color: white;
-                font-size: 24px;
-                margin-bottom: 20px;
-            }
-
-        /* Input Fields */
-        .input-group {
-            position: relative;
-            margin-bottom: 20px;
-            text-align: left;
-        }
-
-            .input-group label {
-                color: white;
-                font-size: 14px;
+            .branding-side::before {
+                content: '';
                 position: absolute;
-                top: 12px;
-                left: 15px;
-                transition: 0.3s;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path fill="rgba(255,255,255,0.03)" d="M0,0 L100,0 L100,100 Q50,80 0,100 Z"></path></svg>');
+                background-size: 100% 100%;
+                opacity: 0.5;
             }
 
-            .input-group input {
-                width: 100%;
-                padding: 12px;
-                padding-left: 40px;
-                border: 1px solid rgba(255, 255, 255, 0.3);
-                border-radius: 8px;
-                background: transparent;
-                color: white;
-                font-size: 14px;
-                outline: none;
+        .logo-container {
+            margin-bottom: 2rem;
+            width: 180px;
+            height: 180px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+            .logo-container img {
+                max-width: 100%;
+                height: auto;
+                filter: brightness(0) invert(1);
             }
 
-                .input-group input:focus {
-                    border-color: white;
-                }
+        .branding-text h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
 
-                    .input-group input:focus + label,
-                    .input-group input:not(:placeholder-shown) + label {
-                        top: -10px;
-                        left: 10px;
-                        font-size: 12px;
-                        color: #FFEB3B;
-                    }
+        .branding-text p {
+            font-size: 1rem;
+            opacity: 0.8;
+            max-width: 300px;
+            line-height: 1.6;
+        }
 
-        /* Button */
-        .login-btn {
-            background: #FFEB3B;
-            color: #29699A;
+        .market-indicators {
+            display: flex;
+            gap: 15px;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .indicator {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .indicator-up::before {
+            content: '↑';
+            color: #4CAF50;
+            margin-right: 5px;
+        }
+
+        .indicator-down::before {
+            content: '↓';
+            color: #F44336;
+            margin-right: 5px;
+        }
+
+        /* Right Side - Login Form */
+        .login-side {
+            flex: 1;
+            padding: 3rem;
+            background: rgba(255, 255, 255, 0.95);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-header {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+            .login-header h2 {
+                font-size: 1.8rem;
+                color: #29699A;
+                margin-bottom: 0.5rem;
+            }
+
+            .login-header p {
+                color: #666;
+                font-size: 0.9rem;
+            }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+            .form-group label {
+                display: block;
+                margin-bottom: 0.5rem;
+                color: #444;
+                font-size: 0.9rem;
+                font-weight: 500;
+            }
+
+        .form-control {
             width: 100%;
-            padding: 12px;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+            background: #f9f9f9;
+        }
+
+            .form-control:focus {
+                outline: none;
+                border-color: #29699A;
+                box-shadow: 0 0 0 3px rgba(41,105,154,0.1);
+                background: white;
+            }
+
+        .input-icon {
+            position: absolute;
+            right: 15px;
+            top: 38px;
+            color: #888;
+        }
+
+        /* Button Styles */
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
             border: none;
             border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
             cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-            transition: 0.3s;
-            box-shadow: 0px 4px 0px #C0A905;
-        }
-
-            .login-btn:hover {
-                background: #FFC107;
-            }
-
-            .login-btn:active {
-                transform: translateY(3px);
-                box-shadow: none;
-            }
-
-        /* Forgot Password */
-        .forgot-password {
-            display: block;
-            margin-top: 10px;
-            font-size: 14px;
-            color: white;
-            text-decoration: none;
-            opacity: 0.8;
-        }
-
-            .forgot-password:hover {
-                opacity: 1;
-                text-decoration: underline;
-            }
-
-        /* Dashboard Link */
-        .dashboard-link {
-            margin-top: 15px;
-            display: block;
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-            opacity: 0.8;
-        }
-
-            .dashboard-link:hover {
-                opacity: 1;
-                text-decoration: underline;
-            }
-
-        /* Animation */
-        @@keyframes fadeIn {
-            from
-
-        {
-            opacity: 0;
-            transform: translateY(-20px);
-        }
-
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        }
-
-        .main-container{
-            display: flex;
-            align-items:center;
-            justify-content:center;
-            gap:30px;
-        }
-        .left{
-            width: 350px;
-            background: rgba(255, 255, 255, 0.1);
-            height:354px;
-            background: #eef3f8; /* Soft bluish white */
-            background: #f0f8ff; /* AliceBlue */
-            background: linear-gradient(to right, whitesmoke, #A7BBEC);
-            backdrop-filter: blur(10px);
-            padding: 2rem;
-            width: 350px;
-            border-radius: 12px;
-            box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s;
             text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            animation: fadeIn 0.8s ease-in-out;
+            width: 100%;
+        }
 
-            display:flex;
-            justify-content:center;
-            align-items:center;
+        .btn-primary {
+            background: #29699A;
+            color: white;
+            box-shadow: 0 4px 6px rgba(41,105,154,0.2);
+        }
+
+            .btn-primary:hover {
+                background: #1E4F7A;
+                transform: translateY(-2px);
+                box-shadow: 0 6px 10px rgba(41,105,154,0.3);
+            }
+
+            .btn-primary:active {
+                transform: translateY(0);
+                box-shadow: 0 2px 4px rgba(41,105,154,0.2);
+            }
+
+        /* Additional Links */
+        .login-footer {
+            margin-top: 1.5rem;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+
+            .login-footer a {
+                color: #29699A;
+                text-decoration: none;
+                font-weight: 500;
+            }
+
+                .login-footer a:hover {
+                    text-decoration: underline;
+                }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 1.5rem 0;
+            color: #999;
+            font-size: 0.8rem;
+        }
+
+            .divider::before, .divider::after {
+                content: "";
+                flex: 1;
+                border-bottom: 1px solid #eee;
+            }
+
+            .divider::before {
+                margin-right: 1rem;
+            }
+
+            .divider::after {
+                margin-left: 1rem;
+            }
+
+        /* Responsive Design */
+        @@media (max-width: 768px) {
+            .hero-container {
+                flex-direction: column;
+                width: 95%;
+            }
+
+            .branding-side {
+                padding: 2rem 1.5rem;
+            }
+
+            .login-side {
+                padding: 2rem 1.5rem;
+            }
+
+            .logo-container {
+                width: 120px;
+                height: 120px;
+            }
+
+            .branding-text h1 {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* Trading-Themed Animations */
+        .chart-line {
+            position: absolute;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.2);
+            transform-origin: left center;
+            animation: drawLine 1.5s forwards;
+            opacity: 0;
+        }
+
+        @@keyframes drawLine {
+            0% {
+                transform: scaleX(0);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scaleX(1);
+                opacity: 1;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Background Elements -->
+    <div class="bg-element bg-element-1"></div>
+    <div class="bg-element bg-element-2"></div>
 
-    <!-- Floating Bubbles for Background Effect -->
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
+    <!-- Trading Particles -->
+    <div class="particle" style="width: 8px; height: 8px; top: 20%; left: 15%; animation-delay: 0s;"></div>
+    <div class="particle" style="width: 6px; height: 6px; top: 60%; left: 25%; animation-delay: 2s;"></div>
+    <div class="particle" style="width: 10px; height: 10px; top: 30%; left: 75%; animation-delay: 4s;"></div>
+    <div class="particle" style="width: 5px; height: 5px; top: 80%; left: 65%; animation-delay: 6s;"></div>
 
-    <div class="main-container">
-
-        <div class="left">
-            <img src="~/images/logo.png" alt="Login Illustration" style="width: 100%; height: auto; border-radius: 10px;">
+    <!-- Main Hero Container -->
+    <div class="hero-container">
+        <!-- Branding Side -->
+        <div class="branding-side">
+            <div class="logo-container">
+                <img src="~/images/logo.png" alt="Awash Logo">
+            </div>
+            <div class="branding-text">
+                <h1>Insurance ERP</h1>
+                <p>Your premier platform for Insurance Services</p>
+            </div>
+            <div class="market-indicators">
+                <div class="indicator indicator-up">Health Insurance</div>
+                <div class="indicator indicator-up">MPTP & MCTP</div>
+                <div class="indicator indicator-up">General Ins.</div>
+            </div>
         </div>
 
-
-        <div class="login-container">
-            <h2>Welcome Back</h2>
-
-            <div class="input-group">
-                <input type="text" id="username" placeholder=" " required>
-                <label for="username">Username</label>
+        <!-- Login Side -->
+        <div class="login-side">
+            <div class="login-header">
+                <h2>Welcome Back</h2>
+                <p>Sign in to access your trading dashboard</p>
             </div>
+            <form asp-controller="Dashboard" asp-action="Dashboard" method="post">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" class="form-control" placeholder="Enter your username" required>
+                    <span class="input-icon">👤</span>
+                </div>
 
-            <div class="input-group">
-                <input type="password" id="password" placeholder=" " required>
-                <label for="password">Password</label>
-            </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password" required>
+                    <span class="input-icon">🔒</span>
+                </div>
 
-            <button class="login-btn">Login</button>
-
-            <a href="#" class="forgot-password">Forgot Password?</a>
-
-            <a asp-controller="Dashboard" asp-action="Dashboard" class="dashboard-link">Go to Dashboard</a>
+                <button type="submit" class="btn btn-primary">Login</button>
+            </form>
         </div>
     </div>
 
-  
+    <script>
+        // Create dynamic chart lines in the background
+        document.addEventListener('DOMContentLoaded', function() {
+            const brandingSide = document.querySelector('.branding-side');
 
+            // Create 5 random chart lines
+            for (let i = 0; i < 5; i++) {
+                const line = document.createElement('div');
+                line.className = 'chart-line';
+
+                // Random positioning and styling
+                const top = Math.random() * 80 + 10;
+                const left = Math.random() * 80 + 10;
+                const width = Math.random() * 30 + 20;
+                const delay = Math.random() * 2;
+                const duration = Math.random() * 1 + 0.5;
+
+                line.style.cssText = `
+                    top: ${top}%;
+                    left: ${left}%;
+                    width: ${width}%;
+                    animation-delay: ${delay}s;
+                    animation-duration: ${duration}s;
+                `;
+
+                brandingSide.appendChild(line);
+            }
+        });
+    </script>
 </body>
 </html>
