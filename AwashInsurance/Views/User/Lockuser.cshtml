@@ -1,0 +1,557 @@
+﻿@{
+    ViewData["Title"] = "User Management";
+    Layout = "~/Views/Shared/_CustomLayout.cshtml";
+}
+
+<div class="registration-container">
+    <div class="profile-header">
+        <h2>User Management</h2>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+        <button id="btnAdd" class="action-btn" data-action="add">Add</button>
+        <button id="btnModify" class="action-btn" data-action="modify">Modify</button>
+        <button id="btnDelete" class="action-btn active" data-action="delete">Delete</button>
+        <button id="btnInquire" class="action-btn" data-action="inquire">Inquire</button>
+    </div>
+
+    <!-- All Content Sections -->
+    <div class="form-card">
+        <!-- Add User Form -->
+        <div id="addContent" class="content-section">
+            <form method="post" action="/User/Add">
+                <div class="form-section">
+                    <h3 class="section-title">Add New User</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" name="FullName" required class="form-input" />
+                        </div>
+                        <div class="form-group">
+                            <label>Login ID</label>
+                            <input type="text" name="LoginID" required class="form-input" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Email Address</label>
+                            <input type="email" name="Email" required class="form-input" />
+                        </div>
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <input type="tel" name="Phone" required class="form-input" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>User Role</label>
+                            <select name="UserRole" required class="form-input">
+                                <option value="">Select Role</option>
+                                <option value="Admin">Administrator</option>
+                                <option value="Manager">Manager</option>
+                                <option value="User">Regular User</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Department</label>
+                            <select name="Department" required class="form-input">
+                                <option value="">Select Department</option>
+                                <option value="IT">IT</option>
+                                <option value="HR">Human Resources</option>
+                                <option value="Finance">Finance</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Create User</button>
+                    <button type="reset" class="btn btn-secondary">Clear Form</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Modify User Form -->
+        <div id="modifyContent" class="content-section" style="display:none;">
+            <form method="post" action="/User/Modify">
+                <div class="form-section">
+                    <h3 class="section-title">Modify User</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Search User</label>
+                            <div class="input-with-button">
+                                <input type="text" placeholder="Enter user ID or name" class="form-input" />
+                                <button type="button" class="search-btn">Search</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" name="FullName" class="form-input" />
+                        </div>
+                        <div class="form-group">
+                            <label>Login ID</label>
+                            <input type="text" name="LoginID" readonly class="form-input" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Email Address</label>
+                            <input type="email" name="Email" class="form-input" />
+                        </div>
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <input type="tel" name="Phone" class="form-input" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>User Role</label>
+                            <select name="UserRole" class="form-input">
+                                <option value="">Select Role</option>
+                                <option value="Admin">Administrator</option>
+                                <option value="Manager">Manager</option>
+                                <option value="User">Regular User</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Status</label>
+                            <select name="Status" class="form-input">
+                                <option value="Active">Active</option>
+                                <option value="Inactive">Inactive</option>
+                                <option value="Suspended">Suspended</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Update User</button>
+                    <button type="reset" class="btn btn-secondary">Cancel Changes</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Delete User Form -->
+        <div id="deleteContent" class="content-section" style="display:block;">
+            <form method="post" action="/User/Lock">
+                <div class="form-section">
+                    <h3 class="section-title">User Identification</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Login ID</label>
+                            <div class="input-with-button">
+                                <select name="LoginID" required class="form-input">
+                                    <option value="">Select---</option>
+                                    <option value="user1">user1</option>
+                                    <option value="user2">user2</option>
+                                    <option value="user3">user3</option>
+                                </select>
+                                <button type="button" class="search-btn">Search</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3 class="section-title">User Details</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>User Name</label>
+                            <input type="text" name="UserName" readonly class="form-input" value="John Doe" />
+                        </div>
+                        <div class="form-group">
+                            <label>User Role</label>
+                            <input type="text" name="UserRole" readonly class="form-input" value="Administrator" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3 class="section-title">Locking Details</h3>
+                    <div class="form-grid">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Locking Reason</label>
+                                <textarea name="LockingReason" rows="3" class="form-input" placeholder="Enter reason for locking this account"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Release Type</label>
+                                <select name="ReleaseType" class="form-input">
+                                    <option value="">Select---</option>
+                                    <option value="Automatic">Automatic</option>
+                                    <option value="Manual">Manual</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Release Date Time</label>
+                                <input type="datetime-local" name="ReleaseDateTime" class="form-input" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-danger">Delete</button>
+                    <button type="reset" class="btn btn-secondary">Reset</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Inquire User Form -->
+        <div id="inquireContent" class="content-section" style="display:none;">
+            <div class="form-section">
+                <h3 class="section-title">User Inquiry</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Search Criteria</label>
+                        <div class="input-with-button">
+                            <input type="text" placeholder="Enter user ID, name, or email" class="form-input" />
+                            <button type="button" class="search-btn">Search</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="search-results">
+                    <table class="results-table">
+                        <thead>
+                            <tr>
+                                <th>User ID</th>
+                                <th>Full Name</th>
+                                <th>Role</th>
+                                <th>Status</th>
+                                <th>Last Login</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>user1</td>
+                                <td>John Doe</td>
+                                <td>Administrator</td>
+                                <td>Active</td>
+                                <td>2023-06-15 14:30</td>
+                            </tr>
+                            <tr>
+                                <td>user2</td>
+                                <td>Jane Smith</td>
+                                <td>Manager</td>
+                                <td>Active</td>
+                                <td>2023-06-14 09:15</td>
+                            </tr>
+                            <tr>
+                                <td>user3</td>
+                                <td>Mike Johnson</td>
+                                <td>User</td>
+                                <td>Inactive</td>
+                                <td>2023-05-20 11:45</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* All your original styles preserved */
+    :root {
+        --primary-color: #29699A;
+        --secondary-color: #f8f9fa;
+        --accent-color: #e74c3c;
+        --text-color: #333;
+        --border-color: #ddd;
+        --shadow-color: rgba(0, 0, 0, 0.1);
+        --input-gap: 15px;
+    }
+
+    .registration-container {
+        margin-top: 30px;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .profile-header {
+        background-color: var(--primary-color);
+        color: white;
+        padding: 10px;
+        margin-bottom: 0;
+    }
+
+        .profile-header h2 {
+            margin: 0;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+
+    /* Action buttons styling */
+    .action-buttons {
+        display: flex;
+        gap: 10px;
+        padding: 10px 15px;
+        background: #f5f5f5;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .action-btn {
+        padding: 8px 20px;
+        border: none;
+        border-radius: 4px;
+        background: #e0e0e0;
+        color: var(--text-color);
+        cursor: pointer;
+        font-weight: 500;
+        transition: all 0.3s;
+    }
+
+        .action-btn.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .action-btn:hover:not(.active) {
+            background: #d0d0d0;
+        }
+
+    /* Form card styling */
+    .form-card {
+        padding: 15px;
+    }
+
+    /* Section styling */
+    .form-section {
+        margin-bottom: 1px;
+    }
+
+    .section-title {
+        color: var(--primary-color);
+        margin-bottom: 15px;
+        font-size: 1.2rem;
+        padding-bottom: 5px;
+        border-bottom: 1px solid var(--border-color);
+        width: 400px;
+    }
+
+    /* Form row styling */
+    .form-row {
+        display: flex;
+        gap: 20px;
+    }
+
+    .form-group {
+        flex: 1;
+        min-width: 0;
+        margin-left: 20px;
+    }
+
+        .form-group.full-width {
+            flex: 2;
+        }
+
+    /* Label styling */
+    label {
+        display: block;
+        margin: 10px 0px;
+        font-weight: 500;
+        color: var(--text-color);
+    }
+
+    /* Input styling */
+    .form-input {
+        width: 90%;
+        padding: 10px;
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        font-size: 0.9rem;
+        transition: border-color 0.3s;
+    }
+
+        .form-input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+
+    /* Specific width adjustments */
+    .form-group input.form-input {
+        width: 500px;
+    }
+
+    .form-group select.form-input {
+        width: 520px;
+    }
+
+    .form-group textarea.form-input {
+        width: 520px;
+    }
+
+    /* Input with button */
+    .input-with-button {
+        display: flex;
+        gap: 10px;
+        max-width: 600px;
+    }
+
+        .input-with-button .form-input {
+            flex: 1;
+            width: auto;
+        }
+
+    /* Form actions */
+    .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 25px;
+        padding-top: 15px;
+        border-top: 1px solid var(--border-color);
+    }
+
+    /* Button styling */
+    .btn {
+        padding: 8px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: all 0.3s;
+    }
+
+    .btn-primary {
+        background-color: var(--primary-color);
+        color: white;
+    }
+
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+
+    .btn-danger {
+        background-color: var(--accent-color);
+        color: white;
+    }
+
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+
+    .btn-secondary {
+        background-color: var(--secondary-color);
+        color: var(--text-color);
+    }
+
+        .btn-secondary:hover {
+            background-color: #e2e6ea;
+        }
+
+    /* Search button */
+    .search-btn {
+        padding: 0 15px;
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+        .search-btn:hover {
+            background-color: #2980b9;
+        }
+
+    /* Search results table */
+    .search-results {
+        margin-top: 20px;
+        overflow-x: auto;
+    }
+
+    .results-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+    }
+
+        .results-table th,
+        .results-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .results-table th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .results-table tr:hover {
+            background-color: #f5f5f5;
+        }
+
+    /* Content section management */
+    .content-section {
+        display: none;
+    }
+
+        .content-section.active {
+            display: block;
+        }
+
+    /* Responsive design */
+    @@media (max-width: 768px) {
+        .form-row {
+            flex-direction: column;
+        }
+
+        .form-group {
+            flex: none;
+            width: 100%;
+            margin-left: 0;
+        }
+
+            .form-group input.form-input,
+            .form-group select.form-input,
+            .form-group textarea.form-input {
+                width: 100%;
+            }
+
+        .action-buttons {
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            flex: 1 0 45%;
+            margin-bottom: 5px;
+        }
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get all action buttons and content sections
+        const actionButtons = document.querySelectorAll('.action-btn');
+        const contentSections = document.querySelectorAll('.content-section');
+
+        // Add click event listeners to action buttons
+        actionButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove active class from all buttons
+                actionButtons.forEach(btn => btn.classList.remove('active'));
+
+                // Add active class to clicked button
+                this.classList.add('active');
+
+                // Hide all content sections
+                contentSections.forEach(section => {
+                    section.style.display = 'none';
+                });
+
+                // Show the corresponding content section
+                const action = this.getAttribute('data-action');
+                document.getElementById(`${action}Content`).style.display = 'block';
+            });
+        });
+    });
+</script>

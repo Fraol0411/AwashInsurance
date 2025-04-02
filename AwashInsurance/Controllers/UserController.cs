@@ -4,9 +4,15 @@ namespace AwashInsurance.Controllers
 {
     public class UserController : Controller
     {
-        public IActionResult Index()
+        public IActionResult UserIdentification()
         {
             return View();
         }
+
+        public IActionResult Lockuser()
+        {
+            return View();
+        }
+
     }
 }

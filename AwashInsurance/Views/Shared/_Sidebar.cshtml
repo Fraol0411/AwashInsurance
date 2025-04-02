@@ -7,38 +7,94 @@
         <div class="sidebar-list">
             <ul class="sidebar-menu">
                 <li>
-                    <a href="#" class="menu-item">Side selection</a>
+                    <a href="#" class="menu-item">System Administration</a>
                     <ul class="submenu">
-                        <li><a asp-controller="Styleview" asp-action="Styleview" onclick="hideSidebar()">Layout page</a></li>
-                        <li><a href="#" onclick="hideSidebar()">Side selection</a></li>
                         <li>
-                            <a href="#" class="menu-item">Side selection</a>
+                            <a href="#" class="menu-item">Masters</a>
                             <ul class="submenu">
-                                <li><a asp-controller="Employees" asp-action="Employees" onclick="hideSidebar()">Side selection</a></li>
+                                <li><a asp-controller="Dashboard" asp-action="Dashboard">Company Profile</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="#" class="menu-item">User Management</a>
+                            <ul class="submenu">
+                                <li><a asp-controller="User" asp-action="Lockuser" >Lock User</a></li>
+                                <li><a href="#">Release Lock</a></li>
+                                <li><a asp-controller="User" asp-action="UserIdentification">User Identification</a></li>
                             </ul>
                         </li>
                     </ul>
                 </li>
-
-                  <li>
-                    <a href="#" class="menu-item">Side selection 2</a>
+                <li>
+                    <a href="#" class="menu-item">General Ledger</a>
                     <ul class="submenu">
-                        <li><a asp-controller="Styleview" asp-action="Styleview" onclick="hideSidebar()">Layout page</a></li>
-                        <li><a href="#" onclick="hideSidebar()">Side selection</a></li>
                         <li>
-                            <a href="#" class="menu-item">Side selection</a>
+                            <a href="#">General</a>
                             <ul class="submenu">
-                                <li><a asp-controller="Employees" asp-action="Employees" onclick="hideSidebar()">Side selection</a></li>
+                                <li><a href="#">Bank Branch Identification</a></li>
+                                <li><a href="#">Bank Identification</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#">Process</a>
+                            <ul class="submenu">
+                                <li><a href="#">Exchange Rate</a></li>
                             </ul>
                         </li>
                     </ul>
                 </li>
-
-
+                <li>
+                    <a href="#" class="menu-item">Customer Information</a>
+                    <ul class="submenu">
+                        <li>
+                            <a href="#">Reports</a>
+                            <ul class="submenu">
+                                <li><a href="#">Customer Query</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#" class="menu-item">Marketing</a>
+                    <ul class="submenu">
+                        <li>
+                            <a href="#">Configuration</a>
+                            <ul class="submenu">
+                                <li><a href="#">Renewal Reminder Configuration</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#">Entries</a>
+                            <ul class="submenu">
+                                <li><a href="#">Agent Commission Payment</a></li>
+                                <li><a href="#">Agent License Renewal Reminder</a></li>
+                                <li><a href="#">AIF - Individual</a></li>
+                                <li><a href="#">AIF - Non Individual</a></li>
+                                <li><a href="#">Auxiliary Commission Correction</a></li>
+                                <li><a href="#">Business Source / Auxiliary Type</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#">Reports</a>
+                            <ul class="submenu">
+                                <li><a href="#">Renewal Follow-up Report by C</a></li>
+                                <li><a href="#">Renewal Follow-up Report by P</a></li>
+                                <li><a href="#">Renewal Follow-up Summary R</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><a href="#" class="menu-item">Underwriting</a></li>
+                <li><a href="#" class="menu-item">General Parameters</a></li>
+                <li><a href="#" class="menu-item">Budget</a></li>
+                <li><a href="#" class="menu-item">Claims</a></li>
+                <li><a href="#" class="menu-item">Reinsurance</a></li>
             </ul>
         </div>
     </div>
 </div>
+
 
 <style>
     .sidebar {
@@ -57,7 +113,7 @@
     }
 
         .sidebar.expanded {
-            width: 230px; /* Expanded width */
+            width: 250px; /* Expanded width */
             
         }
 

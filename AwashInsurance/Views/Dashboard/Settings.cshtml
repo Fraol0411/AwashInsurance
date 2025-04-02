@@ -9,9 +9,10 @@
         font-family: 'Arial', sans-serif;
         margin: 0;
         padding: 0;
- /*        background: #f4f4f4; */
         margin-top:50px;
-        color: #080808
+        color: #080808;
+        background-color:white;
+        
 
         
     }
@@ -20,6 +21,7 @@
         .settings-page .settings-container {
             display: flex;
             /* min-height: 100vh; */
+            background: white;
         }
 
         /* Sidebar */
@@ -114,28 +116,32 @@
             .settings-page form label {
                 margin-top: 10px;
                 font-weight: bold;
+
             }
 
-            .settings-page form input {
+        .settings-page .settings-card form input {
                 padding: 10px;
                 margin-top: 5px;
                 border: 1px solid #ccc;
                 border-radius: 4px;
+                width:500px;
 
             }
 
-        .settings-page button {
+        .settings-page .settings-card button {
             margin-top: 15px;
             padding: 10px;
-            background: #27ae60;
+            background: #29699A;
             color: white;
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            width: 520px;
         }
 
             .settings-page button:hover {
-                background: #219150;
+                background: #2c3e50;
+                transition: ease-in-out 0.3s;
             }
 
         .settings-page .edit-btn {
@@ -155,6 +161,15 @@
             .settings-page .settings-grid .settings-card {
                 flex: 1;
             }
+
+    @@media (max-width: 1477px) {
+        .settings-grid {
+            display:flex;
+            flex-direction: column;
+        }
+
+
+    }
 </style>
 
 
