@@ -1,66 +1,325 @@
-﻿<div class="custom-topbar">
-    <div class="custom-topbar__title">
-        <h2>Dashboard</h2>
+﻿<div class="topbar">
+    <div class="topbar-left">
+        <div class="hamburger-menu" onclick="toggleSidebar()">
+            <div class="hamburger-line"></div>
+            <div class="hamburger-line"></div>
+            <div class="hamburger-line"></div>
+        </div>
+        <div class="topbar-title">
+            <h2>Dashboard</h2>
+            <div class="breadcrumb">Insurance ERP / Dashboard</div>
+        </div>
     </div>
-    <div class="custom-topbar__actions">
-        <button class="custom-topbar__profile-btn">👤 Profile</button>
-        <form asp-controller="Dashboard" asp-action="Settings" method="get">
-            <button type="submit" class="custom-topbar__settings-btn">⚙️ Settings</button>
-        </form>
-        <form asp-controller="Login" asp-action="Login" method="get">
-            <button type="submit" class="custom-topbar__logout-btn">🚪 Logout</button>
-        </form>
+
+    <div class="topbar-right">
+        <div class="notifications">
+            <button class="icon-btn notification-btn">
+                <div class="notification-bell">
+                    <div class="bell-top"></div>
+                    <div class="bell-bottom"></div>
+                    <div class="bell-clapper"></div>
+                    <div class="notification-dot"></div>
+                </div>
+            </button>
+        </div>
+
+        <div class="user-profile" id="userProfile">
+            <button class="profile-btn" id="profileButton">
+                <div class="profile-avatar">U</div>
+                <div class="profile-name">User</div>
+                <div class="profile-arrow">▼</div>
+            </button>
+            <div class="profile-dropdown" id="profileDropdown">
+                <form asp-controller="Dashboard" asp-action="Dashboard" method="get">
+                    <button type="submit" class="dropdown-item">
+                        <div class="dropdown-icon">🚪</div>
+                        <span>Home</span>
+                    </button>
+                </form>
+                <form asp-controller="Dashboard" asp-action="Settings" method="get">
+                    <button type="submit" class="dropdown-item">
+                        <div class="dropdown-icon">⚙️</div>
+                        <span>Settings</span>
+                    </button>
+                </form>
+                <form asp-controller="Login" asp-action="Login" method="get">
+                    <button type="submit" class="dropdown-item">
+                        <div class="dropdown-icon">🚪</div>
+                        <span>Logout</span>
+                    </button>
+                </form>
+
+            </div>
+        </div>
     </div>
 </div>
 
 <style>
-    .custom-topbar {
+    /* Topbar Base Styles */
+    .topbar {
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
+        height: 60px;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 8px;
-        background-color: #29699A;
+        padding: 0 20px;
+        background: linear-gradient(90deg, #0F2D52, #29699A);
         color: white;
-        font-family: Arial, sans-serif;
-        z-index: 1000;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        font-family: "Poppins", sans-serif;
+        z-index: 999;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
     }
 
-    .custom-topbar__title h2 {
+    /* Left Section */
+    .topbar-left {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .hamburger-menu {
+        width: 24px;
+        height: 24px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        cursor: pointer;
+        padding: 4px 0;
+    }
+
+    .hamburger-line {
+        height: 2px;
+        width: 100%;
+        background-color: white;
+        transition: all 0.3s ease;
+    }
+
+    .hamburger-menu:hover .hamburger-line {
+        background-color: rgba(255, 255, 255, 0.8);
+    }
+
+    .topbar-title h2 {
         margin: 0;
-        font-size: 20px;
+        font-size: 1.3rem;
+        font-weight: 600;
+    }
+
+    .breadcrumb {
+        font-size: 0.7rem;
+        opacity: 0.8;
+        margin-top: 2px;
+    }
+
+    /* Right Section */
+    .topbar-right {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        padding-right: 30px;
+    }
+
+    /* Notification Bell */
+    .notification-bell {
+        position: relative;
+        width: 20px;
+        height: 20px;
+    }
+
+    .bell-top {
+        position: absolute;
+        top: 0;
+        left: 2px;
+        width: 12px;
+        height: 10px;
+        border: 2px solid white;
+        border-bottom: none;
+        border-radius: 8px 8px 0 0;
+    }
+
+    .bell-bottom {
+        position: absolute;
+        top: 8px;
+        left: 0;
+        width: 16px;
+        height: 8px;
+        border: 2px solid white;
+        border-top: none;
+        border-radius: 0 0 8px 8px;
+    }
+
+    .bell-clapper {
+        position: absolute;
+        top: 16px;
+        left: 7px;
+        width: 2px;
+        height: 4px;
+        background-color: white;
+    }
+
+    .notification-dot {
+        position: absolute;
+        top: -2px;
+        right: -2px;
+        width: 8px;
+        height: 8px;
+        background-color: #FF5252;
+        border-radius: 50%;
+        border: 2px solid #29699A;
+    }
+
+    /* Profile Section */
+    .profile-btn {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: none;
+        border: none;
+        color: white;
+        cursor: pointer;
+        padding: 5px 10px;
+        border-radius: 20px;
+        transition: all 0.3s ease;
+    }
+
+        .profile-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+    .profile-avatar {
+        width: 32px;
+        height: 32px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         font-weight: bold;
     }
 
-    .custom-topbar__actions {
-        padding-right: 30px;
-        display: flex;
-        gap: 20px;
+    .profile-name {
+        font-size: 0.9rem;
     }
 
-        .custom-topbar__actions button {
-            background: white;
-            color: #29699A;
-            border: none;
-            padding: 4px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 0.75rem;
-            transition: background 0.3s ease, transform 0.2s ease;
+    .profile-arrow {
+        font-size: 0.7rem;
+        margin-top: 2px;
+        transition: transform 0.3s;
+    }
+
+    /* Dropdown Menu */
+    .profile-dropdown {
+        position: absolute;
+        top: 60px;
+        right: 20px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        padding: 10px 0;
+        min-width: 180px;
+        display: none;
+        z-index: 1000;
+        opacity: 0;
+        transform: translateY(-10px);
+        transition: opacity 0.3s, transform 0.3s;
+    }
+
+        .profile-dropdown.show {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
         }
 
-            .custom-topbar__actions button:hover {
-                background: #f0f0f0;
-                transform: scale(1.05);
-            }
+    .profile-btn.active .profile-arrow {
+        transform: rotate(180deg);
+    }
 
-            .custom-topbar__actions button:active {
-                transform: scale(0.95);
-            }
+    .dropdown-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        width: 100%;
+        padding: 8px 15px;
+        background: none;
+        border: none;
+        text-align: left;
+        color: #333;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
 
+        .dropdown-item:hover {
+            background: #f5f7fa;
+        }
+
+    .dropdown-icon {
+        font-size: 1rem;
+    }
+
+    /* Button States */
+    .icon-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 5px;
+        border-radius: 50%;
+        transition: all 0.3s;
+    }
+
+        .icon-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+    /* Responsive Design */
+    @@media (max-width: 768px) {
+        .topbar
+
+    {
+        padding: 0 10px;
+    }
+
+    .breadcrumb {
+        display: none;
+    }
+
+    .profile-name {
+        display: none;
+    }
+
+    }
 </style>
+
+<script>
+    function toggleSidebar() {
+        const sidebar = document.querySelector('.sidebar');
+        if (sidebar) {
+            sidebar.classList.toggle('expanded');
+        }
+    }
+
+    // Improved dropdown functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const profileButton = document.getElementById('profileButton');
+        const profileDropdown = document.getElementById('profileDropdown');
+
+        // Toggle dropdown when profile button is clicked
+        profileButton.addEventListener('click', function(e) {
+            e.stopPropagation();
+            profileDropdown.classList.toggle('show');
+            profileButton.classList.toggle('active');
+        });
+
+        // Close dropdown when clicking anywhere else
+        document.addEventListener('click', function() {
+            profileDropdown.classList.remove('show');
+            profileButton.classList.remove('active');
+        });
+
+        // Prevent dropdown from closing when clicking inside it
+        profileDropdown.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+    });
+</script>

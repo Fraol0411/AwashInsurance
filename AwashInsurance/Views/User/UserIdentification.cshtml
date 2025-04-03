@@ -3,351 +3,1049 @@
     Layout = "~/Views/Shared/_CustomLayout.cshtml";
 }
 
-<div class="registration-container">
-    <div class="profile-header">
-        <h2>User Registration</h2>
+<div class="form-container">
+    <!-- Form Header -->
+    <div class="form-header">
+        <h2 class="form-title">User Registration</h2>
     </div>
 
-    <div class="form-card">
-        <form method="post" action="/User/Register">
-            <!-- User Identification Section -->
-            <div class="form-section">
-                <h3 class="section-title">User Identification</h3>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Employee Name</label>
-                        <div class="input-with-button">
-                            <input type="text" name="EmployeeName" required />
-                            <button type="button" class="search-btn">Search</button>
-                        </div>
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+        <button id="btnAdd" class="action-btn active" data-action="add">Add</button>
+        <button id="btnModify" class="action-btn" data-action="modify">Modify</button>
+        <button id="btnDelete" class="action-btn" data-action="delete">Delete</button>
+        <button id="btnInquire" class="action-btn" data-action="inquire">Inquire</button>
+    </div>
+
+    <!-- Main Form Content - Add Section (Default) -->
+    <div id="addContent" class="form-body content-section">
+        <form method="post" action="/User/Register" class="form-main">
+            <!-- Section 1: User Identification -->
+            <fieldset class="form-section">
+                <legend class="section-header">
+                    <span class="section-number">1</span>
+                    <h3 class="section-title">User Identification</h3>
+                </legend>
+
+                <div class="form-group">
+                    <label class="form-label">Employee Name</label>
+                    <div class="input-group">
+                        <input type="text" name="EmployeeName" class="form-input" required
+                               placeholder="Enter employee name">
+                        <button type="button" class="input-button search-button">
+                            <span class="button-icon">🔍</span> Search
+                        </button>
                     </div>
                 </div>
-            </div>
+            </fieldset>
 
-            <!-- Employee Details Section -->
-            <div class="form-section">
-                <h3 class="section-title">Employee Details</h3>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Employee Code</label>
-                        <input type="text" name="EmployeeCode" required />
-                    </div>
-                    <div class="form-group">
-                        <label>Father's Name</label>
-                        <input type="text" name="FathersName" required />
-                    </div>
-                    <div class="form-group">
-                        <label>Grandfather's Name</label>
-                        <input type="text" name="GrandFatherName" required />
-                    </div>
-                    <div class="form-group">
-                        <label>Mother's Name</label>
-                        <input type="text" name="MothersName" required />
-                    </div>
-                </div>
-            </div>
+            <!-- Section 2: Employee Details -->
+            <fieldset class="form-section">
+                <legend class="section-header">
+                    <span class="section-number">2</span>
+                    <h3 class="section-title">Employee Details</h3>
+                </legend>
 
-            <!-- Other Details Section -->
-            <div class="form-section">
-                <h3 class="section-title">Other Details</h3>
                 <div class="form-grid">
-                    <!-- Row 1 -->
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Login ID</label>
-                            <input type="text" name="LoginID" required />
-                        </div>
-                        <div class="form-group checkbox-group">
-                            <label>Multi Unit User?</label>
-                            <div class="checkbox-container">
-                                <input type="checkbox" name="MultiUnitUser" />
-                            </div>
+                    <div class="form-group">
+                        <label class="form-label">Employee Code</label>
+                        <input type="text" name="EmployeeCode" class="form-input" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Father's Name</label>
+                        <input type="text" name="FathersName" class="form-input" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Grandfather's Name</label>
+                        <input type="text" name="GrandFatherName" class="form-input" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Mother's Name</label>
+                        <input type="text" name="MothersName" class="form-input" required>
+                    </div>
+                </div>
+            </fieldset>
+
+            <!-- Section 3: Other Details -->
+            <fieldset class="form-section">
+                <legend class="section-header">
+                    <span class="section-number">3</span>
+                    <h3 class="section-title">Other Details</h3>
+                </legend>
+
+                <div class="form-grid otherdetail">
+                    <div class="form-group">
+                        <label class="form-label">Login ID</label>
+                        <input type="text" name="LoginID" class="form-input" required>
+                    </div>
+
+                    <div class="form-group checkbox-group">
+                        <label class="form-label">Multi Unit User?</label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="MultiUnitUser" class="form-checkbox">
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Host Branch</label>
+                        <select name="HostBranch" class="form-select">
+                            <option value="">-- Select --</option>
+                            <!-- Options would be populated dynamically -->
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">User Role</label>
+                        <select name="UserRole" class="form-select">
+                            <option value="">-- Select --</option>
+                            <!-- Options would be populated dynamically -->
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">E-Mail Address</label>
+                        <input type="email" name="EmailAddress" class="form-input">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Office Phone Number</label>
+                        <input type="tel" name="OfficePhoneNumber" class="form-input">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Residence Phone Number</label>
+                        <input type="tel" name="ResidencePhoneNumber" class="form-input">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Mobile Number</label>
+                        <input type="tel" name="MobileNumber" class="form-input">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Validity Period (Days)</label>
+                        <input type="number" name="ValidityPeriod" class="form-input">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Validity Date</label>
+                        <input type="date" name="ValidityDate" class="form-input">
+                    </div>
+
+                    <div class="form-group checkbox-group">
+                        <label class="form-label">Change Password On Next Login</label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="ChangePassword" class="form-checkbox">
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label class="form-label">Remarks</label>
+                        <textarea name="Remarks" rows="3" class="form-textarea"></textarea>
+                    </div>
+                </div>
+            </fieldset>
+
+            <!-- Form Actions -->
+            <div class="form-actions">
+                <button type="button" class="form-button secondary-button">
+                    <span class="button-icon">↻</span> Reset
+                </button>
+                <button type="button" class="form-button danger-button">
+                    <span class="button-icon">🗑</span> Delete
+                </button>
+                <button type="submit" class="form-button primary-button">
+                    <span class="button-icon">✓</span> Save User
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Modify Content Section -->
+    <div id="modifyContent" class="form-body content-section" style="display: none;">
+        <form method="post" action="/User/Modify" class="form-main">
+            <!-- Search Section -->
+            <fieldset class="form-section">
+                <legend class="section-header">
+                    <span class="section-number">1</span>
+                    <h3 class="section-title">Search User</h3>
+                </legend>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Employee Code</label>
+                        <div class="input-group">
+                            <input type="text" name="SearchEmployeeCode" class="form-input" placeholder="Enter employee code">
+                            <button type="button" class="input-button search-button">
+                                <span class="button-icon">🔍</span> Search
+                            </button>
                         </div>
                     </div>
 
-                    <!-- Row 2 -->
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Host Branch</label>
-                            <select name="HostBranch">
-                                <option>-- Select --</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>User Role</label>
-                            <select name="UserRole">
-                                <option>-- Select --</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- Row 3 -->
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>E-Mail Address</label>
-                            <input type="email" name="EmailAddress" />
-                        </div>
-                        <div class="form-group">
-                            <label>Office Phone Number</label>
-                            <input type="text" name="OfficePhoneNumber" />
-                        </div>
-                    </div>
-
-                    <!-- Row 4 -->
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Residence Phone Number</label>
-                            <input type="text" name="ResidencePhoneNumber" />
-                        </div>
-                        <div class="form-group">
-                            <label>Mobile Number</label>
-                            <input type="text" name="MobileNumber" />
-                        </div>
-                    </div>
-
-                    <!-- Row 5 -->
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Validity Period (Days)</label>
-                            <input type="number" name="ValidityPeriod" />
-                        </div>
-                        <div class="form-group">
-                            <label>Validity Date</label>
-                            <input type="date" name="ValidityDate" />
-                        </div>
-                    </div>
-
-                    <!-- Row 6 -->
-                    <div class="form-row">
-                        <div class="form-group checkbox-group">
-                            <label>Change Password On Next Login</label>
-                            <div class="checkbox-container">
-                                <input type="checkbox" name="ChangePassword" />
-                            </div>
-                        </div>
-                        <div class="form-group full-width">
-                            <label>Remarks</label>
-                            <textarea name="Remarks" rows="2"></textarea>
+                    <div class="form-group">
+                        <label class="form-label">Employee Name</label>
+                        <div class="input-group">
+                            <input type="text" name="SearchEmployeeName" class="form-input" placeholder="Enter employee name">
+                            <button type="button" class="input-button search-button">
+                                <span class="button-icon">🔍</span> Search
+                            </button>
                         </div>
                     </div>
                 </div>
-            </div>
 
+                <div class="form-group full-width">
+                    <div class="search-results">
+                        <table class="results-table">
+                            <thead>
+                                <tr>
+                                    <th>Select</th>
+                                    <th>Employee Code</th>
+                                    <th>Employee Name</th>
+                                    <th>Login ID</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Search results would be populated here -->
+                                <tr>
+                                    <td><input type="radio" name="selectedUser" value="1"></td>
+                                    <td>EMP001</td>
+                                    <td>John Doe</td>
+                                    <td>johndoe</td>
+                                    <td>Active</td>
+                                </tr>
+                                <tr>
+                                    <td><input type="radio" name="selectedUser" value="2"></td>
+                                    <td>EMP002</td>
+                                    <td>Jane Smith</td>
+                                    <td>janesmith</td>
+                                    <td>Active</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </fieldset>
+
+            <!-- Modification Form (shown after selection) -->
+            <fieldset class="form-section" id="modifyFormSection" style="display: none;">
+                <legend class="section-header">
+                    <span class="section-number">2</span>
+                    <h3 class="section-title">Modify User Details</h3>
+                </legend>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Login ID</label>
+                        <input type="text" name="ModifyLoginID" class="form-input" readonly>
+                    </div>
+
+                    <div class="form-group checkbox-group">
+                        <label class="form-label">Multi Unit User?</label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="ModifyMultiUnitUser" class="form-checkbox">
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">User Role</label>
+                        <select name="ModifyUserRole" class="form-select">
+                            <option value="">-- Select --</option>
+                            <!-- Options would be populated dynamically -->
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Validity Date</label>
+                        <input type="date" name="ModifyValidityDate" class="form-input">
+                    </div>
+                </div>
+
+                <div class="form-group full-width">
+                    <label class="form-label">Modification Remarks</label>
+                    <textarea name="ModifyRemarks" rows="3" class="form-textarea"></textarea>
+                </div>
+            </fieldset>
+
+            <!-- Form Actions -->
             <div class="form-actions">
-                <button type="submit" class="btn btn-primary">Save</button>
-                <button type="button" class="btn btn-danger">Delete</button>
-                <button type="reset" class="btn btn-secondary">Reset</button>
+                <button type="button" class="form-button secondary-button">
+                    <span class="button-icon">↻</span> Reset
+                </button>
+                <button type="submit" class="form-button primary-button" id="btnSaveModifications" disabled>
+                    <span class="button-icon">✓</span> Save Modifications
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Delete Content Section -->
+    <div id="deleteContent" class="form-body content-section" style="display: none;">
+        <form method="post" action="/User/Delete" class="form-main">
+            <!-- Search Section -->
+            <fieldset class="form-section">
+                <legend class="section-header">
+                    <span class="section-number">1</span>
+                    <h3 class="section-title">Search User to Delete</h3>
+                </legend>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Employee Code</label>
+                        <div class="input-group">
+                            <input type="text" name="DeleteEmployeeCode" class="form-input" placeholder="Enter employee code">
+                            <button type="button" class="input-button search-button">
+                                <span class="button-icon">🔍</span> Search
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Employee Name</label>
+                        <div class="input-group">
+                            <input type="text" name="DeleteEmployeeName" class="form-input" placeholder="Enter employee name">
+                            <button type="button" class="input-button search-button">
+                                <span class="button-icon">🔍</span> Search
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group full-width">
+                    <div class="search-results">
+                        <table class="results-table">
+                            <thead>
+                                <tr>
+                                    <th>Select</th>
+                                    <th>Employee Code</th>
+                                    <th>Employee Name</th>
+                                    <th>Login ID</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Search results would be populated here -->
+                                <tr>
+                                    <td><input type="radio" name="userToDelete" value="1"></td>
+                                    <td>EMP001</td>
+                                    <td>John Doe</td>
+                                    <td>johndoe</td>
+                                    <td>Active</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </fieldset>
+
+            <!-- Confirmation Section (shown after selection) -->
+            <fieldset class="form-section" id="deleteConfirmationSection" style="display: none;">
+                <legend class="section-header">
+                    <span class="section-number">2</span>
+                    <h3 class="section-title">Confirm Deletion</h3>
+                </legend>
+
+                <div class="form-group full-width">
+                    <div class="confirmation-message">
+                        <p>You are about to delete the following user account:</p>
+                        <div class="user-details">
+                            <p><strong>Employee Code:</strong> <span id="deleteEmpCode"></span></p>
+                            <p><strong>Employee Name:</strong> <span id="deleteEmpName"></span></p>
+                            <p><strong>Login ID:</strong> <span id="deleteLoginID"></span></p>
+                        </div>
+                        <p class="warning-text">⚠️ This action cannot be undone. Are you sure you want to proceed?</p>
+                    </div>
+                </div>
+
+                <div class="form-group full-width">
+                    <label class="form-label">Deletion Reason</label>
+                    <textarea name="DeleteReason" rows="3" class="form-textarea" required></textarea>
+                </div>
+            </fieldset>
+
+            <!-- Form Actions -->
+            <div class="form-actions">
+                <button type="button" class="form-button secondary-button">
+                    <span class="button-icon">↻</span> Cancel
+                </button>
+                <button type="submit" class="form-button danger-button" id="btnConfirmDelete" disabled>
+                    <span class="button-icon">🗑</span> Confirm Delete
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Inquire Content Section -->
+    <div id="inquireContent" class="form-body content-section" style="display: none;">
+        <form method="post" action="/User/Inquire" class="form-main">
+            <!-- Search Section -->
+            <fieldset class="form-section">
+                <legend class="section-header">
+                    <span class="section-number">1</span>
+                    <h3 class="section-title">Search User</h3>
+                </legend>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Employee Code</label>
+                        <div class="input-group">
+                            <input type="text" name="InquireEmployeeCode" class="form-input" placeholder="Enter employee code">
+                            <button type="button" class="input-button search-button">
+                                <span class="button-icon">🔍</span> Search
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Employee Name</label>
+                        <div class="input-group">
+                            <input type="text" name="InquireEmployeeName" class="form-input" placeholder="Enter employee name">
+                            <button type="button" class="input-button search-button">
+                                <span class="button-icon">🔍</span> Search
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group full-width">
+                    <div class="search-results">
+                        <table class="results-table">
+                            <thead>
+                                <tr>
+                                    <th>Select</th>
+                                    <th>Employee Code</th>
+                                    <th>Employee Name</th>
+                                    <th>Login ID</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Search results would be populated here -->
+                                <tr>
+                                    <td><input type="radio" name="userToInquire" value="1"></td>
+                                    <td>EMP001</td>
+                                    <td>John Doe</td>
+                                    <td>johndoe</td>
+                                    <td>Active</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </fieldset>
+
+            <!-- User Details Section (shown after selection) -->
+            <fieldset class="form-section" id="userDetailsSection" style="display: none;">
+                <legend class="section-header">
+                    <span class="section-number">2</span>
+                    <h3 class="section-title">User Details</h3>
+                </legend>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Employee Code</label>
+                        <input type="text" class="form-input" id="inquireEmpCode" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Employee Name</label>
+                        <input type="text" class="form-input" id="inquireEmpName" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Login ID</label>
+                        <input type="text" class="form-input" id="inquireLoginID" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">User Role</label>
+                        <input type="text" class="form-input" id="inquireUserRole" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Status</label>
+                        <input type="text" class="form-input" id="inquireStatus" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Created Date</label>
+                        <input type="text" class="form-input" id="inquireCreatedDate" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Last Modified</label>
+                        <input type="text" class="form-input" id="inquireLastModified" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Validity Date</label>
+                        <input type="text" class="form-input" id="inquireValidityDate" readonly>
+                    </div>
+                </div>
+
+                <div class="form-group full-width">
+                    <label class="form-label">Remarks</label>
+                    <textarea class="form-textarea" id="inquireRemarks" readonly></textarea>
+                </div>
+            </fieldset>
+
+            <!-- Form Actions -->
+            <div class="form-actions">
+                <button type="button" class="form-button secondary-button">
+                    <span class="button-icon">↻</span> New Search
+                </button>
+                <button type="button" class="form-button primary-button" id="btnPrintDetails">
+                    <span class="button-icon">🖨</span> Print Details
+                </button>
             </div>
         </form>
     </div>
 </div>
 
 <style>
+    /* Base Variables */
     :root {
+
         --primary-color: #29699A;
+        --primary-light: #3a7cad;
+        --primary-lighter: #e1eaf0;
         --secondary-color: #f8f9fa;
         --accent-color: #e74c3c;
+        --accent-light: #f8e0dd;
+        --success-color: #2ecc71;
         --text-color: #333;
+        --text-light: #666;
         --border-color: #ddd;
-        --shadow-color: rgba(0, 0, 0, 0.1);
-        --input-gap: 15px;
+        --border-radius: 6px;
+        --box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+        --transition: all 0.3s ease;
     }
 
-    .registration-container {
-
-        /* max-width: 1200px; */
-/*         margin: 10px auto; */
-        margin-top:30px;
-        /* background-color: white; */
-        border-radius: 8px;
-      /*   box-shadow: 0 2px 10px var(--shadow-color); */
+    /* Base Form Container */
+    .form-container {
+        margin: 30px auto;
         overflow: hidden;
     }
 
-    .profile-header {
-        background-color: var(--primary-color);
+    /* Form Header */
+    .form-header {
+        background: var(--primary-color);
         color: white;
-        padding: 10px;
-        margin-bottom: 0;
+        padding: 20px 30px;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        border-radius:8px;
     }
 
-        .profile-header h2 {
-            margin: 0;
-            font-size: 1.2rem;
-            text-align:center;
-        }
-
-    .form-card {
-        padding: 15px;
+    .form-title {
+        margin: 0;
+        font-size: 1.5rem;
+        font-weight: 600;
     }
 
-    .form-section {
-        margin-bottom: 1px;
-    }
-
-    .section-title {
-        color: var(--primary-color);
-        margin-bottom: 15px;
-        font-size: 1.2rem;
-        padding-bottom: 5px;
+    /* Action buttons styling */
+    .action-buttons {
+        display: flex;
+        gap: 10px;
+        padding: 10px 15px;
+        background: #f5f5f5;
         border-bottom: 1px solid var(--border-color);
-        width:400px;
     }
 
-    .form-row {
-        display: flex;
-/*         gap: var(--input-gap);
-        margin-bottom: var(--input-gap); */
-        gap:20px;
-    }
-
-    .form-group {
-        flex: 1;
-        min-width: 0;
-        margin-left:20px;
-    }
-
-        .form-group.full-width {
-            flex: 2;
-        }
-
-    .checkbox-group {
-        display: flex;
-        align-items: center;
-        justify-content:space-evenly;
-    }
-
-
-
-    .checkbox-group .checkbox-container {
-          width:300px;
-    }
-
-    label {
-        display: block;
-        margin: 10px 0px;
-        font-weight: 500;
-        color: var(--text-color);
-    }
-
-    input, select, textarea {
-        width: 90%;
-        padding: 10px;
-        border: 1px solid var(--border-color);
-        border-radius: 4px;
-        font-size: 0.9rem;
-        transition: border-color 0.3s;
-  
-    }
-
-        input:focus, select:focus, textarea:focus {
-            border-color: var(--primary-color);
-            outline: none;
-            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
-        }
-
-
-
-
-    .form-group input  {
-        width:500px;
-    }
-
-    .form-group select {
-        width: 520px;
-    }
-
-    .form-group textarea {
-        width: 520px;
-    }
-
-
-
-
-    .input-with-button {
-        display: flex;
-        gap: 10px;
-        max-width:600px;
-    }
-
-        .input-with-button input {
-            flex: 1;
-        }
-
-    .checkbox-container {
-        margin-top: 5px;
-    }
-
-    .form-actions {
-        display: flex;
-        justify-content: flex-end;
-        gap: 10px;
-        margin-top: 25px;
-        padding-top: 15px;
-        border-top: 1px solid var(--border-color);
-    }
-
-    .btn {
+    .action-btn {
         padding: 8px 20px;
         border: none;
         border-radius: 4px;
+        background: #e0e0e0;
+        color: var(--text-color);
         cursor: pointer;
         font-weight: 500;
         transition: all 0.3s;
     }
 
-    .btn-primary {
-        background-color: var(--primary-color);
+        .action-btn.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .action-btn:hover:not(.active) {
+            background: #d0d0d0;
+        }
+
+    /* Form Body */
+    .form-body {
+        padding: 25px 30px;
+    }
+
+    /* Content Sections */
+    .content-section {
+        display: none;
+    }
+
+        .content-section.active {
+            display: block;
+        }
+
+    /* Form Sections */
+    .form-section {
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius);
+        padding: 20px;
+        margin-bottom: 25px;
+        background: #F4FAFF;
+    }
+
+    .section-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .section-number {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        background: var(--primary-color);
         color: white;
+        border-radius: 50%;
+        margin-right: 12px;
+        font-weight: bold;
     }
 
-        .btn-primary:hover {
-            background-color: #2980b9;
-        }
-
-    .btn-danger {
-        background-color: var(--accent-color);
-        color: white;
+    .section-title {
+        margin: 0;
+        font-size: 1.2rem;
+        color: var(--primary-color);
     }
 
-        .btn-danger:hover {
-            background-color: #c0392b;
-        }
-
-    .btn-secondary {
-        background-color: var(--secondary-color);
-        color: var(--text-color);
+    /* Form Grid Layout */
+    .form-grid {
+        display: flex;
+        gap: 60px;
+        flex-wrap: wrap;
     }
 
-        .btn-secondary:hover {
-            background-color: #e2e6ea;
-        }
-
-    .search-btn {
-        padding: 0 15px;
-        background-color: var(--primary-color);
-        color: white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-    }
-
-        .search-btn:hover {
-            background-color: #2980b9;
-        }
-
-    @@media (max-width: 768px) {
-        .form-row
-
-    {
-        flex-direction: column;
-    }
-
+    /* Form Groups */
     .form-group {
-        flex: none;
-        width: 100%;
+        width: 250px;
+        margin-bottom: 15px;
     }
 
+        .form-group.full-width {
+            width: 100%;
+        }
+
+    /* Labels */
+    .form-label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+        color: var(--text-color);
+        font-size: 0.95rem;
+    }
+
+    /* Input Fields */
+    .form-input,
+    .form-select,
+    .form-textarea {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius);
+        font-size: 0.95rem;
+        transition: var(--transition);
+        background: white;
+    }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(41,105,154,0.1);
+        }
+
+        .form-input[readonly],
+        .form-textarea[readonly] {
+            background-color: #f5f5f5;
+            border-color: #e0e0e0;
+        }
+
+    .form-textarea {
+        min-height: 100px;
+        resize: vertical;
+    }
+
+    /* Input Groups */
+    .input-group {
+        display: flex;
+        gap: 10px;
+    }
+
+        .input-group .form-input {
+            flex: 1;
+        }
+
+    /* Checkbox Styles */
+    .checkbox-group {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .checkbox-label {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        position: relative;
+        padding-left: 30px;
+        margin-bottom: 0;
+    }
+
+    .form-checkbox {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        height: 0;
+        width: 0;
+    }
+
+    .checkmark {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 20px;
+        width: 20px;
+        background-color: white;
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+    }
+
+    .checkbox-label:hover .checkmark {
+        background-color: var(--primary-lighter);
+    }
+
+    .form-checkbox:checked ~ .checkmark {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+    .checkmark:after {
+        content: "";
+        position: absolute;
+        display: none;
+    }
+
+    .form-checkbox:checked ~ .checkmark:after {
+        display: block;
+    }
+
+    .checkbox-label .checkmark:after {
+        left: 7px;
+        top: 3px;
+        width: 5px;
+        height: 10px;
+        border: solid white;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+    }
+
+    /* Buttons */
+    .form-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 12px 20px;
+        border: none;
+        border-radius: var(--border-radius);
+        font-size: 0.95rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+
+    .primary-button {
+        background: var(--primary-color);
+        color: white;
+    }
+
+        .primary-button:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+        }
+
+    .secondary-button {
+        background: var(--secondary-color);
+        color: var(--text-color);
+        border: 1px solid var(--border-color);
+    }
+
+        .secondary-button:hover {
+            background: #e2e6ea;
+        }
+
+    .danger-button {
+        background: var(--accent-color);
+        color: white;
+    }
+
+        .danger-button:hover {
+            background: #c0392b;
+        }
+
+    .input-button {
+        padding: 0 15px;
+        border: none;
+        border-radius: var(--border-radius);
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+
+    .search-button {
+        background: var(--primary-color);
+        color: white;
+    }
+
+        .search-button:hover {
+            background: var(--primary-light);
+        }
+
+    .button-icon {
+        margin-right: 8px;
+    }
+
+    /* Form Actions */
+    .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 15px;
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid var(--border-color);
+    }
+
+    /* Search Results Table */
+    .search-results {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .results-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+    }
+
+        .results-table th,
+        .results-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .results-table th {
+            background-color: var(--primary-lighter);
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .results-table tr:hover {
+            background-color: rgba(41, 105, 154, 0.05);
+        }
+
+    /* Confirmation Message */
+    .confirmation-message {
+        padding: 15px;
+        background-color: var(--accent-light);
+        border-left: 4px solid var(--accent-color);
+        margin-bottom: 20px;
+    }
+
+        .confirmation-message p {
+            margin: 5px 0;
+        }
+
+    .user-details {
+        margin: 15px 0;
+        padding: 10px;
+        background-color: white;
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius);
+    }
+
+    .warning-text {
+        color: var(--accent-color);
+        font-weight: 600;
+        margin-top: 15px !important;
+    }
+
+    /* Responsive Design */
+    @@media (max-width: 768px) {
+        .form-container {
+            margin: 15px;
+        }
+
+        .form-header {
+            padding: 15px 20px;
+        }
+
+        .form-body {
+            padding: 15px 20px;
+        }
+
+        .form-grid {
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .form-group {
+            width: 100%;
+        }
+
+        .input-group {
+            flex-direction: column;
+        }
+
+        .form-actions {
+            flex-direction: column;
+        }
+
+        .form-button {
+            width: 100%;
+        }
+
+        .results-table {
+            font-size: 0.85rem;
+        }
+
+            .results-table th,
+            .results-table td {
+                padding: 8px 10px;
+            }
     }
 </style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Focus first input field
+        const firstInput = document.querySelector('.form-input');
+        if (firstInput) firstInput.focus();
+
+        // Get all action buttons and content sections
+        const actionButtons = document.querySelectorAll('.action-btn');
+        const contentSections = document.querySelectorAll('.content-section');
+
+        // Add click event listeners to action buttons
+        actionButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove active class from all buttons
+                actionButtons.forEach(btn => btn.classList.remove('active'));
+
+                // Add active class to clicked button
+                this.classList.add('active');
+
+                // Hide all content sections
+                contentSections.forEach(section => {
+                    section.style.display = 'none';
+                });
+
+                // Show the corresponding content section
+                const action = this.getAttribute('data-action');
+                document.getElementById(`${action}Content`).style.display = 'block';
+            });
+        });
+
+        // Add animation to form sections when they come into view
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = 1;
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.form-section').forEach(section => {
+            section.style.opacity = 0;
+            section.style.transform = 'translateY(20px)';
+            section.style.transition = 'all 0.4s ease-out';
+            observer.observe(section);
+        });
+
+        // Modify section functionality
+        const modifyRadios = document.querySelectorAll('input[name="selectedUser"]');
+        const modifyFormSection = document.getElementById('modifyFormSection');
+        const saveModificationsBtn = document.getElementById('btnSaveModifications');
+
+        modifyRadios.forEach(radio => {
+            radio.addEventListener('change', function() {
+                if (this.checked) {
+                    modifyFormSection.style.display = 'block';
+                    saveModificationsBtn.disabled = false;
+                    // Here you would typically load the user data into the form
+                }
+            });
+        });
+
+        // Delete section functionality
+        const deleteRadios = document.querySelectorAll('input[name="userToDelete"]');
+        const deleteConfirmationSection = document.getElementById('deleteConfirmationSection');
+        const confirmDeleteBtn = document.getElementById('btnConfirmDelete');
+
+        deleteRadios.forEach(radio => {
+            radio.addEventListener('change', function() {
+                if (this.checked) {
+                    const row = this.closest('tr');
+                    document.getElementById('deleteEmpCode').textContent = row.cells[1].textContent;
+                    document.getElementById('deleteEmpName').textContent = row.cells[2].textContent;
+                    document.getElementById('deleteLoginID').textContent = row.cells[3].textContent;
+
+                    deleteConfirmationSection.style.display = 'block';
+                    confirmDeleteBtn.disabled = false;
+                }
+            });
+        });
+
+        // Inquire section functionality
+        const inquireRadios = document.querySelectorAll('input[name="userToInquire"]');
+        const userDetailsSection = document.getElementById('userDetailsSection');
+        const printDetailsBtn = document.getElementById('btnPrintDetails');
+
+        inquireRadios.forEach(radio => {
+            radio.addEventListener('change', function() {
+                if (this.checked) {
+                    const row = this.closest('tr');
+                    document.getElementById('inquireEmpCode').value = row.cells[1].textContent;
+                    document.getElementById('inquireEmpName').value = row.cells[2].textContent;
+                    document.getElementById('inquireLoginID').value = row.cells[3].textContent;
+                    // These would normally come from an API call with more details
+                    document.getElementById('inquireUserRole').value = "Administrator";
+                    document.getElementById('inquireStatus').value = "Active";
+                    document.getElementById('inquireCreatedDate').value = "2023-05-15";
+                    document.getElementById('inquireLastModified').value = "2023-06-20";
+                    document.getElementById('inquireValidityDate').value = "2024-05-15";
+                    document.getElementById('inquireRemarks').value = "System administrator with full access rights";
+
+                    userDetailsSection.style.display = 'block';
+                }
+            });
+        });
+
+        // Print functionality for inquire section
+        printDetailsBtn.addEventListener('click', function() {
+            window.print();
+        });
+    });
+</script>
