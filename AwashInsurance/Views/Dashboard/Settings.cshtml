@@ -1,248 +1,649 @@
 ﻿@{
-    ViewData["Title"] = "Setting";
+    ViewData["Title"] = "User Profile";
     Layout = "~/Views/Shared/_CustomLayout.cshtml";
 }
 
-<style>
-    /* Scoped Styles */
-    .settings-page {
-        font-family: 'Arial', sans-serif;
-        margin: 0;
-        padding: 0;
-        margin-top:50px;
-        color: #080808;
-        background-color:white;
-        
+<div class="user-profile-container">
+    <!-- Form Header -->
+    <div class="user-profile-header">
+        <h2 class="user-profile-title">User Profile Settings</h2>
+    </div>
 
-        
+    <!-- Profile Content -->
+    <div class="user-profile-body">
+        <div class="user-profile-layout">
+            <!-- Profile Sidebar -->
+            <div class="user-profile-sidebar">
+                <div class="user-profile-card">
+                    <div class="user-profile-avatar-upload">
+                        <img src="~/images/user.png" id="userProfileAvatarPreview" alt="User Avatar" class="user-profile-avatar">
+                        <label for="userProfileAvatarInput" class="user-profile-avatar-upload-button">
+                            <span class="user-profile-button-icon">📷</span> Change Photo
+                        </label>
+                        <input type="file" id="userProfileAvatarInput" accept="image/*" style="display: none;">
+                    </div>
+                    <div class="user-profile-info">
+                        <h3 class="user-profile-name">John Doe</h3>
+                        <p class="user-profile-role">Software Developer</p>
+                        <p class="user-profile-branch">Adama Branch</p>
+                        <div class="user-profile-status">
+                            <span class="user-profile-status-badge active">Active</span>
+                            <span class="user-profile-last-login">Last login: Today, 14:30</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <nav class="user-profile-navigation">
+                    <ul>
+                        <li class="user-profile-nav-active" data-section="password">
+                            <span class="user-profile-nav-icon">🔒</span> Password
+                        </li>
+                        <li  data-section="email">
+                            <span class="user-profile-nav-icon">✉️</span> Email
+                        </li>
+                        <li data-section="personal">
+                            <span class="user-profile-nav-icon">👤</span> Personal Info
+                        </li>
+                        <li data-section="security">
+                            <span class="user-profile-nav-icon">🛡️</span> Security
+                        </li>
+                        <li data-section="preferences">
+                            <span class="user-profile-nav-icon">⚙️</span> Preferences
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+
+            <!-- Profile Content Sections -->
+            <div class="user-profile-content">
+                <!-- Password Section -->
+                <div id="userProfilePasswordSection" class="user-profile-content-section active">
+                    <form method="post" action="/Profile/ChangePassword" class="user-profile-form">
+                        <fieldset class="user-profile-form-section">
+                            <legend class="user-profile-section-header">
+                                <span class="user-profile-section-number">1</span>
+                                <h3 class="user-profile-section-title">Change Password</h3>
+                            </legend>
+
+                            <div class="user-profile-form-grid">
+                                <div class="user-profile-form-group">
+                                    <label class="user-profile-form-label">Current Password</label>
+                                    <input type="password" name="CurrentPassword" class="user-profile-form-input" required>
+                                </div>
+
+                                <div class="user-profile-form-group">
+                                    <label class="user-profile-form-label">New Password</label>
+                                    <input type="password" name="NewPassword" class="user-profile-form-input" required>
+                                    <div class="user-profile-password-strength">
+                                        <span class="user-profile-strength-bar"></span>
+                                        <span class="user-profile-strength-bar"></span>
+                                        <span class="user-profile-strength-bar"></span>
+                                        <span class="user-profile-strength-text">Password strength</span>
+                                    </div>
+                                </div>
+
+                                <div class="user-profile-form-group">
+                                    <label class="user-profile-form-label">Confirm New Password</label>
+                                    <input type="password" name="ConfirmPassword" class="user-profile-form-input" required>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <div class="user-profile-form-actions">
+                            <button type="button" class="user-profile-form-button secondary">
+                                <span class="user-profile-button-icon">↻</span> Cancel
+                            </button>
+                            <button type="submit" class="user-profile-form-button primary">
+                                <span class="user-profile-button-icon">✓</span> Update Password
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Email section -->
+                <div id="userProfileemailSection" class="user-profile-content-section ">
+                    <form method="post" action="/Profile/ChangePassword" class="user-profile-form">
+                        <fieldset class="user-profile-form-section">
+                            <legend class="user-profile-section-header">
+                                <span class="user-profile-section-number">1</span>
+                                <h3 class="user-profile-section-title">Change Password</h3>
+                            </legend>
+
+                            <div class="user-profile-form-grid">
+                                <div class="user-profile-form-group">
+                                    <label class="user-profile-form-label">Current Password</label>
+                                    <input type="password" name="CurrentPassword" class="user-profile-form-input" required>
+                                </div>
+
+                                <div class="user-profile-form-group">
+                                    <label class="user-profile-form-label">New Password</label>
+                                    <input type="password" name="NewPassword" class="user-profile-form-input" required>
+                                    <div class="user-profile-password-strength">
+                                        <span class="user-profile-strength-bar"></span>
+                                        <span class="user-profile-strength-bar"></span>
+                                        <span class="user-profile-strength-bar"></span>
+                                        <span class="user-profile-strength-text">Password strength</span>
+                                    </div>
+                                </div>
+
+                                <div class="user-profile-form-group">
+                                    <label class="user-profile-form-label">Confirm New Password</label>
+                                    <input type="password" name="ConfirmPassword" class="user-profile-form-input" required>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <div class="user-profile-form-actions">
+                            <button type="button" class="user-profile-form-button secondary">
+                                <span class="user-profile-button-icon">↻</span> Cancel
+                            </button>
+                            <button type="submit" class="user-profile-form-button primary">
+                                <span class="user-profile-button-icon">✓</span> Update Password
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Email section -->
+                <div id="userProfilepersonalSection" class="user-profile-content-section ">
+                    <form method="post" action="/Profile/ChangePassword" class="user-profile-form">
+                        <fieldset class="user-profile-form-section">
+                            <legend class="user-profile-section-header">
+                                <span class="user-profile-section-number">1</span>
+                                <h3 class="user-profile-section-title">Change Password</h3>
+                            </legend>
+
+                            <div class="user-profile-form-grid">
+                                <div class="user-profile-form-group">
+                                    <label class="user-profile-form-label">Current Password</label>
+                                    <input type="password" name="CurrentPassword" class="user-profile-form-input" required>
+                                </div>
+
+                                <div class="user-profile-form-group">
+                                    <label class="user-profile-form-label">New Password</label>
+                                    <input type="password" name="NewPassword" class="user-profile-form-input" required>
+                                    <div class="user-profile-password-strength">
+                                        <span class="user-profile-strength-bar"></span>
+                                        <span class="user-profile-strength-bar"></span>
+                                        <span class="user-profile-strength-bar"></span>
+                                        <span class="user-profile-strength-text">Password strength</span>
+                                    </div>
+                                </div>
+
+                                <div class="user-profile-form-group">
+                                    <label class="user-profile-form-label">Confirm New Password</label>
+                                    <input type="password" name="ConfirmPassword" class="user-profile-form-input" required>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <div class="user-profile-form-actions">
+                            <button type="button" class="user-profile-form-button secondary">
+                                <span class="user-profile-button-icon">↻</span> Cancel
+                            </button>
+                            <button type="submit" class="user-profile-form-button primary">
+                                <span class="user-profile-button-icon">✓</span> Update Password
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+
+                <!-- Email section -->
+                <div id="userProfilesecuritySection" class="user-profile-content-section ">
+                    <form method="post" action="/Profile/ChangePassword" class="user-profile-form">
+                        <fieldset class="user-profile-form-section">
+                            <legend class="user-profile-section-header">
+                                <span class="user-profile-section-number">1</span>
+                                <h3 class="user-profile-section-title">Change Password</h3>
+                            </legend>
+
+                            <div class="user-profile-form-grid">
+                                <div class="user-profile-form-group">
+                                    <label class="user-profile-form-label">Current Password</label>
+                                    <input type="password" name="CurrentPassword" class="user-profile-form-input" required>
+                                </div>
+
+                                <div class="user-profile-form-group">
+                                    <label class="user-profile-form-label">New Password</label>
+                                    <input type="password" name="NewPassword" class="user-profile-form-input" required>
+                                    <div class="user-profile-password-strength">
+                                        <span class="user-profile-strength-bar"></span>
+                                        <span class="user-profile-strength-bar"></span>
+                                        <span class="user-profile-strength-bar"></span>
+                                        <span class="user-profile-strength-text">Password strength</span>
+                                    </div>
+                                </div>
+
+                                <div class="user-profile-form-group">
+                                    <label class="user-profile-form-label">Confirm New Password</label>
+                                    <input type="password" name="ConfirmPassword" class="user-profile-form-input" required>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <div class="user-profile-form-actions">
+                            <button type="button" class="user-profile-form-button secondary">
+                                <span class="user-profile-button-icon">↻</span> Cancel
+                            </button>
+                            <button type="submit" class="user-profile-form-button primary">
+                                <span class="user-profile-button-icon">✓</span> Update Password
+                            </button>
+                        </div>
+                    </form>
+                </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* ==============================================
+           USER PROFILE PAGE SPECIFIC STYLES
+           All classes prefixed with 'user-profile-' to avoid conflicts
+           ============================================== */
+
+    /* Base Variables - Scoped to this page only */
+    .user-profile-container {
+        --user-profile-primary-color: #29699A;
+        --user-profile-primary-light: #3a7cad;
+        --user-profile-primary-lighter: #e1eaf0;
+        --user-profile-secondary-color: #f8f9fa;
+        --user-profile-accent-color: #e74c3c;
+        --user-profile-accent-light: #f8e0dd;
+        --user-profile-success-color: #2ecc71;
+        --user-profile-text-color: #333;
+        --user-profile-text-light: #666;
+        --user-profile-border-color: #ddd;
+        --user-profile-border-radius: 6px;
+        --user-profile-box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+        --user-profile-transition: all 0.3s ease;
     }
 
-        /* Settings Page Layout */
-        .settings-page .settings-container {
-            display: flex;
-            /* min-height: 100vh; */
-            background: white;
-        }
+    /* Container Styles */
+    .user-profile-container {
+        margin: 30px auto;
+/*         max-width: 1200px; */
+        overflow: hidden;
+    }
 
-        /* Sidebar */
-        .settings-page .settings-sidebar {
-            width: 200px;
-            background: #2c3e50;
+    /* Header Styles */
+    .user-profile-header {
+        background: var(--user-profile-primary-color);
+        color: white;
+        padding: 20px 30px;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .user-profile-title {
+        margin: 0;
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
+
+    /* Body Styles */
+    .user-profile-body {
+        padding: 25px 30px;
+        background: white;
+    }
+
+    /* Layout Styles */
+    .user-profile-layout {
+        display: flex;
+        gap: 30px;
+    }
+
+    /* Sidebar Styles */
+    .user-profile-sidebar {
+        width: 280px;
+        flex-shrink: 0;
+    }
+
+    .user-profile-card {
+        background: white;
+        border-radius: var(--user-profile-border-radius);
+        padding: 20px;
+        box-shadow: var(--user-profile-box-shadow);
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .user-profile-avatar {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 4px solid var(--user-profile-primary-lighter);
+        margin-bottom: 15px;
+    }
+
+    .user-profile-avatar-upload-button {
+        display: inline-block;
+        padding: 8px 15px;
+        background: var(--user-profile-primary-lighter);
+        color: var(--user-profile-primary-color);
+        border-radius: var(--user-profile-border-radius);
+        cursor: pointer;
+        font-size: 0.9rem;
+        margin-top: 10px;
+        transition: var(--user-profile-transition);
+    }
+
+        .user-profile-avatar-upload-button:hover {
+            background: var(--user-profile-primary-light);
             color: white;
-            padding: 20px;
-            border-radius:8px;
-   
-
         }
 
+    .user-profile-name {
+        margin: 10px 0 5px;
+        color: var(--user-profile-primary-color);
+        font-size: 1.2rem;
+    }
 
-            .settings-page .settings-sidebar ul {
-                list-style: none;
-                padding: 0;
-            }
+    .user-profile-role,
+    .user-profile-branch {
+        margin: 5px 0;
+        color: var(--user-profile-text-light);
+        font-size: 0.9rem;
+    }
 
-            .settings-page .settings-sidebar li {
-                padding: 12px 15px;
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                transition: background 0.3s;
-            }
+    .user-profile-status {
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 1px solid var(--user-profile-border-color);
+    }
 
-                .settings-page .settings-sidebar li:hover,
-                .settings-page .settings-sidebar .active {
-                    background: #34495e;
-                }
+    .user-profile-status-badge {
+        display: inline-block;
+        padding: 3px 10px;
+        border-radius: 12px;
+        font-size: 0.8rem;
+        font-weight: 500;
+    }
 
-        /* Main Content */
-        .settings-page .settings-content {
-            flex-grow: 1;
-            padding: 30px;
+        .user-profile-status-badge.active {
+            background: #e8f8f0;
+            color: #27ae60;
         }
 
-        /* Settings Card */
-        .settings-page .settings-card {
-            width:250px;
-            padding: 50px;
-            border-radius: 8px;
-            gap: 201px;
+    .user-profile-last-login {
+        display: block;
+        font-size: 0.8rem;
+        color: var(--user-profile-text-light);
+        margin-top: 5px;
+    }
+
+    /* Navigation Styles */
+    .user-profile-navigation {
+        background: white;
+        border-radius: var(--user-profile-border-radius);
+        box-shadow: var(--user-profile-box-shadow);
+        padding: 15px 0;
+    }
+
+        .user-profile-navigation ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
         }
 
-        /* Profile Section */
-        .settings-page .profile-container {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .settings-page .profile-card{
-            display: flex;
-            align-items: center;
-            flex-direction:column;
-
-        }
-
-        .settings-page .avatar-upload {
-            text-align: center;
-        }
-
-            .settings-page .avatar-upload img {
-                width: 100px;
-                height: 100px;
-                border-radius: 50%;
-                object-fit: cover;
-                border: 3px solid #ddd;
-            }
-
-            .settings-page .avatar-upload label {
-                display: block;
-                margin-top: 10px;
-                color: #2980b9;
-                cursor: pointer;
-                font-weight: bold;
-            }
-
-            .settings-page .avatar-upload input {
-                display: none;
-            }
-
-        /* Forms */
-        .settings-page form {
-            display: flex;
-            flex-direction: column;
-        }
-
-            .settings-page form label {
-                margin-top: 10px;
-                font-weight: bold;
-
-            }
-
-        .settings-page .settings-card form input {
-                padding: 10px;
-                margin-top: 5px;
-                border: 1px solid #ccc;
-                border-radius: 4px;
-                width:500px;
-
-            }
-
-        .settings-page .settings-card button {
-            margin-top: 15px;
-            padding: 10px;
-            background: #29699A;
-            color: white;
-            border: none;
-            border-radius: 4px;
+        .user-profile-navigation li {
+            padding: 12px 20px;
             cursor: pointer;
-            width: 520px;
-        }
-
-            .settings-page button:hover {
-                background: #2c3e50;
-                transition: ease-in-out 0.3s;
-            }
-
-        .settings-page .edit-btn {
-            background: #2980b9;
-        }
-
-            .settings-page .edit-btn:hover {
-                background: #1f6ea5;
-            }
-
-        /* Two-column layout for forms */
-        .settings-page .settings-grid {
             display: flex;
-            gap: 20px;
+            align-items: center;
+            gap: 10px;
+            transition: var(--user-profile-transition);
+            border-left: 3px solid transparent;
         }
 
-            .settings-page .settings-grid .settings-card {
-                flex: 1;
+            .user-profile-navigation li:hover {
+                background: var(--user-profile-primary-lighter);
             }
 
-    @@media (max-width: 1477px) {
-        .settings-grid {
-            display:flex;
+        .user-profile-navigation .user-profile-nav-active {
+            background: var(--user-profile-primary-lighter);
+            border-left-color: var(--user-profile-primary-color);
+            font-weight: 500;
+        }
+
+    .user-profile-nav-icon {
+        font-size: 1.1rem;
+    }
+
+    /* Content Styles */
+    .user-profile-content {
+        flex-grow: 1;
+    }
+
+    .user-profile-content-section {
+        display: none;
+    }
+
+        .user-profile-content-section.active {
+            display: block;
+        }
+
+    /* Form Styles */
+    .user-profile-form {
+        width: 100%;
+    }
+
+    .user-profile-form-section {
+        border: 1px solid var(--user-profile-border-color);
+        border-radius: var(--user-profile-border-radius);
+        padding: 20px;
+        margin-bottom: 25px;
+        background: #F4FAFF;
+    }
+
+    .user-profile-section-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid var(--user-profile-border-color);
+    }
+
+    .user-profile-section-number {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        background: var(--user-profile-primary-color);
+        color: white;
+        border-radius: 50%;
+        margin-right: 12px;
+        font-weight: bold;
+    }
+
+    .user-profile-section-title {
+        margin: 0;
+        font-size: 1.2rem;
+        color: var(--user-profile-primary-color);
+    }
+
+    .user-profile-form-grid {
+        display: flex;
+        gap: 60px;
+        flex-wrap: wrap;
+    }
+
+    .user-profile-form-group {
+        width: 250px;
+        margin-bottom: 15px;
+    }
+
+        .user-profile-form-group.full-width {
+            width: 100%;
+        }
+
+    .user-profile-form-label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+        color: var(--user-profile-text-color);
+        font-size: 0.95rem;
+    }
+
+    .user-profile-form-input,
+    .user-profile-form-select,
+    .user-profile-form-textarea {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid var(--user-profile-border-color);
+        border-radius: var(--user-profile-border-radius);
+        font-size: 0.95rem;
+        transition: var(--user-profile-transition);
+        background: white;
+    }
+
+        .user-profile-form-input:focus,
+        .user-profile-form-select:focus,
+        .user-profile-form-textarea:focus {
+            outline: none;
+            border-color: var(--user-profile-primary-color);
+            box-shadow: 0 0 0 3px rgba(41,105,154,0.1);
+        }
+
+        .user-profile-form-input[readonly],
+        .user-profile-form-textarea[readonly] {
+            background-color: #f5f5f5;
+            border-color: #e0e0e0;
+        }
+
+    .user-profile-form-textarea {
+        min-height: 100px;
+        resize: vertical;
+    }
+
+    /* Button Styles */
+    .user-profile-form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 15px;
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid var(--user-profile-border-color);
+    }
+
+    .user-profile-form-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 12px 20px;
+        border: none;
+        border-radius: var(--user-profile-border-radius);
+        font-size: 0.95rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: var(--user-profile-transition);
+    }
+
+        .user-profile-form-button.primary {
+            background: var(--user-profile-primary-color);
+            color: white;
+        }
+
+            .user-profile-form-button.primary:hover {
+                background: var(--user-profile-primary-light);
+                transform: translateY(-2px);
+            }
+
+        .user-profile-form-button.secondary {
+            background: var(--user-profile-secondary-color);
+            color: var(--user-profile-text-color);
+            border: 1px solid var(--user-profile-border-color);
+        }
+
+            .user-profile-form-button.secondary:hover {
+                background: #e2e6ea;
+            }
+
+    .user-profile-button-icon {
+        margin-right: 8px;
+    }
+
+    /* Responsive Design */
+    @@media (max-width: 992px) {
+        .user-profile-layout {
             flex-direction: column;
         }
 
+        .user-profile-sidebar {
+            width: 100%;
+        }
+    }
 
+    @@media (max-width: 768px) {
+        .user-profile-form-grid {
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .user-profile-form-group {
+            width: 100%;
+        }
     }
 </style>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Navigation between sections
+        const navItems = document.querySelectorAll('.user-profile-navigation li');
+        const contentSections = document.querySelectorAll('.user-profile-content-section');
 
+        navItems.forEach(item => {
+            item.addEventListener('click', function() {
+                // Remove active class from all nav items
+                navItems.forEach(navItem => navItem.classList.remove('user-profile-nav-active'));
 
+                // Add active class to clicked item
+                this.classList.add('user-profile-nav-active');
 
-<div class="settings-page">
-    <div class="settings-container">
-        <!-- Sidebar -->
-        <aside class="settings-sidebar">
-            <div class="profile-card">
-                <div class="avatar-upload">
-                    <img src="~/images/user.png" id="avatarPreview" alt="User Avatar">
-                </div>
-                <h3>John Doe</h3>
-                <p class="profile-role">Software Developer</p>
-                <p class="profile-role">Adama Branch</p>
-                
-            </div>
+                // Hide all content sections
+                contentSections.forEach(section => section.classList.remove('active'));
 
-@*             <div class="profile-info-card">
-                <ul>
-                    <li><i class="fas fa-briefcase"></i> Founder at XYZ</li>
-                    <li><i class="fas fa-map-marker-alt"></i> Lives in Addis Ababa, Ethiopia</li>
-                    <li><i class="fas fa-envelope"></i> johndoe@example.com</li>
-                    <li><i class="fab fa-twitter"></i> johndoe</li>
-                </ul>
-            </div> *@
+                // Show the corresponding section
+                const sectionId = 'userProfile' + this.getAttribute('data-section') + 'Section';
+                document.getElementById(sectionId).classList.add('active');
+            });
+        });
 
-@*             <div class="profile-progress-card">
-                <p>Complete Your Profile</p>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 80%;"></div>
-                </div>
-                <button class="complete-profile-btn">Complete Profile</button>
-            </div> *@
-        </aside>
+        // Avatar upload preview
+        const avatarInput = document.getElementById('userProfileAvatarInput');
+        const avatarPreview = document.getElementById('userProfileAvatarPreview');
 
+        if (avatarInput && avatarPreview) {
+            avatarInput.addEventListener('change', function() {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        avatarPreview.src = e.target.result;
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
 
-        <!-- Main Settings Content -->
-        <main class="settings-content">
-            <!-- Two-column layout for password & email sections -->
-            <div class="settings-grid">
-                <!-- Change Password Section -->
-                <div class="settings-card">
-                    <h2>Change Password</h2>
-                    <form>
-                        <label>Current Password</label>
-                        <input type="password" placeholder="Enter current password">
+        // Password strength indicator
+        const passwordInput = document.querySelector('.user-profile-content-section.active input[name="NewPassword"]');
+        const strengthBars = document.querySelectorAll('.user-profile-strength-bar');
 
-                        <label>New Password</label>
-                        <input type="password" placeholder="Enter new password">
+        if (passwordInput && strengthBars.length > 0) {
+            passwordInput.addEventListener('input', function() {
+                const strength = Math.min(3, Math.floor(this.value.length / 3));
 
-                        <label>Confirm New Password</label>
-                        <input type="password" placeholder="Confirm new password">
-
-                        <button type="submit">Update Password</button>
-                    </form>
-                </div>
-
-                <!-- Change Email Section -->
-                <div class="settings-card">
-                    <h2>Change Email</h2>
-                    <form>
-                        <label>Current Email</label>
-                        <input type="email" value="johndoe@example.com" readonly>
-
-                        <label>New Email</label>
-                        <input type="email" placeholder="Enter new email">
-
-                        <button type="submit">Update Email</button>
-                    </form>
-                </div>
-            </div>
-        </main>
-    </div>
-</div>
+                strengthBars.forEach((bar, index) => {
+                    if (index < strength) {
+                        bar.style.background = index < 1 ? '#e74c3c' : index === 1 ? '#f39c12' : '#2ecc71';
+                    } else {
+                        bar.style.background = '#e0e0e0';
+                    }
+                });
+            });
+        }
+    });
+</script>
