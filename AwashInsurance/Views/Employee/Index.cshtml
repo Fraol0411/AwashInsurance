@@ -3,8 +3,10 @@
     Layout = "~/Views/Shared/_CustomLayout.cshtml";
 
 }
+@* 
+@model AwashInsurance.Models.Employee *@
+@model List<AwashInsurance.Models.Employee>
 
-@model IEnumerable<Employee>
 
 <div class="form-container">
     <!-- Form Header -->
@@ -22,11 +24,12 @@
 
     <!-- All Content Sections -->
     <div class="form-body">
-
-
         <!-- Add Employee Section -->
         <div id="addContent" class="content-section active">
             <form method="post" asp-controller="Employee" asp-action="Create" class="form-main">
+
+                <input type="hidden" name="activeSection" value="add">
+
                 <fieldset class="form-section">
                     <legend class="section-header">
                         <span class="section-number">1</span>
@@ -36,22 +39,22 @@
                     <div class="form-grid">
                         <div class="form-group">
                             <label class="form-label">First Name</label>
-                            <input type="text" asp-for="@Model.First().FirstName" class="form-input" required>
+                            <input type="text" name="FirstName"  class="form-input" required>
                         </div>
 
                         <div class="form-group">
                             <label class="form-label">Last Name</label>
-                            <input type="text" asp-for="@Model.First().LastName" class="form-input" required>
+                            <input type="text" name="LastName" value="" class="form-input" required>
                         </div>
 
                         <div class="form-group">
                             <label class="form-label">Email</label>
-                            <input type="email" asp-for="@Model.First().Email" class="form-input">
+                            <input type="email" name="Email" value="" class="form-input">
                         </div>
 
                         <div class="form-group">
                             <label class="form-label">Phone Number</label>
-                            <input type="tel" asp-for="@Model.First().PhoneNumber" class="form-input">
+                            <input type="tel" name="PhoneNumber" value="" class="form-input">
                         </div>
                     </div>
                 </fieldset>
@@ -65,17 +68,17 @@
                     <div class="form-grid">
                         <div class="form-group">
                             <label class="form-label">Hire Date</label>
-                            <input type="date" asp-for="@Model.First().HireDate" class="form-input" required>
+                            <input type="date" name="HireDate" value="" class="form-input" required>
                         </div>
 
                         <div class="form-group">
                             <label class="form-label">Job Title</label>
-                            <input type="text" asp-for="@Model.First().JobTitle" class="form-input">
+                            <input type="text" name="JobTitle" value="" class="form-input">
                         </div>
 
                         <div class="form-group">
                             <label class="form-label">Department</label>
-                            <select asp-for="@Model.First().Department" class="form-select">
+                            <select name="Department" value="" class="form-select">
                                 <option value="">-- Select --</option>
                                 <option value="IT">IT</option>
                                 <option value="HR">Human Resources</option>
@@ -86,13 +89,13 @@
 
                         <div class="form-group">
                             <label class="form-label">Salary</label>
-                            <input type="number" step="0.01" asp-for="@Model.First().Salary" class="form-input">
+                            <input type="number" step="0.01" name="Salary" value="" class="form-input">
                         </div>
                     </div>
                 </fieldset>
 
                 <div class="form-actions">
-                    <button type="reset" class="form-button secondary-button">
+                    <button type="reset" class="form-button secondary-button-reset">
                         <span class="button-icon">↻</span> Reset
                     </button>
                     <button type="submit" class="form-button primary-button">
@@ -105,7 +108,10 @@
 
         <!-- Modify Employee Section -->
         <div id="modifyContent" class="content-section">
-            <form method="get" asp-controller="Employee" asp-action="Index" class="form-main">
+            <form method="get" asp-controller="Employee" asp-action="Search" class="form-main">
+
+                <input type="hidden" name="activeSection" value="modify">
+
                 <fieldset class="form-section">
                     <legend class="section-header">
                         <span class="section-number">1</span>
@@ -127,32 +133,40 @@
             </form>
 
             <div class="search-results">
-                <table class="results-table">
-                    <thead>
-                        <tr>
-                            <th>Select</th>
-                            <th>Employee ID</th>
-                            <th>Full Name</th>
-                            <th>Job Title</th>
-                            <th>Department</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var emp in Model)
-                        {
+                @if (Model != null && Model.Any())
+                {
+                    <table class="results-table">
+                        <thead>
                             <tr>
-                                <td><input type="radio" name="selectedEmployee" value="@emp.EmployeeId"></td>
-                                <td>@emp.EmployeeId</td>
-                                <td>@emp.FirstName @emp.LastName</td>
-                                <td>@emp.JobTitle</td>
-                                <td>@emp.Department</td>
-                                <td>@(emp.IsActive == true ? "Active" : "Inactive")</td>
+                                <th>Select</th>
+                                <th>Employee ID</th>
+                                <th>Full Name</th>
+                                <th>Job Title</th>
+                                <th>Department</th>
+                                <th>Status</th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach (var emp in Model)
+                            {
+                                <tr>
+                                    <td><input type="radio" name="selectedEmployee" value="@emp.EmployeeId"></td>
+                                    <td>@emp.EmployeeId</td>
+                                    <td>@emp.FirstName @emp.LastName</td>
+                                    <td>@emp.JobTitle</td>
+                                    <td>@emp.Department</td>
+                                   @*  <td>@(emp.IsActive ? "Active" : "Inactive")</td> *@
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else if (ViewBag.Message != null)
+                {
+                    <p class="no-results">@ViewBag.Message</p>
+                }
             </div>
+
 
             <!-- Modify Form (shown after selection) -->
             <form method="post" asp-controller="Employee" asp-action="Edit" id="modifyForm" style="display: none;">
@@ -221,7 +235,7 @@
                 </fieldset>
 
                 <div class="form-actions">
-                    <button type="button" class="form-button secondary-button">
+                    <button type="button" class="form-button secondary-button-reset">
                         <span class="button-icon">↻</span> Cancel
                     </button>
                     <button type="submit" class="form-button primary-button">
@@ -233,7 +247,10 @@
 
         <!-- Delete Employee Section -->
         <div id="deleteContent" class="content-section">
-            <form method="get" asp-controller="Employee" asp-action="Index" class="form-main">
+            <form method="get" asp-controller="Employee" asp-action="Search" class="form-main">
+
+                <input type="hidden" name="activeSection" value="modify">
+
                 <fieldset class="form-section">
                     <legend class="section-header">
                         <span class="section-number">1</span>
@@ -255,29 +272,38 @@
             </form>
 
             <div class="search-results">
-                <table class="results-table">
-                    <thead>
-                        <tr>
-                            <th>Select</th>
-                            <th>Employee ID</th>
-                            <th>Full Name</th>
-                            <th>Job Title</th>
-                            <th>Department</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var emp in Model)
-                        {
+                @if (Model != null && Model.Any())
+                {
+                    <table class="results-table">
+                        <thead>
                             <tr>
-                                <td><input type="radio" name="employeeToDelete" value="@emp.EmployeeId"></td>
-                                <td>@emp.EmployeeId</td>
-                                <td>@emp.FirstName @emp.LastName</td>
-                                <td>@emp.JobTitle</td>
-                                <td>@emp.Department</td>
+                                <th>Select</th>
+                                <th>Employee ID</th>
+                                <th>Full Name</th>
+                                <th>Job Title</th>
+                                <th>Department</th>
+                                <th>Status</th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach (var emp in Model)
+                            {
+                                <tr>
+                                    <td><input type="radio" name="selectedEmployee" value="@emp.EmployeeId"></td>
+                                    <td>@emp.EmployeeId</td>
+                                    <td>@emp.FirstName @emp.LastName</td>
+                                    <td>@emp.JobTitle</td>
+                                    <td>@emp.Department</td>
+                                    @*  <td>@(emp.IsActive ? "Active" : "Inactive")</td> *@
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else if (ViewBag.Message != null)
+                {
+                    <p class="no-results">@ViewBag.Message</p>
+                }
             </div>
 
             <!-- Delete Confirmation (shown after selection) -->
@@ -309,7 +335,7 @@
                 </fieldset>
 
                 <div class="form-actions">
-                    <button type="button" class="form-button secondary-button">
+                    <button type="button" class="form-button secondary-button-reset">
                         <span class="button-icon">↻</span> Cancel
                     </button>
                     <button type="submit" class="form-button danger-button">
@@ -321,7 +347,10 @@
 
         <!-- Inquire Employee Section -->
         <div id="inquireContent" class="content-section">
-            <form method="get" asp-controller="Employee" asp-action="Index" class="form-main">
+            <form method="get" asp-controller="Employee" asp-action="Search" class="form-main">
+
+                <input type="hidden" name="activeSection" value="modify">
+
                 <fieldset class="form-section">
                     <legend class="section-header">
                         <span class="section-number">1</span>
@@ -343,29 +372,38 @@
             </form>
 
             <div class="search-results">
-                <table class="results-table">
-                    <thead>
-                        <tr>
-                            <th>Select</th>
-                            <th>Employee ID</th>
-                            <th>Full Name</th>
-                            <th>Job Title</th>
-                            <th>Department</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var emp in Model)
-                        {
+                @if (Model != null && Model.Any())
+                {
+                    <table class="results-table">
+                        <thead>
                             <tr>
-                                <td><input type="radio" name="employeeToView" value="@emp.EmployeeId"></td>
-                                <td>@emp.EmployeeId</td>
-                                <td>@emp.FirstName @emp.LastName</td>
-                                <td>@emp.JobTitle</td>
-                                <td>@emp.Department</td>
+                                <th>Select</th>
+                                <th>Employee ID</th>
+                                <th>Full Name</th>
+                                <th>Job Title</th>
+                                <th>Department</th>
+                                <th>Status</th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach (var emp in Model)
+                            {
+                                <tr>
+                                    <td><input type="radio" name="selectedEmployee" value="@emp.EmployeeId"></td>
+                                    <td>@emp.EmployeeId</td>
+                                    <td>@emp.FirstName @emp.LastName</td>
+                                    <td>@emp.JobTitle</td>
+                                    <td>@emp.Department</td>
+                                    @*  <td>@(emp.IsActive ? "Active" : "Inactive")</td> *@
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else if (ViewBag.Message != null)
+                {
+                    <p class="no-results">@ViewBag.Message</p>
+                }
             </div>
 
             <!-- Employee Details (shown after selection) -->
@@ -438,9 +476,13 @@
 </div>
 
 <style>
+
+
+
     /* ==============================================
            EMPLOYEE MANAGEMENT PAGE STYLES
            Using the same design metrics as other pages
+
            ============================================== */
 
     /* Base Variables */
@@ -869,35 +911,67 @@
             .results-table td {
                 padding: 8px 10px;
             }
+
+
+
+        .loading {
+            padding: 20px;
+            text-align: center;
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+        /* Add to your existing :root variables */
+        :root {
+            --primary-color: #29699A;
+            --primary-light: #3a7cad;
+            --error-color: #e74c3c;
+        }
     }
 </style>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Navigation between sections
+
+
+
+      document.addEventListener('DOMContentLoaded', function() {
+        // 1. Section Navigation System
         const actionButtons = document.querySelectorAll('.action-btn');
         const contentSections = document.querySelectorAll('.content-section');
 
+        // Initialize active section from URL or default to 'add'
+        const urlParams = new URLSearchParams(window.location.search);
+        const initialActiveSection = urlParams.get('activeSection') || 'add';
+        setActiveSection(initialActiveSection);
+
+        // Set up button click handlers
         actionButtons.forEach(button => {
             button.addEventListener('click', function() {
-                // Remove active class from all buttons
-                actionButtons.forEach(btn => btn.classList.remove('active'));
-
-                // Add active class to clicked button
-                this.classList.add('active');
-
-                // Hide all content sections
-                contentSections.forEach(section => {
-                    section.style.display = 'none';
-                });
-
-                // Show the corresponding content section
-                const action = this.getAttribute('data-action');
-                document.getElementById(`${action}Content`).style.display = 'block';
+                const section = this.getAttribute('data-action');
+                setActiveSection(section);
             });
         });
 
-        // Modify Section - Employee Selection
+        // 2. Form Submission Handling (for active section persistence)
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', function() {
+                // Update the activeSection hidden input before submission
+                const activeBtn = document.querySelector('.action-btn.active');
+                if (activeBtn) {
+                    const section = activeBtn.getAttribute('data-action');
+                    let hiddenInput = this.querySelector('input[name="activeSection"]');
+
+                    if (!hiddenInput) {
+                        hiddenInput = document.createElement('input');
+                        hiddenInput.type = 'hidden';
+                        hiddenInput.name = 'activeSection';
+                        this.appendChild(hiddenInput);
+                    }
+                    hiddenInput.value = section;
+                }
+            });
+        });
+
+        // 3. Modify Employee Functionality
         const modifyRadios = document.querySelectorAll('input[name="selectedEmployee"]');
         const modifyForm = document.getElementById('modifyForm');
 
@@ -907,19 +981,17 @@
                     const row = this.closest('tr');
                     const cells = row.cells;
 
-                    // Populate the modify form with employee data
                     document.getElementById('modifyEmployeeId').value = this.value;
                     document.getElementById('modifyFirstName').value = cells[2].textContent.split(' ')[0];
                     document.getElementById('modifyLastName').value = cells[2].textContent.split(' ')[1];
-                    // In a real app, you would fetch the full employee details via AJAX
 
-                    // Show the modify form
                     modifyForm.style.display = 'block';
                 }
             });
         });
 
-        // Delete Section - Employee Selection
+  
+        // 4. Delete Employee Functionality
         const deleteRadios = document.querySelectorAll('input[name="employeeToDelete"]');
         const deleteForm = document.getElementById('deleteForm');
 
@@ -929,19 +1001,17 @@
                     const row = this.closest('tr');
                     const cells = row.cells;
 
-                    // Populate the delete confirmation
                     document.getElementById('deleteEmployeeId').value = this.value;
                     document.getElementById('deleteEmpId').textContent = cells[1].textContent;
                     document.getElementById('deleteEmpName').textContent = cells[2].textContent;
                     document.getElementById('deleteJobTitle').textContent = cells[3].textContent;
 
-                    // Show the delete form
                     deleteForm.style.display = 'block';
                 }
             });
         });
 
-        // Inquire Section - Employee Selection
+        // 5. Inquire Employee Functionality
         const inquireRadios = document.querySelectorAll('input[name="employeeToView"]');
         const employeeDetails = document.getElementById('employeeDetails');
 
@@ -951,23 +1021,20 @@
                     const row = this.closest('tr');
                     const cells = row.cells;
 
-                    // Populate the employee details
                     document.getElementById('detailEmpId').value = cells[1].textContent;
                     document.getElementById('detailFullName').value = cells[2].textContent;
-                    // In a real app, you would fetch the full employee details via AJAX
 
-                    // Show the details section
                     employeeDetails.style.display = 'block';
                 }
             });
         });
 
-        // Print functionality
+        // 6. Print Functionality
         document.getElementById('btnPrintDetails')?.addEventListener('click', function() {
             window.print();
         });
 
-        // Add animation to form sections when they come into view
+        // 7. Animation System
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -983,5 +1050,40 @@
             section.style.transition = 'all 0.4s ease-out';
             observer.observe(section);
         });
+
+
+
+        // Helper function to set active section
+        function setActiveSection(section) {
+            // Hide all sections
+            contentSections.forEach(sec => {
+                sec.style.display = 'none';
+            });
+
+            // Remove active class from all buttons
+            actionButtons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Show selected section and activate button
+            document.getElementById(`${section}Content`).style.display = 'block';
+            document.querySelector(`.action-btn[data-action="${section}"]`).classList.add('active');
+        }
+
+
+		// 8. Reset Button Functionality
+        const resetButtons = document.querySelectorAll('.secondary-button-reset');
+		resetButtons.forEach(button => {
+			button.addEventListener('click', function() {
+				const form = this.closest('form');
+				form.reset();
+
+			});
+		});
+
+
+
     });
+
+
 </script>
