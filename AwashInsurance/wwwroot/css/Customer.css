@@ -1,0 +1,341 @@
+﻿/* Base Variables */
+:root {
+    --primary-color: #29699A;
+    --primary-light: #3a7cad;
+    --primary-lighter: #e1eaf0;
+    --secondary-color: #f8f9fa;
+    --accent-color: #e74c3c;
+    --accent-light: #f8e0dd;
+    --success-color: #2ecc71;
+    --text-color: #333;
+    --text-light: #666;
+    --border-color: #ddd;
+    --border-radius: 6px;
+    --box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+    --transition: all 0.3s ease;
+}
+
+/* Base Form Container */
+.form-container {
+    margin: 30px auto;
+    overflow: hidden;
+}
+
+/* Form Header */
+.form-header {
+    background: var(--primary-color);
+    color: white;
+    padding: 20px 30px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+}
+
+.form-title {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+/* Action buttons styling */
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    padding: 10px 15px;
+    background: #f5f5f5;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.action-btn {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 4px;
+    background: #e0e0e0;
+    color: var(--text-color);
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s;
+    text-decoration: none;
+    text-align: center;
+    display: inline-block;
+}
+
+    .action-btn.active {
+        background: var(--primary-color);
+        color: white;
+    }
+
+    .action-btn:hover:not(.active) {
+        background: #d0d0d0;
+    }
+
+/* Form Body */
+.form-body {
+    padding: 25px 30px;
+}
+
+/* Form Sections */
+.form-section {
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    margin-bottom: 25px;
+    background: #F4FAFF;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.section-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: var(--primary-color);
+    color: white;
+    border-radius: 50%;
+    margin-right: 12px;
+    font-weight: bold;
+}
+
+.section-title {
+    margin: 0;
+    font-size: 1.2rem;
+    color: var(--primary-color);
+}
+
+/* Form Grid Layout */
+.form-grid {
+    display: flex;
+    gap: 60px;
+    flex-wrap: wrap;
+}
+
+/* Form Groups */
+.form-group {
+    width: 250px;
+    margin-bottom: 15px;
+}
+
+    .form-group.full-width {
+        width: 100%;
+    }
+
+/* Labels */
+.form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--text-color);
+    font-size: 0.95rem;
+}
+
+/* Input Fields */
+.form-input,
+.form-select,
+.form-textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    font-size: 0.95rem;
+    transition: var(--transition);
+    background: white;
+}
+
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(41,105,154,0.1);
+    }
+
+    .form-input[readonly],
+    .form-textarea[readonly] {
+        background-color: #f5f5f5;
+        border-color: #e0e0e0;
+    }
+
+.form-textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+/* Input Groups */
+.input-group {
+    display: flex;
+    gap: 10px;
+}
+
+    .input-group .form-input {
+        flex: 1;
+    }
+
+/* Checkbox Styles */
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    padding-left: 30px;
+    margin-bottom: 0;
+}
+
+.form-checkbox {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    background-color: white;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+}
+
+.checkbox-label:hover .checkmark {
+    background-color: var(--primary-lighter);
+}
+
+.form-checkbox:checked ~ .checkmark {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.form-checkbox:checked ~ .checkmark:after {
+    display: block;
+}
+
+.checkbox-label .checkmark:after {
+    left: 7px;
+    top: 3px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+/* Buttons */
+.form-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 20px;
+    border: none;
+    border-radius: var(--border-radius);
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.primary-button {
+    background: var(--primary-color);
+    color: white;
+}
+
+    .primary-button:hover {
+        background: var(--primary-light);
+        transform: translateY(-2px);
+    }
+
+.secondary-button {
+    background: var(--secondary-color);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+}
+
+    .secondary-button:hover {
+        background: #e2e6ea;
+    }
+
+.danger-button {
+    background: var(--accent-color);
+    color: white;
+}
+
+    .danger-button:hover {
+        background: #c0392b;
+    }
+
+.input-button {
+    padding: 0 15px;
+    border: none;
+    border-radius: var(--border-radius);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.search-button {
+    background: var(--primary-color);
+    color: white;
+}
+
+    .search-button:hover {
+        background: var(--primary-light);
+    }
+
+.button-icon {
+    margin-right: 8px;
+}
+
+/* Form Actions */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+}
+
+/* Search Results Table */
+.search-results {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.results-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+    .results-table th,
+    .results-table td {
+        padding: 12px 15px;
+        text-align: left;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .results-table th {
+        background-color: var(--primary-lighter

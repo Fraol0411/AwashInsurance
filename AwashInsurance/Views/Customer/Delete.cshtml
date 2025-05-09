@@ -1,0 +1,174 @@
+﻿@{
+    ViewData["Title"] = "Remove Customer";
+    Layout = "~/Views/Shared/_CustomLayout.cshtml";
+}
+
+<div class="form-container">
+    <!-- Form Header -->
+    <div class="form-header">
+        <h2 class="form-title">Remove Customer</h2>
+    </div>
+
+    <!-- Navigation Links -->
+    <div class="action-buttons">
+        <a href="/Customer/Add" class="action-btn active">Register</a>
+        <a href="/Customer/Modify" class="action-btn">Update</a>
+        <a href="/Customer/Delete" class="action-btn">Remove</a>
+        <a href="/Customer/Inquire" class="action-btn">View</a>
+    </div>
+
+    <!-- Delete Form -->
+    <div class="form-body">
+        <form class="form-main">
+            <!-- Search Section -->
+            <fieldset class="form-section">
+                <legend class="section-header">
+                    <span class="section-number">1</span>
+                    <h3 class="section-title">Find Customer</h3>
+                </legend>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Customer ID</label>
+                        <div class="input-group">
+                            <input type="text" class="form-input" placeholder="Enter customer ID">
+                            <button type="button" class="input-button search-button">
+                                <span class="button-icon">🔍</span> Search
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Customer Name</label>
+                        <div class="input-group">
+                            <input type="text" class="form-input" placeholder="Enter customer name">
+                            <button type="button" class="input-button search-button">
+                                <span class="button-icon">🔍</span> Search
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group full-width">
+                    <div class="search-results">
+                        <table class="results-table">
+                            <thead>
+                                <tr>
+                                    <th>Select</th>
+                                    <th>Customer ID</th>
+                                    <th>Customer Name</th>
+                                    <th>Phone</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input type="radio" name="customerToDelete" value="1"></td>
+                                    <td>CUST001</td>
+                                    <td>John Doe</td>
+                                    <td>+1234567890</td>
+                                    <td>Active</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </fieldset>
+
+            <!-- Confirmation Section (shown after selection) -->
+            <fieldset class="form-section" id="deleteConfirmationSection" style="display: none;">
+                <legend class="section-header">
+                    <span class="section-number">2</span>
+                    <h3 class="section-title">Confirm Removal</h3>
+                </legend>
+
+                <div class="form-group full-width">
+                    <div class="confirmation-message">
+                        <p>You are about to remove the following customer:</p>
+                        <div class="customer-details">
+                            <p><strong>Customer ID:</strong> <span id="deleteCustId"></span></p>
+                            <p><strong>Customer Name:</strong> <span id="deleteCustName"></span></p>
+                            <p><strong>Phone Number:</strong> <span id="deletePhone"></span></p>
+                        </div>
+                        <p class="warning-text">⚠️ This action cannot be undone. Are you sure you want to proceed?</p>
+                    </div>
+                </div>
+
+                <div class="form-group full-width">
+                    <label class="form-label">Removal Reason</label>
+                    <textarea rows="3" class="form-textarea" required></textarea>
+                </div>
+            </fieldset>
+
+            <!-- Form Actions -->
+            <div class="form-actions">
+                <button type="button" class="form-button secondary-button">
+                    <span class="button-icon">↻</span> Cancel
+                </button>
+                <button type="button" class="form-button danger-button" id="btnConfirmDelete" disabled>
+                    <span class="button-icon">🗑</span> Confirm Removal
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Include shared CSS -->
+<link href="~/css/customer.css" rel="stylesheet" />
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Focus first input field
+        const firstInput = document.querySelector('.form-input');
+        if (firstInput) firstInput.focus();
+
+        // Add animation to form sections when they come into view
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = 1;
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.form-section').forEach(section => {
+            section.style.opacity = 0;
+            section.style.transform = 'translateY(20px)';
+            section.style.transition = 'all 0.4s ease-out';
+            observer.observe(section);
+        });
+
+        // Remove section functionality
+        const deleteRadios = document.querySelectorAll('input[name="customerToDelete"]');
+        const deleteConfirmationSection = document.getElementById('deleteConfirmationSection');
+        const confirmDeleteBtn = document.getElementById('btnConfirmDelete');
+
+        deleteRadios.forEach(radio => {
+            radio.addEventListener('change', function() {
+                if (this.checked) {
+                    const row = this.closest('tr');
+                    document.getElementById('deleteCustId').textContent = row.cells[1].textContent;
+                    document.getElementById('deleteCustName').textContent = row.cells[2].textContent;
+                    document.getElementById('deletePhone').textContent = row.cells[3].textContent;
+
+                    deleteConfirmationSection.style.display = 'block';
+                    confirmDeleteBtn.disabled = false;
+                }
+            });
+        });
+
+        // Reset form
+        document.querySelector('.secondary-button').addEventListener('click', function() {
+            const form = this.closest('form');
+            if (form) {
+                form.reset();
+                deleteConfirmationSection.style.display = 'none';
+                confirmDeleteBtn.disabled = true;
+                document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                    radio.checked = false;
+                });
+            }
+        });
+    });
+</script>
