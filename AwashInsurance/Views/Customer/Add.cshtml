@@ -1,4 +1,5 @@
-﻿@{
+﻿@model AwashInsurance.Models.Customer
+@{
     ViewData["Title"] = "Register Customer";
     Layout = "~/Views/Shared/_CustomLayout.cshtml";
 }
@@ -19,7 +20,8 @@
 
     <!-- Registration Form -->
     <div class="form-body">
-        <form class="form-main">
+        <form  asp-action="Add" method="post" class="form-main">
+            @Html.AntiForgeryToken()
             <!-- Section 1: Customer Identification -->
             <fieldset class="form-section">
                 <legend class="section-header">
@@ -29,18 +31,18 @@
 
                 <div class="form-grid">
                     <div class="form-group">
-                        <label class="form-label">Full Name</label>
+                        <label asp-for="FullName" class="form-label">Full Name</label>
                         <input type="text" class="form-input" required>
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">Date of Birth</label>
+                        <label asp-for="DateOfBirth" class="form-label">Date of Birth</label>
                         <input type="date" class="form-input" required>
                     </div>
 
                     <div class="form-group">
                         <label class="form-label">Gender</label>
-                        <select class="form-select">
+                        <select asp-for="Gender" class="form-select">
                             <option value="">-- Select --</option>
                             <option value="Male">Male</option>
                             <option value="Female">Female</option>
@@ -50,7 +52,7 @@
 
                     <div class="form-group">
                         <label class="form-label">ID Type</label>
-                        <select class="form-select">
+                        <select asp-for="IDType" class="form-select">
                             <option value="">-- Select --</option>
                             <option value="Passport">Passport</option>
                             <option value="Driver License">Driver License</option>
@@ -70,22 +72,22 @@
                 <div class="form-grid">
                     <div class="form-group">
                         <label class="form-label">Email Address</label>
-                        <input type="email" class="form-input" required>
+                        <input asp-for="Email" type="email" class="form-input" required>
                     </div>
 
                     <div class="form-group">
                         <label class="form-label">Phone Number</label>
-                        <input type="tel" class="form-input" required>
+                        <input asp-for="Phone" type="tel" class="form-input" required>
                     </div>
 
                     <div class="form-group">
                         <label class="form-label">Address</label>
-                        <input type="text" class="form-input" required>
+                        <input asp-for="Address" type="text" class="form-input" required>
                     </div>
 
                     <div class="form-group">
                         <label class="form-label">City</label>
-                        <input type="text" class="form-input" required>
+                        <input asp-for="City" type="text" class="form-input" required>
                     </div>
                 </div>
             </fieldset>
@@ -100,7 +102,7 @@
                 <div class="form-grid">
                     <div class="form-group">
                         <label class="form-label">Customer Type</label>
-                        <select class="form-select">
+                        <select asp-for="CustomerType" class="form-select">
                             <option value="">-- Select --</option>
                             <option value="Individual">Individual</option>
                             <option value="Business">Business</option>
@@ -111,19 +113,19 @@
                     <div class="form-group checkbox-group">
                         <label class="form-label">Newsletter Subscription</label>
                         <label class="checkbox-label">
-                            <input type="checkbox" class="form-checkbox">
+                            <input asp-for="IsSubscribedToNewsletter" type="checkbox" class="form-checkbox">
                             <span class="checkmark"></span>
                         </label>
                     </div>
 
                     <div class="form-group">
                         <label class="form-label">Registration Date</label>
-                        <input type="date" class="form-input">
+                        <input asp-for="RegistrationDate" type="date" class="form-input">
                     </div>
 
                     <div class="form-group full-width">
                         <label class="form-label">Notes</label>
-                        <textarea rows="3" class="form-textarea"></textarea>
+                        <textarea asp-for="Notes" rows="3" class="form-textarea"></textarea>
                     </div>
                 </div>
             </fieldset>
