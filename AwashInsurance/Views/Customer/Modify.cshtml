@@ -1,4 +1,9 @@
-﻿@{
+﻿ @model List<AwashInsurance.Models.Customer>
+@{
+    var selected = ViewBag.SelectedCustomer as AwashInsurance.Models.Customer;
+}
+ @using Newtonsoft.Json
+@{
     ViewData["Title"] = "Update Customer";
     Layout = "~/Views/Shared/_CustomLayout.cshtml";
 }
@@ -19,7 +24,7 @@
 
     <!-- Update Form -->
     <div class="form-body">
-        <form class="form-main">
+        <form class="form-main" asp-action="Modify" method="get">
             <!-- Search Section -->
             <fieldset class="form-section">
                 <legend class="section-header">
@@ -29,93 +34,116 @@
 
                 <div class="form-grid">
                     <div class="form-group">
-                        <label class="form-label">Customer ID</label>
-                        <div class="input-group">
-                            <input type="text" class="form-input" placeholder="Enter customer ID">
-                            <button type="button" class="input-button search-button">
-                                <span class="button-icon">🔍</span> Search
-                            </button>
-                        </div>
+                        <form method="get" asp-action="Modify">
+                            <input type="hidden" name="searchBy" value="CustomerId" />
+                            <label class="form-label">Customer ID</label>
+                            <div class="input-group">
+                                <input type="text" name="searchValue" class="form-input" placeholder="Enter customer ID">
+                                <button type="submit" class="input-button search-button">
+                                    <span class="button-icon">🔍</span> Search
+                                </button>
+                            </div>
+                        </form>
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">Customer Name</label>
-                        <div class="input-group">
-                            <input type="text" class="form-input" placeholder="Enter customer name">
-                            <button type="button" class="input-button search-button">
-                                <span class="button-icon">🔍</span> Search
-                            </button>
-                        </div>
+                        <form method="get" asp-action="Modify">
+                            <input type="hidden" name="searchBy" value="CustomerName" />
+                            <label class="form-label">Customer Name</label>
+                            <div class="input-group">
+                                <input type="text" name="searchValue" class="form-input" placeholder="Enter customer name">
+                                <button type="submit" class="input-button search-button">
+                                    <span class="button-icon">🔍</span> Search
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
 
                 <div class="form-group full-width">
                     <div class="search-results">
-                        <table class="results-table">
-                            <thead>
-                                <tr>
-                                    <th>Select</th>
-                                    <th>Customer ID</th>
-                                    <th>Customer Name</th>
-                                    <th>Phone</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><input type="radio" name="selectedCustomer" value="1"></td>
-                                    <td>CUST001</td>
-                                    <td>John Doe</td>
-                                    <td>+1234567890</td>
-                                    <td>Active</td>
-                                </tr>
-                                <tr>
-                                    <td><input type="radio" name="selectedCustomer" value="2"></td>
-                                    <td>CUST002</td>
-                                    <td>Jane Smith</td>
-                                    <td>+1987654321</td>
-                                    <td>Active</td>
-                                </tr>
-                            </tbody>
+                        <form asp-action="SelectCustomer" method="post">
+                            <table class="results-table">
+                                <thead>
+                                    <tr>
+                                        <th>Select</th>
+                                        <th>Customer ID</th>
+                                        <th>Customer Name</th>
+                                        <th>Phone</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model != null && Model.Any())
+                                    {        @foreach (var customer in Model)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <input type="radio" name="selectedCustomerId" value="@customer.CustomerId"
+                                                           onclick="this.form.submit();" />
+                                                </td>
+                                                <td>@customer.CustomerId</td>
+                                                <td>@customer.FullName</td>
+                                                <td>@customer.Phone</td>
+                                                <td>@customer.Email</td>
+                                            </tr>
+                                        }
+
+                                    }
+                                </tbody>
+
                         </table>
+                        </form>
+        
+                        @if (!Model.Any())
+                        {
+                            <p>No customers found.</p>
+                        }
+
                     </div>
                 </div>
             </fieldset>
+
+
 
             <!-- Update Form (shown after selection) -->
-            <fieldset class="form-section" id="modifyFormSection" style="display: none;">
-                <legend class="section-header">
-                    <span class="section-number">2</span>
-                    <h3 class="section-title">Update Customer Details</h3>
-                </legend>
+            @if (selected != null)
+            {
+                <fieldset class="form-section" id="modifyFormSection">
+                    <legend class="section-header">
+                        <span class="section-number">2</span>
+                        <h3 class="section-title">Update Customer Details</h3>
+                    </legend>
 
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label class="form-label">Customer ID</label>
-                        <input type="text" class="form-input" readonly>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Customer ID</label>
+                            <input type="text" class="form-input" value="@selected.CustomerId" readonly>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" class="form-input" value="@selected.FullName">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Phone Number</label>
+                            <input type="tel" class="form-input" value="@selected.Phone">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Email Address</label>
+                            <input type="email" class="form-input" value="@selected.Email">
+                        </div>
                     </div>
 
-                    <div class="form-group">
-                        <label class="form-label">Full Name</label>
-                        <input type="text" class="form-input">
+                    <div class="form-group full-width">
+                        <label class="form-label">Update Notes</label>
+                        <textarea rows="3" class="form-textarea">@selected.Notes</textarea>
                     </div>
+                </fieldset>
+            }
 
-                    <div class="form-group">
-                        <label class="form-label">Phone Number</label>
-                        <input type="tel" class="form-input">
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Email Address</label>
-                        <input type="email" class="form-input">
-                    </div>
-                </div>
-
-                <div class="form-group full-width">
-                    <label class="form-label">Update Notes</label>
-                    <textarea rows="3" class="form-textarea"></textarea>
-                </div>
-            </fieldset>
 
             <!-- Form Actions -->
             <div class="form-actions">
@@ -156,26 +184,43 @@
             observer.observe(section);
         });
 
-        // Update section functionality
-        const updateRadios = document.querySelectorAll('input[name="selectedCustomer"]');
-        const updateFormSection = document.getElementById('modifyFormSection');
-        const saveUpdatesBtn = document.getElementById('btnSaveUpdates');
 
-        updateRadios.forEach(radio => {
-            radio.addEventListener('change', function() {
-                if (this.checked) {
-                    updateFormSection.style.display = 'block';
-                    saveUpdatesBtn.disabled = false;
+                // Update section functionality
+            // document.querySelectorAll('.customer-row input[type="radio"]').forEach((radio, index) => {
+            //         radio.addEventListener('click', function () {
+            //             const row = this.closest('.customer-row');
+            //             document.getElementById('customerIdInput').value = row.dataset.id;
+            //             document.getElementById('fullNameInput').value = row.dataset.name;
+            //             document.getElementById('phoneInput').value = row.dataset.phone;
+            //             document.getElementById('emailInput').value = row.dataset.email;
 
-                    // Simulate loading data (UI only)
-                    const row = this.closest('tr');
-                    const form = updateFormSection.querySelector('form');
-                    form.querySelector('input[type="text"]').value = row.cells[1].textContent;
-                    form.querySelectorAll('input[type="text"]')[1].value = row.cells[2].textContent;
-                    form.querySelector('input[type="tel"]').value = row.cells[3].textContent;
-                }
-            });
-        });
+            //             document.getElementById('modifyFormSection').style.display = 'block';
+            //         });
+            //     });
+
+
+        // const updateRadios = document.querySelectorAll('input[name="selectedCustomer"]');
+        // const updateFormSection = document.getElementById('modifyFormSection');
+        // const saveUpdatesBtn = document.getElementById('btnSaveUpdates');
+
+        // updateRadios.forEach(radio => {
+        //     radio.addEventListener('change', function() {
+        //         if (this.checked) {
+        //             updateFormSection.style.display = 'block';
+        //             saveUpdatesBtn.disabled = false;
+
+        //             // Simulate loading data (UI only)
+        //             const row = this.closest('tr');
+        //             const form = updateFormSection.querySelector('form');
+        //             form.querySelector('input[type="text"]').value = row.cells[1].textContent;
+        //             form.querySelectorAll('input[type="text"]')[1].value = row.cells[2].textContent;
+        //             form.querySelector('input[type="tel"]').value = row.cells[3].textContent;
+        //         }
+        //     });
+        // });
+
+
+
 
         // Reset form
         document.querySelector('.secondary-button').addEventListener('click', function() {
@@ -190,4 +235,9 @@
             }
         });
     });
+</script>
+
+<script>
+    const customers = @Html.Raw(JsonConvert.SerializeObject(Model));
+    console.log("Fetched Customers:", selected);
 </script>
