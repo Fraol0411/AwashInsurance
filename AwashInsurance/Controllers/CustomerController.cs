@@ -13,8 +13,10 @@ namespace AwashInsurance.Controllers
             _context = context;
         }
 
+
+
         
-        // ADDING LOGIC      
+                 // ADDING LOGIC      
         public IActionResult Add()
         {
             return View();
@@ -51,17 +53,75 @@ namespace AwashInsurance.Controllers
 
 
 
+               // Modify LOGIC  
+        // GET: Load the view initially
+        [HttpGet]
+        public IActionResult Modify()
+        {
+            return View(new List<Customer>()); // returns the empty form
+        }
 
-        //public IActionResult Modify()
-        //{
-        //    return View();
-        //}
+       
+        // POST: Save updates to the selected customer
+        [HttpPost]
+        public IActionResult Modify(Customer updatedCustomer)
+        {
+            //if (!ModelState.IsValid)
+            //{
+            //    TempData["Error"] = "Please correct the errors in the form.";
 
-        public IActionResult Modify(string? searchBy, string? searchValue)
+            //    // Fetch the full customer list again
+            //    var allCustomers = _context.Customers.ToList();
+
+            //    // Set the selected customer for editing
+            //    ViewBag.Selected = updatedCustomer;
+
+            //    // Return the list so view can render
+            //    return View(allCustomers);
+            //}
+
+            var existingCustomer = _context.Customers.FirstOrDefault(c => c.CustomerId == updatedCustomer.CustomerId);
+
+            if (existingCustomer == null)
+            {
+                TempData["Error"] = "Customer not found.";
+                var allCustomers = _context.Customers.ToList();
+                return View(allCustomers);
+            }
+
+            // Update fields
+            existingCustomer.FullName = updatedCustomer.FullName;
+            existingCustomer.DateOfBirth = updatedCustomer.DateOfBirth;
+            existingCustomer.Gender = updatedCustomer.Gender;
+            existingCustomer.IDType = updatedCustomer.IDType;
+            existingCustomer.Email = updatedCustomer.Email;
+            existingCustomer.Phone = updatedCustomer.Phone;
+            existingCustomer.Address = updatedCustomer.Address;
+            existingCustomer.City = updatedCustomer.City;
+            existingCustomer.CustomerType = updatedCustomer.CustomerType;
+            existingCustomer.RegistrationDate = updatedCustomer.RegistrationDate;
+            existingCustomer.IsSubscribedToNewsletter = updatedCustomer.IsSubscribedToNewsletter;
+            existingCustomer.Notes = updatedCustomer.Notes;
+
+            _context.SaveChanges();
+
+            TempData["Success"] = "Customer information updated successfully!";
+
+            // After saving, return to the same view with updated list and selected customer
+            var customers = _context.Customers.ToList();
+            ViewBag.Selected = existingCustomer;
+            return View(new List<Customer>());
+        }
+
+
+
+
+        // Search the User Method
+        public IActionResult SearchUser(string? searchBy, string? searchValue)
         {
             if (string.IsNullOrWhiteSpace(searchBy) || string.IsNullOrWhiteSpace(searchValue))
             {
-                return View(new List<Customer>());
+                return View("Modify", new List<Customer>());
             }
 
             var customers = _context.Customers.AsQueryable();
@@ -75,21 +135,21 @@ namespace AwashInsurance.Controllers
                 else
                 {
                     TempData["Error"] = "Please enter a valid numeric Customer ID.";
-                    return View(new List<Customer>());
+                    return View("Modify", new List<Customer>());
                 }
             }
-            else if (searchBy == "CustomerName") // ✅ FIXED this line
+            else if (searchBy == "CustomerName")
             {
                 customers = customers.Where(c => c.FullName.Contains(searchValue));
             }
 
-            // ❗ Store filtered results in TempData
-            TempData["SearchResult"] = System.Text.Json.JsonSerializer.Serialize(customers.ToList());
-
-            return View(customers.ToList());
+            var result = customers.ToList();
+            TempData["SearchResult"] = System.Text.Json.JsonSerializer.Serialize(result);
+            return View("Modify", result); // 👈 Render the Modify.cshtml view
         }
 
 
+        // Populate the User Selected from Searched result
         [HttpPost]
         public IActionResult SelectCustomer(int selectedCustomerId)
         {
@@ -119,16 +179,16 @@ namespace AwashInsurance.Controllers
 
 
 
-
+                 // Delete LOGIC  
         public IActionResult Delete()
         {
             return View();
         }
-        
 
 
 
 
+                 // Inquire LOGIC  
         public IActionResult Inquire()
         {
             return View();

@@ -25,13 +25,17 @@
     }
 
 
-    <!-- Navigation Links -->
+    @{
+        var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+    }
+
     <div class="action-buttons">
-        <a href="/Customer/Add" class="action-btn active">Register</a>
-        <a href="/Customer/Modify" class="action-btn">Update</a>
-        <a href="/Customer/Delete" class="action-btn">Remove</a>
-        <a href="/Customer/Inquire" class="action-btn">View</a>
+        <a href="/Customer/Add" class="action-btn @(currentAction == "Add" ? "active" : "")">Register</a>
+        <a href="/Customer/Modify" class="action-btn @(currentAction == "Modify" ? "active" : "")">Update</a>
+        <a href="/Customer/Delete" class="action-btn @(currentAction == "Delete" ? "active" : "")">Remove</a>
+        <a href="/Customer/Inquire" class="action-btn @(currentAction == "Inquire" ? "active" : "")">View</a>
     </div>
+
 
     <!-- Registration Form -->
     <div class="form-body">

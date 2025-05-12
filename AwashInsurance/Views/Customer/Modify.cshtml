@@ -1,4 +1,5 @@
 ﻿ @model List<AwashInsurance.Models.Customer>
+
 @{
     var selected = ViewBag.SelectedCustomer as AwashInsurance.Models.Customer;
 }
@@ -8,11 +9,35 @@
     Layout = "~/Views/Shared/_CustomLayout.cshtml";
 }
 
+
+<style>
+    .highlighted-row {
+        background-color: #d1e7dd; /* Light green, change as needed */
+    }
+</style>
+
+
+
 <div class="form-container">
     <!-- Form Header -->
     <div class="form-header">
         <h2 class="form-title">Update Customer</h2>
     </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div style="color: green; background-color: #d4edda; padding: 10px; border-radius: 4px; margin-bottom: 10px;">
+            @TempData["Success"]
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div style="color: red; background-color: #f8d7da; padding: 10px; border-radius: 4px; margin-bottom: 10px;">
+            @TempData["Error"]
+        </div>
+    }
+
 
     <!-- Navigation Links -->
     <div class="action-buttons">
@@ -34,7 +59,7 @@
 
                 <div class="form-grid">
                     <div class="form-group">
-                        <form method="get" asp-action="Modify">
+                        <form method="get" asp-action="SearchUser">
                             <input type="hidden" name="searchBy" value="CustomerId" />
                             <label class="form-label">Customer ID</label>
                             <div class="input-group">
@@ -47,7 +72,7 @@
                     </div>
 
                     <div class="form-group">
-                        <form method="get" asp-action="Modify">
+                        <form method="get" asp-action="SearchUser">
                             <input type="hidden" name="searchBy" value="CustomerName" />
                             <label class="form-label">Customer Name</label>
                             <div class="input-group">
@@ -60,6 +85,8 @@
                     </div>
                 </div>
 
+
+                <!--  radio section that populates searched value -->
                 <div class="form-group full-width">
                     <div class="search-results">
                         <form asp-action="SelectCustomer" method="post">
@@ -75,12 +102,13 @@
                                 </thead>
                                 <tbody>
                                     @if (Model != null && Model.Any())
-                                    {        @foreach (var customer in Model)
+                                    {
+                                        foreach (var customer in Model)
                                         {
                                             <tr>
-                                                <td>
+                                                <td onclick="highlightRow(this.parentElement)">
                                                     <input type="radio" name="selectedCustomerId" value="@customer.CustomerId"
-                                                           onclick="this.form.submit();" />
+                                                           onclick="event.stopPropagation(); this.form.submit();" />
                                                 </td>
                                                 <td>@customer.CustomerId</td>
                                                 <td>@customer.FullName</td>
@@ -88,16 +116,15 @@
                                                 <td>@customer.Email</td>
                                             </tr>
                                         }
-
                                     }
                                 </tbody>
-
-                        </table>
+                            </table>
                         </form>
+
         
                         @if (!Model.Any())
                         {
-                            <p>No customers found.</p>
+                            <p></p>
                         }
 
                     </div>
@@ -109,51 +136,90 @@
             <!-- Update Form (shown after selection) -->
             @if (selected != null)
             {
-                <fieldset class="form-section" id="modifyFormSection">
-                    <legend class="section-header">
-                        <span class="section-number">2</span>
-                        <h3 class="section-title">Update Customer Details</h3>
-                    </legend>
+                <form asp-action="Modify" method="post">
+                    <fieldset class="form-section" id="modifyFormSection">
+                        <legend class="section-header">
+                            <span class="section-number">2</span>
+                            <h3 class="section-title">Update Customer Details</h3>
+                        </legend>
 
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label class="form-label">Customer ID</label>
-                            <input type="text" class="form-input" value="@selected.CustomerId" readonly>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">Customer ID</label>
+                                <input type="text" class="form-input" name="CustomerId" value="@selected.CustomerId" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Full Name</label>
+                                <input type="text" class="form-input" name="FullName" value="@selected.FullName" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Date of Birth</label>
+                                <input type="date" class="form-input" name="DateOfBirth" value="@selected.DateOfBirth.ToString("yyyy-MM-dd")">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Gender</label>
+                                <select class="form-input" name="Gender">
+                                    <option value="Male" selected="@(selected.Gender == "Male")">Male</option>
+                                    <option value="Female" selected="@(selected.Gender == "Female")">Female</option>
+                                    <option value="Other" selected="@(selected.Gender == "Other")">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">ID Type</label>
+                                <input type="text" class="form-input" name="IDType" value="@selected.IDType">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-input" name="Email" value="@selected.Email">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Phone</label>
+                                <input type="tel" class="form-input" name="Phone" value="@selected.Phone">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Address</label>
+                                <input type="text" class="form-input" name="Address" value="@selected.Address">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">City</label>
+                                <input type="text" class="form-input" name="City" value="@selected.City">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Customer Type</label>
+                                <select class="form-input" name="CustomerType">
+                                    <option value="Individual" selected="@(selected.CustomerType == "Individual")">Individual</option>
+                                    <option value="Corporate" selected="@(selected.CustomerType == "Corporate")">Corporate</option>
+                                    <option value="VIP" selected="@(selected.CustomerType == "VIP")">VIP</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Newsletter Subscription</label>
+                                <input type="checkbox" class="form-checkbox" name="IsSubscribedToNewsletter" checked="@selected.IsSubscribedToNewsletter">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Registration Date</label>
+                                <input type="date" class="form-input" name="RegistrationDate" value="@selected.RegistrationDate.ToString("yyyy-MM-dd")" readonly>
+                            </div>
                         </div>
 
-                        <div class="form-group">
-                            <label class="form-label">Full Name</label>
-                            <input type="text" class="form-input" value="@selected.FullName">
+                        <div class="form-group full-width">
+                            <label class="form-label">Update Notes</label>
+                            <textarea rows="3" class="form-textarea" name="Notes">@selected.Notes</textarea>
                         </div>
 
-                        <div class="form-group">
-                            <label class="form-label">Phone Number</label>
-                            <input type="tel" class="form-input" value="@selected.Phone">
-                        </div>
+                        <div class="form-actions">
+                            <button type="reset" class="form-button secondary-button">
+                                <span class="button-icon">↻</span> Reset
+                            </button>
 
-                        <div class="form-group">
-                            <label class="form-label">Email Address</label>
-                            <input type="email" class="form-input" value="@selected.Email">
+                            <button type="submit" class="form-button primary-button" id="btnSaveUpdates">
+                                <span class="button-icon">✓</span> Save Updates
+                            </button>
                         </div>
-                    </div>
-
-                    <div class="form-group full-width">
-                        <label class="form-label">Update Notes</label>
-                        <textarea rows="3" class="form-textarea">@selected.Notes</textarea>
-                    </div>
-                </fieldset>
+                    </fieldset>
+                </form>
             }
 
-
-            <!-- Form Actions -->
-            <div class="form-actions">
-                <button type="button" class="form-button secondary-button">
-                    <span class="button-icon">↻</span> Reset
-                </button>
-                <button type="button" class="form-button primary-button" id="btnSaveUpdates" disabled>
-                    <span class="button-icon">✓</span> Save Updates
-                </button>
-            </div>
         </form>
     </div>
 </div>
@@ -184,44 +250,6 @@
             observer.observe(section);
         });
 
-
-                // Update section functionality
-            // document.querySelectorAll('.customer-row input[type="radio"]').forEach((radio, index) => {
-            //         radio.addEventListener('click', function () {
-            //             const row = this.closest('.customer-row');
-            //             document.getElementById('customerIdInput').value = row.dataset.id;
-            //             document.getElementById('fullNameInput').value = row.dataset.name;
-            //             document.getElementById('phoneInput').value = row.dataset.phone;
-            //             document.getElementById('emailInput').value = row.dataset.email;
-
-            //             document.getElementById('modifyFormSection').style.display = 'block';
-            //         });
-            //     });
-
-
-        // const updateRadios = document.querySelectorAll('input[name="selectedCustomer"]');
-        // const updateFormSection = document.getElementById('modifyFormSection');
-        // const saveUpdatesBtn = document.getElementById('btnSaveUpdates');
-
-        // updateRadios.forEach(radio => {
-        //     radio.addEventListener('change', function() {
-        //         if (this.checked) {
-        //             updateFormSection.style.display = 'block';
-        //             saveUpdatesBtn.disabled = false;
-
-        //             // Simulate loading data (UI only)
-        //             const row = this.closest('tr');
-        //             const form = updateFormSection.querySelector('form');
-        //             form.querySelector('input[type="text"]').value = row.cells[1].textContent;
-        //             form.querySelectorAll('input[type="text"]')[1].value = row.cells[2].textContent;
-        //             form.querySelector('input[type="tel"]').value = row.cells[3].textContent;
-        //         }
-        //     });
-        // });
-
-
-
-
         // Reset form
         document.querySelector('.secondary-button').addEventListener('click', function() {
             const form = this.closest('form');
@@ -241,3 +269,22 @@
     const customers = @Html.Raw(JsonConvert.SerializeObject(Model));
     console.log("Fetched Customers:", selected);
 </script>
+
+<script>
+    function highlightRow(row) {
+        const rows = document.querySelectorAll(".results-table tbody tr");
+        rows.forEach(r => r.classList.remove("highlighted-row"));
+        row.classList.add("highlighted-row");
+    }
+</script>
+
+@* @section Scripts {
+    <script>
+        setTimeout(function () {
+            document.querySelectorAll('[style*="background-color"]').forEach(el => {
+                el.style.display = 'none';
+            });
+        }, 4000); // Hide after 4 seconds
+    </script>
+} *@
+

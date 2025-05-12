@@ -1,0 +1,72 @@
+﻿@model IEnumerable<AwashInsurance.Models.Employee>
+
+@{
+    ViewData["Title"] = "Employee List";
+    Layout = "~/Views/Shared/_CustomLayout.cshtml";
+}
+
+<div class="form-container">
+    <div class="form-header">
+        <h2 class="form-title">Employee List</h2>
+    </div>
+
+    <div class="form-body">
+        <div class="form-actions">
+            <a asp-action="Create" class="form-button primary-button">Create New</a>
+        </div>
+
+        <div class="search-results">
+            <table class="results-table">
+                <thead>
+                    <tr>
+                        <th>@Html.DisplayNameFor(model => model.First().FullName)</th>
+                        <th>@Html.DisplayNameFor(model => model.First().DateOfBirth)</th>
+                        <th>@Html.DisplayNameFor(model => model.First().Gender)</th>
+                        <th>@Html.DisplayNameFor(model => model.First().Email)</th>
+                        <th>@Html.DisplayNameFor(model => model.First().Phone)</th>
+                        <th>@Html.DisplayNameFor(model => model.First().Position)</th>
+                        <th>@Html.DisplayNameFor(model => model.First().HireDate)</th>
+                        <th>@Html.DisplayNameFor(model => model.First().IsActive)</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(_ => item.FullName)</td>
+                            <td>@item.DateOfBirth.ToString("yyyy-MM-dd")</td>
+                            <td>@Html.DisplayFor(_ => item.Gender)</td>
+                            <td>@Html.DisplayFor(_ => item.Email)</td>
+                            <td>@Html.DisplayFor(_ => item.Phone)</td>
+                            <td>@Html.DisplayFor(_ => item.Position)</td>
+                            <td>@item.HireDate.ToString("yyyy-MM-dd")</td>
+                            <td>
+                                <span class="checkbox-label">
+                                    <input type="checkbox" @(item.IsActive ? "checked" : "") disabled class="form-checkbox" />
+                                    <span class="checkmark"></span>
+                                </span>
+                            </td>
+                            <td>
+                                <div class="action-buttons">
+                                    <a asp-action="Edit" asp-route-id="@item.EmployeeId" class="action-btn">Edit</a>
+                                    <a asp-action="Details" asp-route-id="@item.EmployeeId" class="action-btn">Details</a>
+                                    <a asp-action="Delete" asp-route-id="@item.EmployeeId" class="action-btn danger-button">Delete</a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Include shared CSS -->
+<link href="~/css/pagestyle.css" rel="stylesheet" />
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
