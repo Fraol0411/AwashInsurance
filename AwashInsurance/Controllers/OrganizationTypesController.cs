@@ -9,22 +9,22 @@ using AwashInsurance.Models;
 
 namespace AwashInsurance.Controllers
 {
-    public class EmployeesController : Controller
+    public class OrganizationTypesController : Controller
     {
         private readonly AppDbContext _context;
 
-        public EmployeesController(AppDbContext context)
+        public OrganizationTypesController(AppDbContext context)
         {
             _context = context;
         }
 
-        // GET: Employees
+        // GET: OrganizationTypes
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Employees.ToListAsync());
+            return View(await _context.OrganizationTypes.ToListAsync());
         }
 
-        // GET: Employees/Details/5
+        // GET: OrganizationTypes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -32,39 +32,39 @@ namespace AwashInsurance.Controllers
                 return NotFound();
             }
 
-            var employee = await _context.Employees
-                .FirstOrDefaultAsync(m => m.EmployeeId == id);
-            if (employee == null)
+            var organizationType = await _context.OrganizationTypes
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (organizationType == null)
             {
                 return NotFound();
             }
 
-            return View(employee);
+            return View(organizationType);
         }
 
-        // GET: Employees/Create
+        // GET: OrganizationTypes/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Employees/Create
+        // POST: OrganizationTypes/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("EmployeeId,FullName,DateOfBirth,Gender,Email,Phone,Position,HireDate,IsActive")] Employee employee)
+        public async Task<IActionResult> Create([Bind("Id,Name")] OrganizationType organizationType)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(employee);
+                _context.Add(organizationType);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(employee);
+            return View(organizationType);
         }
 
-        // GET: Employees/Edit/5
+        // GET: OrganizationTypes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -72,22 +72,22 @@ namespace AwashInsurance.Controllers
                 return NotFound();
             }
 
-            var employee = await _context.Employees.FindAsync(id);
-            if (employee == null)
+            var organizationType = await _context.OrganizationTypes.FindAsync(id);
+            if (organizationType == null)
             {
                 return NotFound();
             }
-            return View(employee);
+            return View(organizationType);
         }
 
-        // POST: Employees/Edit/5
+        // POST: OrganizationTypes/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("EmployeeId,FullName,DateOfBirth,Gender,Email,Phone,Position,HireDate,IsActive")] Employee employee)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] OrganizationType organizationType)
         {
-            if (id != employee.EmployeeId)
+            if (id != organizationType.Id)
             {
                 return NotFound();
             }
@@ -96,12 +96,12 @@ namespace AwashInsurance.Controllers
             {
                 try
                 {
-                    _context.Update(employee);
+                    _context.Update(organizationType);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!EmployeeExists(employee.EmployeeId))
+                    if (!OrganizationTypeExists(organizationType.Id))
                     {
                         return NotFound();
                     }
@@ -112,10 +112,10 @@ namespace AwashInsurance.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(employee);
+            return View(organizationType);
         }
 
-        // GET: Employees/Delete/5
+        // GET: OrganizationTypes/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -123,34 +123,34 @@ namespace AwashInsurance.Controllers
                 return NotFound();
             }
 
-            var employee = await _context.Employees
-                .FirstOrDefaultAsync(m => m.EmployeeId == id);
-            if (employee == null)
+            var organizationType = await _context.OrganizationTypes
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (organizationType == null)
             {
                 return NotFound();
             }
 
-            return View(employee);
+            return View(organizationType);
         }
 
-        // POST: Employees/Delete/5
+        // POST: OrganizationTypes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var employee = await _context.Employees.FindAsync(id);
-            if (employee != null)
+            var organizationType = await _context.OrganizationTypes.FindAsync(id);
+            if (organizationType != null)
             {
-                _context.Employees.Remove(employee);
+                _context.OrganizationTypes.Remove(organizationType);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool EmployeeExists(int id)
+        private bool OrganizationTypeExists(int id)
         {
-            return _context.Employees.Any(e => e.EmployeeId == id);
+            return _context.OrganizationTypes.Any(e => e.Id == id);
         }
     }
 }

@@ -16,3 +16,80 @@
 
     return View(result);
 }
+
+
+
+
+@* <!-- Section 1: Account Details --> *@
+@* <fieldset class="form-section"> *@
+@*     <legend class="section-header"> *@
+@*         <span class="section-number">1</span> *@
+@*         <h3 class="section-title">User Account Details</h3> *@
+@*     </legend> *@
+
+@*     <div class="form-grid"> *@
+@*         <!-- Login ID --> *@
+@*         <div class="form-group"> *@
+@*             <label class="form-label">Login ID</label> *@
+@*             <input asp-for="LoginId" type="text" class="form-input" required /> *@
+@*             <span asp-validation-for="LoginId" class="text-danger"></span> *@
+@*         </div> *@
+
+@*         <!-- Password --> *@
+@*         <div class="form-group"> *@
+@*             <label class="form-label">Password</label> *@
+@*             <input asp-for="Password" type="password" class="form-input" required /> *@
+@*             <span asp-validation-for="Password" class="text-danger"></span> *@
+@*         </div> *@
+
+@*         <!-- Role Selection --> *@
+@*         <div class="form-group"> *@
+@*             <label class="form-label">Role</label> *@
+@*             <select asp-for="RoleId" class="form-select" asp-items="ViewBag.Roles"> *@
+@*                 <option value="">-- Select Role --</option> *@
+@*             </select> *@
+@*             <span asp-validation-for="RoleId" class="text-danger"></span> *@
+@*         </div> *@
+
+@*         <!-- Is Active --> *@
+@*         <div class="form-group checkbox-group"> *@
+@*             <label class="form-label">Active</label> *@
+@*             <label class="checkbox-label"> *@
+@*                 <input asp-for="IsActive" type="checkbox" class="form-checkbox" /> *@
+@*                 <span class="checkmark"></span> *@
+@*             </label> *@
+@*         </div> *@
+
+@*         <!-- Created At (optional display only) --> *@
+@*         <div class="form-group"> *@
+@*             <label class="form-label">Created At</label> *@
+@*             <input asp-for="CreatedAt" type="date" class="form-input" readonly /> *@
+@*         </div> *@
+@*     </div> *@
+@* </fieldset> *@
+
+@* <!-- Section 2: Employee Selection --> *@
+@* <fieldset class="form-section"> *@
+@*     <legend class="section-header"> *@
+@*         <span class="section-number">2</span> *@
+@*         <h3 class="section-title">Employee Link</h3> *@
+@*     </legend> *@
+
+@*     <div class="form-grid"> *@
+@*         <!-- Search or Select Employee --> *@
+@*         <div class="form-group"> *@
+@*             <label class="form-label">Employee</label> *@
+@*             <select asp-for="EmployeeId" class="form-select" asp-items="ViewBag.Employees"> *@
+@*                 <option value="">-- Select Employee --</option> *@
+@*             </select> *@
+@*             <span asp-validation-for="EmployeeId" class="text-danger"></span> *@
+@*         </div> *@
+
+@*         <!-- Display Employee Full Name (optional) --> *@
+@*         <div class="form-group"> *@
+@*             <label class="form-label">Employee Name</label> *@
+@*             <input type="text" value="@(Model != null ? Model.EmployeeName : "")" class="form-input" readonly /> *@
+
+@*         </div> *@
+@*     </div> *@
+@* </fieldset> *@

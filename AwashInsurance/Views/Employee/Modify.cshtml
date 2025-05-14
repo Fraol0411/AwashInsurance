@@ -1,11 +1,11 @@
-﻿ @model List<AwashInsurance.Models.Customer>
+﻿ @model List<AwashInsurance.Models.Employee>
 
 @{
-    var selected = ViewBag.SelectedCustomer as AwashInsurance.Models.Customer;
+    var selected = ViewBag.SelectedEmployee as AwashInsurance.Models.Employee;
 }
  @using Newtonsoft.Json
 @{
-    ViewData["Title"] = "Update Customer";
+    ViewData["Title"] = "Update Employee";
     Layout = "~/Views/Shared/_CustomLayout.cshtml";
 }
 
@@ -21,7 +21,7 @@
 <div class="form-container">
     <!-- Form Header -->
     <div class="form-header">
-        <h2 class="form-title">Update Customer</h2>
+        <h2 class="form-title">Update Employee</h2>
     </div>
 
     @if (TempData["Success"] != null)
@@ -38,14 +38,25 @@
         </div>
     }
 
+    @{
+        string currentAction = ViewContext.RouteData.Values["action"]?.ToString() ?? "";
+        string currentController = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
+    }
 
-    <!-- Navigation Links -->
     <div class="action-buttons">
-        <a href="/Customer/Add" class="action-btn active">Register</a>
-        <a href="/Customer/Modify" class="action-btn">Update</a>
-        <a href="/Customer/Delete" class="action-btn">Remove</a>
-        <a href="/Customer/Inquire" class="action-btn">View</a>
+        <a href="/Employee/Add" class="action-btn @(currentAction == "Add" && currentController == "Employee" ? "active" : "")"
+           data-action="Add">Add</a>
+        <a href="/Employee/Modify" class="action-btn @(currentAction == "Modify" && currentController == "Employee" ? "active" : "")"
+           data-action="Modify">Modify</a>
+        <a href="/Employee/Delete" class="action-btn delete @(currentAction == "Delete" && currentController == "Employee" ? "active" : "")"
+           data-action="Delete">Delete</a>
+        <a href="/Employee/Inquire" class="action-btn inquire @(currentAction == "Inquire" && currentController == "Employee" ? "active" : "")"
+           data-action="Inquire">Inquire</a>
     </div>
+
+
+
+
 
     <!-- Update Form -->
     <div class="form-body">
@@ -59,9 +70,10 @@
 
                 <div class="form-grid">
                     <div class="form-group">
-                        <form method="get" asp-action="SearchUser">
-                            <input type="hidden" name="searchBy" value="CustomerId" />
-                            <label class="form-label">Customer ID</label>
+                        <form method="get" asp-action="SearchEmployee">
+                            <input type="hidden" name="searchBy" value="Id" />
+                            <input type="hidden" name="returnView" value="Modify" /> <!-- Add this -->
+                            <label class="form-label">Employee ID</label>
                             <div class="input-group">
                                 <input type="text" name="searchValue" class="form-input" placeholder="Enter customer ID">
                                 <button type="submit" class="input-button search-button">
@@ -72,9 +84,10 @@
                     </div>
 
                     <div class="form-group">
-                        <form method="get" asp-action="SearchUser">
-                            <input type="hidden" name="searchBy" value="CustomerName" />
-                            <label class="form-label">Customer Name</label>
+                        <form method="get" asp-action="SearchEmployee">
+                            <input type="hidden" name="searchBy" value="FirstName" />
+                            <input type="hidden" name="returnView" value="Modify" /> <!-- Add this -->
+                            <label class="form-label">Employee Name</label>
                             <div class="input-group">
                                 <input type="text" name="searchValue" class="form-input" placeholder="Enter customer name">
                                 <button type="submit" class="input-button search-button">
@@ -86,10 +99,12 @@
                 </div>
 
 
+
                 <!--  radio section that populates searched value -->
                 <div class="form-group full-width">
                     <div class="search-results">
-                        <form asp-action="SelectCustomer" method="post">
+                        <form asp-action="SelectEmployee" method="post">
+                            <input type="hidden" name="returnView" value="Modify" />
                             <table class="results-table">
                                 <thead>
                                     <tr>
@@ -103,17 +118,17 @@
                                 <tbody>
                                     @if (Model != null && Model.Any())
                                     {
-                                        foreach (var customer in Model)
+                                        foreach (var employee in Model)
                                         {
                                             <tr>
                                                 <td onclick="highlightRow(this.parentElement)">
-                                                    <input type="radio" name="selectedCustomerId" value="@customer.CustomerId"
+                                                    <input type="radio" name="selectedEmployeeId" value="@employee.Id"
                                                            onclick="event.stopPropagation(); this.form.submit();" />
                                                 </td>
-                                                <td>@customer.CustomerId</td>
-                                                <td>@customer.FullName</td>
-                                                <td>@customer.Phone</td>
-                                                <td>@customer.Email</td>
+                                                <td>@employee.Id</td>
+                                                <td>@employee.FirstName</td>
+                                                <td>@employee.PhoneNumber</td>
+                                                <td>@employee.Email</td>
                                             </tr>
                                         }
                                     }
@@ -140,71 +155,55 @@
                     <fieldset class="form-section" id="modifyFormSection">
                         <legend class="section-header">
                             <span class="section-number">2</span>
-                            <h3 class="section-title">Update Customer Details</h3>
+                            <h3 class="section-title">Update Employee Details</h3>
                         </legend>
 
                         <div class="form-grid">
                             <div class="form-group">
-                                <label class="form-label">Customer ID</label>
-                                <input type="text" class="form-input" name="CustomerId" value="@selected.CustomerId" readonly>
+                                <label class="form-label">Employee ID</label>
+                                <input type="text" class="form-input" name="Id" value="@selected.Id" readonly>
                             </div>
+
                             <div class="form-group">
-                                <label class="form-label">Full Name</label>
-                                <input type="text" class="form-input" name="FullName" value="@selected.FullName" required>
+                                <label class="form-label">First Name</label>
+                                <input type="text" class="form-input" name="FirstName" value="@selected.FirstName" required>
                             </div>
+
                             <div class="form-group">
-                                <label class="form-label">Date of Birth</label>
-                                <input type="date" class="form-input" name="DateOfBirth" value="@selected.DateOfBirth.ToString("yyyy-MM-dd")">
+                                <label class="form-label">Last Name</label>
+                                <input type="text" class="form-input" name="LastName" value="@selected.LastName" required>
                             </div>
+
                             <div class="form-group">
                                 <label class="form-label">Gender</label>
-                                <select class="form-input" name="Gender">
+                                <select class="form-select" name="Gender">
+                                    <option value="">-- Select --</option>
                                     <option value="Male" selected="@(selected.Gender == "Male")">Male</option>
                                     <option value="Female" selected="@(selected.Gender == "Female")">Female</option>
                                     <option value="Other" selected="@(selected.Gender == "Other")">Other</option>
                                 </select>
                             </div>
+
                             <div class="form-group">
-                                <label class="form-label">ID Type</label>
-                                <input type="text" class="form-input" name="IDType" value="@selected.IDType">
+                                <label class="form-label">Phone Number</label>
+                                <input type="tel" class="form-input" name="PhoneNumber" value="@selected.PhoneNumber" required>
                             </div>
+
                             <div class="form-group">
                                 <label class="form-label">Email</label>
-                                <input type="email" class="form-input" name="Email" value="@selected.Email">
+                                <input type="email" class="form-input" name="Email" value="@selected.Email" required>
                             </div>
+
                             <div class="form-group">
-                                <label class="form-label">Phone</label>
-                                <input type="tel" class="form-input" name="Phone" value="@selected.Phone">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Address</label>
-                                <input type="text" class="form-input" name="Address" value="@selected.Address">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">City</label>
-                                <input type="text" class="form-input" name="City" value="@selected.City">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Customer Type</label>
-                                <select class="form-input" name="CustomerType">
-                                    <option value="Individual" selected="@(selected.CustomerType == "Individual")">Individual</option>
-                                    <option value="Corporate" selected="@(selected.CustomerType == "Corporate")">Corporate</option>
-                                    <option value="VIP" selected="@(selected.CustomerType == "VIP")">VIP</option>
+                                <label class="form-label">Department</label>
+                                <select class="form-select" name="OrganizationUnitId" required>
+                                    <option value="">-- Select Department --</option>
+                                    @foreach (var dept in ViewBag.OrganizationUnits)
+                                    {
+                                        <option value="@dept.Id" selected="@(dept.Id == selected.OrganizationUnitId)">@dept.Name</option>
+                                    }
                                 </select>
                             </div>
-                            <div class="form-group">
-                                <label class="form-label">Newsletter Subscription</label>
-                                <input type="checkbox" class="form-checkbox" name="IsSubscribedToNewsletter" checked="@selected.IsSubscribedToNewsletter">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Registration Date</label>
-                                <input type="date" class="form-input" name="RegistrationDate" value="@selected.RegistrationDate.ToString("yyyy-MM-dd")" readonly>
-                            </div>
-                        </div>
-
-                        <div class="form-group full-width">
-                            <label class="form-label">Update Notes</label>
-                            <textarea rows="3" class="form-textarea" name="Notes">@selected.Notes</textarea>
                         </div>
 
                         <div class="form-actions">
@@ -228,13 +227,11 @@
 <link href="~/css/pagestyle.css" rel="stylesheet" />
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Focus first input field
+    document.addEventListener('DOMContentLoaded', () => {
         const firstInput = document.querySelector('.form-input');
         if (firstInput) firstInput.focus();
 
-        // Add animation to form sections when they come into view
-        const observer = new IntersectionObserver((entries) => {
+        const observer = new IntersectionObserver(entries => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.style.opacity = 1;
@@ -249,42 +246,67 @@
             section.style.transition = 'all 0.4s ease-out';
             observer.observe(section);
         });
-
-        // Reset form
-        document.querySelector('.secondary-button').addEventListener('click', function() {
-            const form = this.closest('form');
-            if (form) {
-                form.reset();
-                updateFormSection.style.display = 'none';
-                saveUpdatesBtn.disabled = true;
-                document.querySelectorAll('input[type="radio"]').forEach(radio => {
-                    radio.checked = false;
-                });
-            }
-        });
     });
-</script>
 
-<script>
-    const customers = @Html.Raw(JsonConvert.SerializeObject(Model));
-    console.log("Fetched Customers:", selected);
-</script>
-
-<script>
     function highlightRow(row) {
-        const rows = document.querySelectorAll(".results-table tbody tr");
-        rows.forEach(r => r.classList.remove("highlighted-row"));
+        document.querySelectorAll(".results-table tbody tr").forEach(r => {
+            r.classList.remove("highlighted-row");
+        });
         row.classList.add("highlighted-row");
     }
+
+        document.addEventListener("DOMContentLoaded", function() {
+        // Get the current URL path
+        const currentPath = window.location.pathname;
+
+        // Remove the active class from all buttons
+        const buttons = document.querySelectorAll('.action-btn');
+        buttons.forEach(button => button.classList.remove('active'));
+
+        // Check the current URL path and add the active class to the corresponding button
+        if (currentPath.includes("/Custom/Add")) {
+            document.querySelector('a[href="/Custom/Add"]').classList.add('active');
+        } else if (currentPath.includes("/Custom/Modify")) {
+            document.querySelector('a[href="/Custom/Modify"]').classList.add('active');
+        } else if (currentPath.includes("/Custom/Delete")) {
+            document.querySelector('a[href="/Custom/Delete"]').classList.add('active');
+        } else if (currentPath.includes("/Custom/Inquire")) {
+            document.querySelector('a[href="/Custom/Inquire"]').classList.add('active');
+        }
+    });
+
+
+        document.addEventListener("DOMContentLoaded", function() {
+        // Check if there's a saved active action in localStorage
+        const savedAction = localStorage.getItem("activeAction");
+
+        // If there is a saved action, apply the 'active' class to the corresponding button
+        if (savedAction) {
+            // Remove 'active' class from all buttons first
+            const allButtons = document.querySelectorAll('.action-btn');
+            allButtons.forEach(button => button.classList.remove('active'));
+
+            // Find and add 'active' class to the button with the saved action
+            const activeButton = document.querySelector(`.action-btn[data-action="${savedAction}"]`);
+            if (activeButton) {
+                activeButton.classList.add('active');
+            }
+        }
+
+        // Add event listeners to update the active state when a button is clicked
+        const buttons = document.querySelectorAll('.action-btn');
+        buttons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Save the clicked action to localStorage
+                localStorage.setItem("activeAction", button.getAttribute("data-action"));
+            });
+        });
+    });
+
+
+
+
 </script>
 
-@* @section Scripts {
-    <script>
-        setTimeout(function () {
-            document.querySelectorAll('[style*="background-color"]').forEach(el => {
-                el.style.display = 'none';
-            });
-        }, 4000); // Hide after 4 seconds
-    </script>
-} *@
+
 

@@ -68,6 +68,24 @@
         background: #d0d0d0;
     }
 
+
+
+    /* Custom Styles for Delete and Inquire */
+    .action-btn.delete.active {
+        background-color: #dc3545; /* Red */
+        color: white;
+        border-color: #dc3545;
+    }
+
+    .action-btn.inquire.active {
+        background-color: #28a745; /* Light Green */
+        color: white;
+        border-color: #28a745;
+    }
+
+
+
+
 /* Form Body */
 .form-body {
     padding: 25px 30px;
@@ -340,3 +358,5 @@
     .results-table th {
         background-color: var(--primary-lighter)
     }
+
+

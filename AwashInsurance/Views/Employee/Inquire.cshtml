@@ -1,0 +1,232 @@
+﻿ @model List<AwashInsurance.Models.Employee>
+
+@{
+    var selected = ViewBag.SelectedEmployee as AwashInsurance.Models.Employee;
+}
+ @using Newtonsoft.Json
+
+@{
+    ViewData["Title"] = "View Customer";
+    Layout = "~/Views/Shared/_CustomLayout.cshtml";
+}
+
+<div class="form-container">
+    <!-- Form Header -->
+    <div class="form-header">
+        <h2 class="form-title">View Customer Details</h2>
+    </div>
+
+
+    @{
+        string currentAction = ViewContext.RouteData.Values["action"]?.ToString() ?? "";
+        string currentController = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
+    }
+
+    <div class="action-buttons">
+        <a href="/Employee/Add" class="action-btn @(currentAction == "Add" && currentController == "Employee" ? "active" : "")"
+           data-action="Add">Add</a>
+        <a href="/Employee/Modify" class="action-btn @(currentAction == "Modify" && currentController == "Employee" ? "active" : "")"
+           data-action="Modify">Modify</a>
+        <a href="/Employee/Delete" class="action-btn delete @(currentAction == "Delete" && currentController == "Employee" ? "active" : "")"
+           data-action="Delete">Delete</a>
+        <a href="/Employee/Inquire" class="action-btn inquire @(currentAction == "Inquire" && currentController == "Employee" ? "active" : "")"
+           data-action="Inquire">Inquire</a>
+    </div>
+
+
+
+
+
+    <!-- View Form -->
+    <div class="form-body">
+        <form class="form-main">
+ 
+            <!-- Search Section -->
+            <fieldset class="form-section">
+                <legend class="section-header">
+                    <span class="section-number">1</span>
+                    <h3 class="section-title">Find Customer</h3>
+                </legend>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <form method="get" asp-action="SearchEmployee">
+                            <input type="hidden" name="searchBy" value="Id" />
+                            <input type="hidden" name="returnView" value="Inquire" /> <!-- Add this -->
+                            <label class="form-label">Customer ID</label>
+                            <div class="input-group">
+                                <input type="text" name="searchValue" class="form-input" placeholder="Enter customer ID">
+                                <button type="submit" class="input-button search-button">
+                                    <span class="button-icon">🔍</span> Search
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="form-group">
+                        <form method="get" asp-action="SearchEmployee">
+                            <input type="hidden" name="searchBy" value="FirstName" />
+                            <input type="hidden" name="returnView" value="Inquire" /> <!-- Add this -->
+                            <label class="form-label">Customer Name</label>
+                            <div class="input-group">
+                                <input type="text" name="searchValue" class="form-input" placeholder="Enter customer name">
+                                <button type="submit" class="input-button search-button">
+                                    <span class="button-icon">🔍</span> Search
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+
+
+                <!--  radio section that populates searched value -->
+                <div class="form-group full-width">
+                    <div class="search-results">
+                        <form asp-action="SelectEmployee" method="post">
+                            <input type="hidden" name="returnView" value="Inquire" />
+                            <table class="results-table">
+                                <thead>
+                                    <tr>
+                                        <th>Select</th>
+                                        <th>Customer ID</th>
+                                        <th>Customer Name</th>
+                                        <th>Phone</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model != null && Model.Any())
+                                    {
+                                        foreach (var employee in Model)
+                                        {
+                                            <tr>
+                                                <td onclick="highlightRow(this.parentElement)">
+                                                    <input type="radio" name="selectedEmployeeId" value="@employee.Id"
+                                                           onclick="event.stopPropagation(); this.form.submit();" />
+                                                </td>
+                                                <td>@employee.Id</td>
+                                                <td>@employee.FirstName</td>
+                                                <td>@employee.PhoneNumber</td>
+                                                <td>@employee.Email</td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </form>
+
+
+                        @if (!Model.Any())
+                        {
+                            <p></p>
+                        }
+
+                    </div>
+                </div>
+            </fieldset>
+
+            <!-- Update Form (shown after selection) -->
+            @if (selected != null)
+            {
+                <fieldset class="form-section" id="inquireSection">
+                    <legend class="section-header">
+                        <span class="section-number">2</span>
+                        <h3 class="section-title">Employee Information</h3>
+                    </legend>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Employee ID</label>
+                            <input type="text" class="form-input" value="@selected.Id" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">First Name</label>
+                            <input type="text" class="form-input" value="@selected.FirstName" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Last Name</label>
+                            <input type="text" class="form-input" value="@selected.LastName" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Gender</label>
+                            <input type="text" class="form-input" value="@selected.Gender" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Phone Number</label>
+                            <input type="tel" class="form-input" value="@selected.PhoneNumber" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-input" value="@selected.Email" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Department</label>
+                            <input type="text" class="form-input" value="@selected.OrganizationUnit?.Name" readonly>
+                        </div>
+                    </div>
+                </fieldset>
+            }
+
+        </form>
+    </div>
+</div>
+
+<!-- Include shared CSS -->
+<link href="~/css/pagestyle.css" rel="stylesheet" />
+
+<script>
+    function highlightRow(row) {
+        document.querySelectorAll('.results-table tr').forEach(r => r.classList.remove('highlight'));
+        row.classList.add('highlight');
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const sections = document.querySelectorAll('.form-section');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = 1;
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        sections.forEach(section => {
+            section.style.opacity = 0;
+            section.style.transform = 'translateY(20px)';
+            section.style.transition = 'all 0.4s ease-out';
+            observer.observe(section);
+        });
+    });
+
+
+        document.addEventListener("DOMContentLoaded", function() {
+        // Check if there's a saved active action in localStorage
+        const savedAction = localStorage.getItem("activeAction");
+
+        // If there is a saved action, apply the 'active' class to the corresponding button
+        if (savedAction) {
+            // Remove 'active' class from all buttons first
+            const allButtons = document.querySelectorAll('.action-btn');
+            allButtons.forEach(button => button.classList.remove('active'));
+
+            // Find and add 'active' class to the button with the saved action
+            const activeButton = document.querySelector(`.action-btn[data-action="${savedAction}"]`);
+            if (activeButton) {
+                activeButton.classList.add('active');
+            }
+        }
+
+        // Add event listeners to update the active state when a button is clicked
+        const buttons = document.querySelectorAll('.action-btn');
+        buttons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Save the clicked action to localStorage
+                localStorage.setItem("activeAction", button.getAttribute("data-action"));
+            });
+        });
+    });
+
+
+</script>

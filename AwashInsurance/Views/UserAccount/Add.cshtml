@@ -1,0 +1,270 @@
+﻿@model List<AwashInsurance.Models.Employee>
+@{
+    var selected = ViewBag.SelectedEmployee as AwashInsurance.Models.Employee;
+}
+ @using Newtonsoft.Json
+
+@{
+    ViewData["Title"] = "Register UserAccount";
+    Layout = "~/Views/Shared/_CustomLayout.cshtml";
+}
+
+<div class="form-container">
+    <!-- Form Header -->
+    <div class="form-header">
+        <h2 class="form-title">Register New Customer</h2>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div style="color: green; background-color: #d4edda; padding: 10px; border-radius: 4px; margin-bottom: 10px;">
+            @TempData["Success"]
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div style="color: red; background-color: #f8d7da; padding: 10px; border-radius: 4px; margin-bottom: 10px;">
+            @TempData["Error"]
+        </div>
+    }
+
+
+    @{
+        string currentAction = ViewContext.RouteData.Values["action"]?.ToString() ?? "";
+        string currentController = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
+    }
+
+    <div class="action-buttons">
+        <a href="/UserAccount/Add" class="action-btn @(currentAction == "Add" && currentController == "UserAccount" ? "active" : "")"
+           data-action="Add">Add</a>
+        <a href="/UserAccount/Modify" class="action-btn @(currentAction == "Modify" && currentController == "UserAccount" ? "active" : "")"
+           data-action="Modify">Modify</a>
+        <a href="/UserAccount/Delete" class="action-btn delete @(currentAction == "Delete" && currentController == "UserAccount" ? "active" : "")"
+           data-action="Delete">Delete</a>
+        <a href="/UserAccount/Inquire" class="action-btn inquire @(currentAction == "Inquire" && currentController == "UserAccount" ? "active" : "")"
+           data-action="Inquire">Inquire</a>
+    </div>
+
+
+
+
+
+    <!-- Registration Form -->
+    <div class="form-body">
+        <form  asp-action="Add" method="post" class="form-main">
+            @Html.AntiForgeryToken()
+
+            <!-- Search Section -->
+            <fieldset class="form-section">
+                <legend class="section-header">
+                    <span class="section-number">1</span>
+                    <h3 class="section-title">Find Customer</h3>
+                </legend>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <form method="get" asp-action="SearchEmployee">
+                            <input type="hidden" name="searchBy" value="Id" />
+                            <input type="hidden" name="returnView" value="Add" /> <!-- Add this -->
+                            <label class="form-label">Customer ID</label>
+                            <div class="input-group">
+                                <input type="text" name="searchValue" class="form-input" placeholder="Enter customer ID">
+                                <button type="submit" class="input-button search-button">
+                                    <span class="button-icon">🔍</span> Search
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="form-group">
+                        <form method="get" asp-action="SearchEmployee">
+                            <input type="hidden" name="searchBy" value="FirstName" />
+                            <input type="hidden" name="returnView" value="Add" /> <!-- Add this -->
+                            <label class="form-label">Customer Name</label>
+                            <div class="input-group">
+                                <input type="text" name="searchValue" class="form-input" placeholder="Enter customer name">
+                                <button type="submit" class="input-button search-button">
+                                    <span class="button-icon">🔍</span> Search
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+
+
+                <!--  radio section that populates searched value -->
+                <div class="form-group full-width">
+                    <div class="search-results">
+                        <form asp-action="SelectEmployee" method="post">
+                            <input type="hidden" name="returnView" value="Add" />
+                            <table class="results-table">
+                                <thead>
+                                    <tr>
+                                        <th>Select</th>
+                                        <th>Customer ID</th>
+                                        <th>Customer Name</th>
+                                        <th>Phone</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model != null && Model.Any())
+                                    {
+                                        foreach (var employee in Model)
+                                        {
+                                            <tr>
+                                                <td onclick="highlightRow(this.parentElement)">
+                                                    <input type="radio" name="selectedEmployeeId" value="@employee.Id"
+                                                           onclick="event.stopPropagation(); this.form.submit();" />
+                                                </td>
+                                                <td>@employee.Id</td>
+                                                <td>@employee.FirstName</td>
+                                                <td>@employee.PhoneNumber</td>
+                                                <td>@employee.Email</td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </form>
+
+
+                        @if (!Model.Any())
+                        {
+                            <p></p>
+                        }
+
+                    </div>
+                </div>
+            </fieldset>
+
+
+
+            <!-- Add User Account (shown after selection) -->
+            @if (selected != null)
+            {
+                <form asp-action="AddUserAccount" method="post">
+                    @Html.AntiForgeryToken()
+                    <fieldset class="form-section" id="addUserAccountFormSection">
+                        <legend class="section-header">
+                            <span class="section-number">2</span>
+                            <h3 class="section-title">Add User Account Details</h3>
+                        </legend>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">Employee ID</label>
+                                <input type="text" class="form-input" name="EmployeeId" value="@selected.Id" readonly />
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Login ID</label>
+                                <input type="text" class="form-input" name="LoginId" placeholder="Enter username / login ID" required />
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Password</label>
+                                <input type="password" class="form-input" name="Password" placeholder="Enter password" required />
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Select Role</label>
+                                <select class="form-select" name="RoleId" required>
+                                    <option value="">-- Select Role --</option>
+                                    @{
+                                        var roles = ViewBag.Roles as List<Role>;
+                                    }
+
+                                    @if (roles != null)
+                                    {
+                                        foreach (var role in roles)
+                                        {
+                                            <option value="@role.Id">@role.Name</option>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <p>No roles found.</p>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="reset" class="form-button secondary-button">
+                                <span class="button-icon">↻</span> Reset
+                            </button>
+
+                            <button type="submit" class="form-button primary-button">
+                                <span class="button-icon">✓</span> Create User Account
+                            </button>
+                        </div>
+                    </fieldset>
+                </form>
+
+            }
+
+
+
+        </form>
+    </div>
+</div>
+
+<!-- Include shared CSS -->
+<link href="~/css/pagestyle.css" rel="stylesheet" />
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Focus first input field
+        const firstInput = document.querySelector('.form-input');
+        if (firstInput) firstInput.focus();
+
+        // Add animation to form sections when they come into view
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = 1;
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.form-section').forEach(section => {
+            section.style.opacity = 0;
+            section.style.transform = 'translateY(20px)';
+            section.style.transition = 'all 0.4s ease-out';
+            observer.observe(section);
+        });
+    });
+
+    document.addEventListener("DOMContentLoaded", function() {
+        // Check if there's a saved active action in localStorage
+        const savedAction = localStorage.getItem("activeAction");
+
+        // If there is a saved action, apply the 'active' class to the corresponding button
+        if (savedAction) {
+            // Remove 'active' class from all buttons first
+            const allButtons = document.querySelectorAll('.action-btn');
+            allButtons.forEach(button => button.classList.remove('active'));
+
+            // Find and add 'active' class to the button with the saved action
+            const activeButton = document.querySelector(`.action-btn[data-action="${savedAction}"]`);
+            if (activeButton) {
+                activeButton.classList.add('active');
+            }
+        }
+
+        // Add event listeners to update the active state when a button is clicked
+        const buttons = document.querySelectorAll('.action-btn');
+        buttons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Save the clicked action to localStorage
+                localStorage.setItem("activeAction", button.getAttribute("data-action"));
+            });
+        });
+    });
+
+
+</script>

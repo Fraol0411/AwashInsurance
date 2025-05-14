@@ -1,0 +1,176 @@
+﻿@model AwashInsurance.Models.Employee
+@{
+    ViewData["Title"] = "Register Employee";
+    Layout = "~/Views/Shared/_CustomLayout.cshtml";
+}
+
+<div class="form-container">
+    <!-- Form Header -->
+    <div class="form-header">
+        <h2 class="form-title">Register New Customer</h2>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div style="color: green; background-color: #d4edda; padding: 10px; border-radius: 4px; margin-bottom: 10px;">
+            @TempData["Success"]
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div style="color: red; background-color: #f8d7da; padding: 10px; border-radius: 4px; margin-bottom: 10px;">
+            @TempData["Error"]
+        </div>
+    }
+
+
+    @{
+        string currentAction = ViewContext.RouteData.Values["action"]?.ToString() ?? "";
+        string currentController = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
+    }
+
+    <div class="action-buttons">
+        <a href="/Employee/Add" class="action-btn @(currentAction == "Add" && currentController == "Employee" ? "active" : "")"
+           data-action="Add">Add</a>
+        <a href="/Employee/Modify" class="action-btn @(currentAction == "Modify" && currentController == "Employee" ? "active" : "")"
+           data-action="Modify">Modify</a>
+        <a href="/Employee/Delete" class="action-btn delete @(currentAction == "Delete" && currentController == "Employee" ? "active" : "")"
+           data-action="Delete">Delete</a>
+        <a href="/Employee/Inquire" class="action-btn inquire @(currentAction == "Inquire" && currentController == "Employee" ? "active" : "")"
+           data-action="Inquire">Inquire</a>
+    </div>
+
+
+
+
+
+    <!-- Registration Form -->
+    <div class="form-body">
+        <form  asp-action="Add" method="post" class="form-main">
+            @Html.AntiForgeryToken()
+            <!-- Section 1: Employee Information -->
+            <fieldset class="form-section">
+                <legend class="section-header">
+                    <span class="section-number">1</span>
+                    <h3 class="section-title">Employee Information</h3>
+                </legend>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label asp-for="FirstName" class="form-label">First Name</label>
+                        <input asp-for="FirstName" type="text" class="form-input" required>
+                        @* <span asp-validation-for="FirstName" class="text-danger"></span> *@
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="LastName" class="form-label">Last Name</label>
+                        <input asp-for="LastName" type="text" class="form-input" required>
+                        @* <span asp-validation-for="LastName" class="text-danger"></span> *@
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Gender" class="form-label">Gender</label>
+                        <select asp-for="Gender" class="form-select" required>
+                            <option value="">-- Select --</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        @* <span asp-validation-for="Gender" class="text-danger"></span> *@
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="PhoneNumber" class="form-label">Phone Number</label>
+                        <input asp-for="PhoneNumber" type="tel" class="form-input" required>
+                        @* <span asp-validation-for="PhoneNumber" class="text-danger"></span> *@
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Email" class="form-label">Email</label>
+                        <input asp-for="Email" type="email" class="form-input" required>
+                        @* <span asp-validation-for="Email" class="text-danger"></span> *@
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="OrganizationUnitId" class="form-label">Department</label>
+                        <select asp-for="OrganizationUnitId" class="form-select" required
+                                asp-items="@(new SelectList(ViewBag.OrganizationUnits, "Id", "Name"))">
+                            <option value="">-- Select Department --</option>
+                        </select>
+                        @* <span asp-validation-for="OrganizationUnitId" class="text-danger"></span> *@
+                    </div>
+                </div>
+            </fieldset>
+
+
+
+            <!-- Form Actions -->
+            <div class="form-actions">
+                <button type="reset" class="form-button secondary-button">
+                    <span class="button-icon">↻</span> Reset
+                </button>
+                <button  type="submit" class="form-button primary-button">
+                    <span class="button-icon">✓</span> Register Customer
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Include shared CSS -->
+<link href="~/css/pagestyle.css" rel="stylesheet" />
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Focus first input field
+        const firstInput = document.querySelector('.form-input');
+        if (firstInput) firstInput.focus();
+
+        // Add animation to form sections when they come into view
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = 1;
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.form-section').forEach(section => {
+            section.style.opacity = 0;
+            section.style.transform = 'translateY(20px)';
+            section.style.transition = 'all 0.4s ease-out';
+            observer.observe(section);
+        });
+    });
+
+    document.addEventListener("DOMContentLoaded", function() {
+        // Check if there's a saved active action in localStorage
+        const savedAction = localStorage.getItem("activeAction");
+
+        // If there is a saved action, apply the 'active' class to the corresponding button
+        if (savedAction) {
+            // Remove 'active' class from all buttons first
+            const allButtons = document.querySelectorAll('.action-btn');
+            allButtons.forEach(button => button.classList.remove('active'));
+
+            // Find and add 'active' class to the button with the saved action
+            const activeButton = document.querySelector(`.action-btn[data-action="${savedAction}"]`);
+            if (activeButton) {
+                activeButton.classList.add('active');
+            }
+        }
+
+        // Add event listeners to update the active state when a button is clicked
+        const buttons = document.querySelectorAll('.action-btn');
+        buttons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Save the clicked action to localStorage
+                localStorage.setItem("activeAction", button.getAttribute("data-action"));
+            });
+        });
+    });
+
+
+</script>

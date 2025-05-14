@@ -26,15 +26,23 @@
 
 
     @{
-        var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+        string currentAction = ViewContext.RouteData.Values["action"]?.ToString() ?? "";
+        string currentController = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
     }
 
     <div class="action-buttons">
-        <a href="/Customer/Add" class="action-btn @(currentAction == "Add" ? "active" : "")">Register</a>
-        <a href="/Customer/Modify" class="action-btn @(currentAction == "Modify" ? "active" : "")">Update</a>
-        <a href="/Customer/Delete" class="action-btn @(currentAction == "Delete" ? "active" : "")">Remove</a>
-        <a href="/Customer/Inquire" class="action-btn @(currentAction == "Inquire" ? "active" : "")">View</a>
+        <a href="/Custom/Add" class="action-btn @(currentAction == "Add" && currentController == "Custom" ? "active" : "")"
+           data-action="Add">Add</a>
+        <a href="/Custom/Modify" class="action-btn @(currentAction == "Modify" && currentController == "Custom" ? "active" : "")"
+           data-action="Modify">Modify</a>
+        <a href="/Custom/Delete" class="action-btn delete @(currentAction == "Delete" && currentController == "Custom" ? "active" : "")"
+           data-action="Delete">Delete</a>
+        <a href="/Custom/Inquire" class="action-btn inquire @(currentAction == "Inquire" && currentController == "Custom" ? "active" : "")"
+           data-action="Inquire">Inquire</a>
     </div>
+
+
+
 
 
     <!-- Registration Form -->
@@ -188,4 +196,33 @@
             observer.observe(section);
         });
     });
+
+    document.addEventListener("DOMContentLoaded", function() {
+        // Check if there's a saved active action in localStorage
+        const savedAction = localStorage.getItem("activeAction");
+
+        // If there is a saved action, apply the 'active' class to the corresponding button
+        if (savedAction) {
+            // Remove 'active' class from all buttons first
+            const allButtons = document.querySelectorAll('.action-btn');
+            allButtons.forEach(button => button.classList.remove('active'));
+
+            // Find and add 'active' class to the button with the saved action
+            const activeButton = document.querySelector(`.action-btn[data-action="${savedAction}"]`);
+            if (activeButton) {
+                activeButton.classList.add('active');
+            }
+        }
+
+        // Add event listeners to update the active state when a button is clicked
+        const buttons = document.querySelectorAll('.action-btn');
+        buttons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Save the clicked action to localStorage
+                localStorage.setItem("activeAction", button.getAttribute("data-action"));
+            });
+        });
+    });
+
+
 </script>

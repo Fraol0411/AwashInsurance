@@ -1,0 +1,249 @@
+﻿ @model List<AwashInsurance.Models.Customer>
+
+@{
+    var selected = ViewBag.SelectedCustomer as AwashInsurance.Models.Customer;
+}
+ @using Newtonsoft.Json
+
+@{
+    ViewData["Title"] = "Remove Customer";
+    Layout = "~/Views/Shared/_CustomLayout.cshtml";
+}
+
+<div class="form-container">
+    <!-- Form Header -->
+    <div class="form-header">
+        <h2 class="form-title">Remove Customer</h2>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div style="color: green; background-color: #d4edda; padding: 10px; border-radius: 4px; margin-bottom: 10px;">
+            @TempData["Success"]
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div style="color: red; background-color: #f8d7da; padding: 10px; border-radius: 4px; margin-bottom: 10px;">
+            @TempData["Error"]
+        </div>
+    }
+
+    @{
+        string currentAction = ViewContext.RouteData.Values["action"]?.ToString() ?? "";
+        string currentController = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
+    }
+
+    <div class="action-buttons">
+        <a href="/Custom/Add" class="action-btn @(currentAction == "Add" && currentController == "Custom" ? "active" : "")"
+           data-action="Add">Add</a>
+        <a href="/Custom/Modify" class="action-btn @(currentAction == "Modify" && currentController == "Custom" ? "active" : "")"
+           data-action="Modify">Modify</a>
+        <a href="/Custom/Delete" class="action-btn delete @(currentAction == "Delete" && currentController == "Custom" ? "active" : "")"
+           data-action="Delete">Delete</a>
+        <a href="/Custom/Inquire" class="action-btn inquire @(currentAction == "Inquire" && currentController == "Custom" ? "active" : "")"
+           data-action="Inquire">Inquire</a>
+    </div>
+
+
+
+
+    <!-- Delete Form -->
+    <div class="form-body">
+        <form class="form-main">
+            <!-- Search Section -->
+            <fieldset class="form-section">
+                <legend class="section-header">
+                    <span class="section-number">1</span>
+                    <h3 class="section-title">Find Customer</h3>
+                </legend>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <form method="get" asp-action="SearchUser">
+                            <input type="hidden" name="searchBy" value="CustomerId" />
+                            <input type="hidden" name="returnView" value="Delete" /> <!-- Add this -->
+                            <label class="form-label">Customer ID</label>
+                            <div class="input-group">
+                                <input type="text" name="searchValue" class="form-input" placeholder="Enter customer ID">
+                                <button type="submit" class="input-button search-button">
+                                    <span class="button-icon">🔍</span> Search
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="form-group">
+                        <form method="get" asp-action="SearchUser">
+                            <input type="hidden" name="searchBy" value="CustomerName" />
+                            <input type="hidden" name="returnView" value="Delete" /> <!-- Add this -->
+                            <label class="form-label">Customer Name</label>
+                            <div class="input-group">
+                                <input type="text" name="searchValue" class="form-input" placeholder="Enter customer name">
+                                <button type="submit" class="input-button search-button">
+                                    <span class="button-icon">🔍</span> Search
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!--  radio section that populates searched value -->
+                <div class="form-group full-width">
+                    <div class="search-results">
+                        <form asp-action="SelectCustomer" method="post">
+                            <input type="hidden" name="returnView" value="Delete" />
+                            <table class="results-table">
+                                <thead>
+                                    <tr>
+                                        <th>Select</th>
+                                        <th>Customer ID</th>
+                                        <th>Customer Name</th>
+                                        <th>Phone</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model != null && Model.Any())
+                                    {
+                                        foreach (var customer in Model)
+                                        {
+                                            <tr>
+                                                <td onclick="highlightRow(this.parentElement)">
+                                                    <input type="radio" name="selectedCustomerId" value="@customer.CustomerId"
+                                                           onclick="event.stopPropagation(); this.form.submit();" />
+                                                </td>
+                                                <td>@customer.CustomerId</td>
+                                                <td>@customer.FullName</td>
+                                                <td>@customer.Phone</td>
+                                                <td>@customer.Email</td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </form>
+
+
+                        @if (!Model.Any())
+                        {
+                            <p></p>
+                        }
+
+                    </div>
+                </div>
+            </fieldset>
+
+            <!-- Confirmation Section (shown after selection) -->
+            @if (selected != null)
+            {
+                <form asp-action="Delete" method="post">
+                    <fieldset class="form-section" id="deleteConfirmationSection">
+                        <legend class="section-header">
+                            <span class="section-number">2</span>
+                            <h3 class="section-title">Confirm Removal</h3>
+                        </legend>
+
+                        <div class="form-group full-width">
+                            <div class="confirmation-message">
+                                <p>You are about to remove the following customer:</p>
+                                <div class="customer-details">
+                                    <p><strong>Customer ID:</strong> @selected.CustomerId</p>
+                                    <p><strong>Customer Name:</strong> @selected.FullName</p>
+                                    <p><strong>Phone Number:</strong> @selected.Phone</p>
+                                </div>
+                                <p class="warning-text">⚠️ This action cannot be undone. Are you sure you want to proceed?</p>
+                            </div>
+                        </div>
+
+                        <input type="hidden" name="CustomerId" value="@selected.CustomerId" />
+
+                        <div class="form-group full-width">
+                            <label class="form-label">Removal Reason</label>
+                            <textarea name="RemovalReason" rows="3" class="form-textarea" required></textarea>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="form-button danger-button">
+                                <span class="button-icon">🗑</span> Confirm Removal
+                            </button>
+                            <button type="button" class="form-button secondary-button" onclick="window.location.href='@Url.Action("Index")'">
+                                <span class="button-icon">↻</span> Cancel
+                            </button>
+                        </div>
+                    </fieldset>
+                </form>
+            }
+
+
+        </form>
+    </div>
+</div>
+
+<!-- Include shared CSS -->
+<link href="~/css/pagestyle.css" rel="stylesheet" />
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Focus the first input
+        const firstInput = document.querySelector('.form-input');
+        if (firstInput) firstInput.focus();
+
+        // Animate form sections
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = 1;
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.form-section').forEach(section => {
+            section.style.opacity = 0;
+            section.style.transform = 'translateY(20px)';
+            section.style.transition = 'all 0.4s ease-out';
+            observer.observe(section);
+        });
+    });
+
+    function highlightRow(row) {
+        document.querySelectorAll('.results-table tr').forEach(r => r.classList.remove('highlight'));
+        row.classList.add('highlight');
+    }
+
+
+
+
+
+
+
+        document.addEventListener("DOMContentLoaded", function() {
+        // Check if there's a saved active action in localStorage
+        const savedAction = localStorage.getItem("activeAction");
+
+        // If there is a saved action, apply the 'active' class to the corresponding button
+        if (savedAction) {
+            // Remove 'active' class from all buttons first
+            const allButtons = document.querySelectorAll('.action-btn');
+            allButtons.forEach(button => button.classList.remove('active'));
+
+            // Find and add 'active' class to the button with the saved action
+            const activeButton = document.querySelector(`.action-btn[data-action="${savedAction}"]`);
+            if (activeButton) {
+                activeButton.classList.add('active');
+            }
+        }
+
+        // Add event listeners to update the active state when a button is clicked
+        const buttons = document.querySelectorAll('.action-btn');
+        buttons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Save the clicked action to localStorage
+                localStorage.setItem("activeAction", button.getAttribute("data-action"));
+            });
+        });
+    });
+
+</script>
