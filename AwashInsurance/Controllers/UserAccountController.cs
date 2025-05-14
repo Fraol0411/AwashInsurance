@@ -3,6 +3,7 @@ using AwashInsurance.Models;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace AwashInsurance.Controllers
 {
@@ -101,9 +102,17 @@ namespace AwashInsurance.Controllers
         [HttpGet]
         public IActionResult Add()
         {
-            ViewBag.Roles = _context.Roles.ToList();
+            ViewBag.Roles = new SelectList(_context.Roles, "Id", "RoleName");
+            ViewBag.Employees = new SelectList(_context.Employees, "Id", "FullName");
             return View(new List<Employee>());
         }
+
+
+
+
+
+
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -133,6 +142,9 @@ namespace AwashInsurance.Controllers
             ViewBag.OrganizationUnits = _context.OrganizationUnits.ToList();
             return View(employee);
         }
+
+
+
 
         // ------------------------------
         // MODIFY EMPLOYEE
@@ -173,6 +185,9 @@ namespace AwashInsurance.Controllers
 
             return View(new List<Employee>());
         }
+
+
+
 
 
         // ------------------------------
@@ -224,6 +239,10 @@ namespace AwashInsurance.Controllers
                 return View(new List<Employee>());
             }
         }
+
+
+
+
 
         // ------------------------------
         // INQUIRE EMPLOYEE

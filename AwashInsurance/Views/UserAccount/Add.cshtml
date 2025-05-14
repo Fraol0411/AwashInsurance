@@ -173,23 +173,32 @@
                                 <label class="form-label">Select Role</label>
                                 <select class="form-select" name="RoleId" required>
                                     <option value="">-- Select Role --</option>
-                                    @{
-                                        var roles = ViewBag.Roles as List<Role>;
-                                    }
 
-                                    @if (roles != null)
+                                    @if (ViewBag.Roles != null)
                                     {
-                                        foreach (var role in roles)
+                                        // Ensure that ViewBag.Roles is of type SelectList
+                                        var roles = ViewBag.Roles as SelectList;
+                                        if (roles != null && roles.Any())
                                         {
-                                            <option value="@role.Id">@role.Name</option>
+                                            foreach (var role in roles)
+                                            {
+                                                <option value="@role.Value">@role.Text</option>
+                                            }
                                         }
-                                    }
-                                    else
-                                    {
-                                        <p>No roles found.</p>
+                                        else
+                                        {
+                                            <p>No roles available.</p>
+                                        }
                                     }
                                 </select>
                             </div>
+
+
+
+
+
+
+
                         </div>
 
                         <div class="form-actions">

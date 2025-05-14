@@ -1,5 +1,8 @@
-﻿namespace AwashInsurance.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace AwashInsurance.Models
 {
+
     public class Role
     {
         public int Id { get; set; }
