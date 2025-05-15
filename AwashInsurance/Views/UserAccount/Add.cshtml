@@ -1,4 +1,6 @@
-﻿@model List<AwashInsurance.Models.Employee>
+﻿@* @model List<AwashInsurance.Models.Employee> *@
+@model AwashInsurance.Models.AddUserAccountViewModel
+
 @{
     var selected = ViewBag.SelectedEmployee as AwashInsurance.Models.Employee;
 }
@@ -45,6 +47,7 @@
         <a href="/UserAccount/Inquire" class="action-btn inquire @(currentAction == "Inquire" && currentController == "UserAccount" ? "active" : "")"
            data-action="Inquire">Inquire</a>
     </div>
+
 
 
 
@@ -110,9 +113,9 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @if (Model != null && Model.Any())
+                                    @if (Model != null && Model.Employees.Any())
                                     {
-                                        foreach (var employee in Model)
+                                        foreach (var employee in Model.Employees)
                                         {
                                             <tr>
                                                 <td onclick="highlightRow(this.parentElement)">
@@ -131,7 +134,7 @@
                         </form>
 
 
-                        @if (!Model.Any())
+                        @if (!Model.Employees.Any())
                         {
                             <p></p>
                         }
@@ -143,20 +146,23 @@
 
 
             <!-- Add User Account (shown after selection) -->
-            @if (selected != null)
+            @if (Model.SelectedEmployee != null)
             {
-                <form asp-action="AddUserAccount" method="post">
+                <form asp-action="Add" method="post">
                     @Html.AntiForgeryToken()
                     <fieldset class="form-section" id="addUserAccountFormSection">
                         <legend class="section-header">
                             <span class="section-number">2</span>
-                            <h3 class="section-title">Add User Account Details</h3>
+                            <h3 class="section-title">Add User Account Detail</h3>
                         </legend>
+
+                        <input type="hidden" name="SelectedEmployee.Id" value="@Model.SelectedEmployee.Id" />
+                        <input type="hidden" name="SelectedEmployee.FirstName" value="@Model.SelectedEmployee.FirstName" />
 
                         <div class="form-grid">
                             <div class="form-group">
                                 <label class="form-label">Employee ID</label>
-                                <input type="text" class="form-input" name="EmployeeId" value="@selected.Id" readonly />
+                                <input type="text" class="form-input" name="EmployeeId" value="@Model.SelectedEmployee.Id" readonly />
                             </div>
 
                             <div class="form-group">
@@ -168,36 +174,14 @@
                                 <label class="form-label">Password</label>
                                 <input type="password" class="form-input" name="Password" placeholder="Enter password" required />
                             </div>
-
                             <div class="form-group">
-                                <label class="form-label">Select Role</label>
-                                <select class="form-select" name="RoleId" required>
-                                    <option value="">-- Select Role --</option>
-
-                                    @if (ViewBag.Roles != null)
-                                    {
-                                        // Ensure that ViewBag.Roles is of type SelectList
-                                        var roles = ViewBag.Roles as SelectList;
-                                        if (roles != null && roles.Any())
-                                        {
-                                            foreach (var role in roles)
-                                            {
-                                                <option value="@role.Value">@role.Text</option>
-                                            }
-                                        }
-                                        else
-                                        {
-                                            <p>No roles available.</p>
-                                        }
-                                    }
+                                <label asp-for="RoleId" class="form-label">Department</label>
+                                <select asp-for="RoleId"
+                                        asp-items="@(Model.Roles ?? new SelectList(Enumerable.Empty<SelectListItem>()))"
+                                        class="form-select" required>
+                                    <option value="">-- Select Department --</option>
                                 </select>
                             </div>
-
-
-
-
-
-
 
                         </div>
 

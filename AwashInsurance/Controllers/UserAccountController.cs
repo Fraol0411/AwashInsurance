@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using AwashInsurance.Models; // Make sure this exists
 
 namespace AwashInsurance.Controllers
 {
@@ -24,41 +25,34 @@ namespace AwashInsurance.Controllers
         // SEARCH EMPLOYEE
         // ------------------------------
 
-        public IActionResult SearchEmployee(string? searchBy, string? searchValue, string? returnView)
+        [HttpGet]
+        public IActionResult SearchEmployee(string searchBy, string searchValue, string returnView)
         {
-            if (string.IsNullOrWhiteSpace(searchBy) || string.IsNullOrWhiteSpace(searchValue))
-                return View(returnView ?? "Modify", new List<Employee>());
+            var employees = new List<Employee>();
 
-            var employees = _context.Employees.AsQueryable();
-
-            if (searchBy == "Id")
+            if (!string.IsNullOrEmpty(searchValue))
             {
-                if (int.TryParse(searchValue, out int id))
+                if (searchBy == "Id")
                 {
-                    employees = employees.Where(e => e.Id == id);
+                    //employees = _context.Employees
+                    //    .Where(e => e.Id.Contains(searchValue))
+                    //    .ToList();
                 }
-                else
+                else if (searchBy == "FirstName")
                 {
-                    TempData["Error"] = "Please enter a valid numeric Employee ID.";
-                    return View(returnView ?? "Modify", new List<Employee>());
+                    employees = _context.Employees
+                        .Where(e => e.FirstName.Contains(searchValue))
+                        .ToList();
                 }
             }
-            else if (searchBy == "FirstName")
+
+            var viewModel = new AddUserAccountViewModel
             {
-                employees = employees.Where(e =>
-                    e.FirstName.Contains(searchValue));
-                if (employees.Count() == 0)
-                {
-                    TempData["Error"] = "No employee found with the given first name.";
-                    return View(returnView ?? "Modify", new List<Employee>());
-                }
+                Employees = employees,
+                Roles = new SelectList(_context.Roles.ToList(), "Id", "Name")
+            };
 
-            }
-
-            var result = employees.ToList();
-            TempData["SearchResult"] = System.Text.Json.JsonSerializer.Serialize(result);
-
-            return View(returnView ?? "Modify", result);
+            return View(returnView, viewModel); // "Add" or other view name
         }
 
         // ------------------------------
@@ -66,30 +60,19 @@ namespace AwashInsurance.Controllers
         // ------------------------------
 
         [HttpPost]
-        public IActionResult SelectEmployee(int selectedEmployeeId, string? returnView)
+        public IActionResult SelectEmployee(int selectedEmployeeId, string returnView)
         {
-            //if (TempData["SearchResult"] == null)
-            //    return RedirectToAction(returnView ?? "Modify");
+            var employee = _context.Employees.FirstOrDefault(e => e.Id == selectedEmployeeId);
 
-            var employeeList = System.Text.Json.JsonSerializer.Deserialize<List<Employee>>(TempData["SearchResult"].ToString());
-            var selectedEmployee = _context.Employees
-            .Include(e => e.OrganizationUnit)
-           .FirstOrDefault(e => e.Id == selectedEmployeeId);
-
-
-            if (selectedEmployee == null)
+            var viewModel = new AddUserAccountViewModel
             {
-                TempData["Error"] = "Selected employee not found.";
-                return View(returnView ?? "Modify", employeeList);
-            }
+                SelectedEmployee = employee,
+                Employees = new List<Employee> { employee }, // or keep previous search results
+                Roles = new SelectList(_context.Roles.ToList(), "Id", "Name")
+            };
 
-            ViewBag.SelectedEmployee = selectedEmployee;
-            ViewBag.OrganizationUnits = _context.OrganizationUnits.ToList();
-            TempData["SearchResult"] = System.Text.Json.JsonSerializer.Serialize(employeeList);
-
-            return View(returnView ?? "Modify", employeeList);
+            return View(returnView, viewModel);
         }
-
 
 
 
@@ -102,46 +85,57 @@ namespace AwashInsurance.Controllers
         [HttpGet]
         public IActionResult Add()
         {
-            ViewBag.Roles = new SelectList(_context.Roles, "Id", "RoleName");
-            ViewBag.Employees = new SelectList(_context.Employees, "Id", "FullName");
-            return View(new List<Employee>());
+            var viewModel = new AddUserAccountViewModel
+            {
+                Roles = new SelectList(_context.Roles.ToList(), "Id", "Name")
+            };
+            return View(viewModel);
         }
-
-
-
-
-
 
 
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Add(Employee employee)
+        public async Task<IActionResult> Add(AddUserAccountViewModel model)
         {
-            if (true)
+            try
             {
-                try
-                {
-                    _context.Employees.Add(employee);
-                    _context.SaveChanges();
+                //if (!ModelState.IsValid)
+                //{
+                //    TempData["Error"] = "Form validation failed. Please check all required fields.";
+                //    model.Roles = new SelectList(_context.Roles.ToList(), "Id", "Name");
+                //    return View(model);
+                //}
 
-                    TempData["Success"] = "Employee added successfully!";
-                    ViewBag.OrganizationUnits = _context.OrganizationUnits.ToList();
-                    return View();
-                }
-                catch (Exception ex)
+                // Create the UserAccount
+                var userAccount = new UserAccount
                 {
-                    TempData["Error"] = "Error saving data: " + ex.Message;
-                }
+                    LoginId = model.LoginId,
+                    Password = model.Password, 
+                    EmployeeId = model.SelectedEmployee.Id,
+                    RoleId = model.RoleId,
+                    CreatedAt = DateTime.Now,
+                    IsActive = true
+                };
+
+                _context.UserAccounts.Add(userAccount);
+                await _context.SaveChangesAsync();
+
+                TempData["Success"] = "User account created successfully!";
+                return RedirectToAction(nameof(Add)); // PRG pattern
             }
-            else
+            catch (Exception ex)
             {
-                TempData["Error"] = "Form validation failed. Please check all required fields.";
+                TempData["Error"] = "Error creating user account: " + ex.Message;
+                model.Roles = new SelectList(_context.Roles.ToList(), "Id", "Name");
+                return View(model);
             }
-
-            ViewBag.OrganizationUnits = _context.OrganizationUnits.ToList();
-            return View(employee);
         }
+
+
+      
+
+
 
 
 
@@ -153,37 +147,55 @@ namespace AwashInsurance.Controllers
         [HttpGet]
         public IActionResult Modify()
         {
-            ViewBag.OrganizationUnits = _context.OrganizationUnits.ToList();
-            return View(new List<Employee>());
+            var viewModel = new AddUserAccountViewModel
+            {
+                Roles = new SelectList(_context.Roles.ToList(), "Id", "Name")
+            };
+            return View(viewModel);
         }
 
+
+
+
+
         [HttpPost]
-        public IActionResult Modify(Employee updatedEmployee)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Modify(AddUserAccountViewModel model)
         {
-            var existingEmployee = _context.Employees.FirstOrDefault(e => e.Id == updatedEmployee.Id);
-
-            if (existingEmployee == null)
+            try
             {
-                TempData["Error"] = "Employee not found.";
-                ViewBag.OrganizationUnits = _context.OrganizationUnits.ToList();
-                return View(_context.Employees.ToList());
+                var existingAccount = await _context.UserAccounts
+                    .FirstOrDefaultAsync(u => u.EmployeeId == model.SelectedEmployee.Id);
+
+                if (existingAccount == null)
+                {
+                    TempData["Error"] = "User account not found";
+                    return RedirectToAction(nameof(Modify));
+                }
+
+                // Update the account
+                existingAccount.LoginId = model.LoginId;
+                existingAccount.RoleId = model.RoleId;
+                existingAccount.IsActive = model.IsActive; // Now using the bool value
+
+                // Only update password if provided
+                if (!string.IsNullOrEmpty(model.Password))
+                {
+                    existingAccount.Password = model.Password;
+                }
+
+                _context.UserAccounts.Update(existingAccount);
+                await _context.SaveChangesAsync();
+
+                TempData["Success"] = "User account updated successfully!";
+                return RedirectToAction(nameof(Modify));
             }
-
-            // Update fields
-            existingEmployee.FirstName = updatedEmployee.FirstName;
-            existingEmployee.LastName = updatedEmployee.LastName;
-            existingEmployee.Gender = updatedEmployee.Gender;
-            existingEmployee.PhoneNumber = updatedEmployee.PhoneNumber;
-            existingEmployee.Email = updatedEmployee.Email;
-            existingEmployee.OrganizationUnitId = updatedEmployee.OrganizationUnitId;
-
-            _context.SaveChanges();
-
-            TempData["Success"] = "Employee information updated successfully!";
-            ViewBag.Selected = existingEmployee;
-            ViewBag.OrganizationUnits = _context.OrganizationUnits.ToList();
-
-            return View(new List<Employee>());
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Error updating user account: " + ex.Message;
+                model.Roles = new SelectList(_context.Roles.ToList(), "Id", "Name");
+                return View(model);
+            }
         }
 
 

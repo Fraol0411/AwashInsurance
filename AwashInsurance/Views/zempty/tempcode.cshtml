@@ -93,3 +93,63 @@
 @*         </div> *@
 @*     </div> *@
 @* </fieldset> *@
+
+
+
+
+
+
+
+
+
+
+
+
+  // the conmplete inclusgin hashing
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult>
+    Add(AddUserAccountViewModel model)
+    //{
+    //    try
+    //    {
+    //        if (!ModelState.IsValid)
+    //        {
+    //            model.Roles = new SelectList(_context.Roles.ToList(), "Id", "Name");
+    //            TempData["Error"] = "Please correct the form errors";
+    //            return View(model);
+    //        }
+
+    //        // Check if login ID already exists
+    //        if (_context.UserAccounts.Any(u => u.LoginId == model.LoginId))
+    //        {
+    //            ModelState.AddModelError("LoginId", "This username is already taken");
+    //            model.Roles = new SelectList(_context.Roles.ToList(), "Id", "Name");
+    //            return View(model);
+    //        }
+
+    //        var userAccount = new UserAccount
+    //        {
+    //            LoginId = model.LoginId,
+    //            Password = BCrypt.Net.BCrypt.HashPassword(model.Password), // Secure hashing
+    //            EmployeeId = model.EmployeeId,
+    //            RoleId = model.RoleId,
+    //            CreatedAt = DateTime.UtcNow,
+    //            IsActive = true
+    //        };
+
+    //        _context.UserAccounts.Add(userAccount);
+    //        await _context.SaveChangesAsync();
+
+    //        TempData["Success"] = "User account created successfully!";
+    //        return RedirectToAction(nameof(Add));
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        _logger.LogError(ex, "Error creating user account");
+    //        model.Roles = new SelectList(_context.Roles.ToList(), "Id", "Name");
+    //        TempData["Error"] = "An error occurred while creating the account";
+    //        return View(model);
+    //    }
+    //}
