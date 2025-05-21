@@ -49,10 +49,6 @@
     </div>
 
 
-
-
-
-
     <!-- Registration Form -->
     <div class="form-body">
         <form asp-action="Add" method="post" class="form-main">
@@ -143,69 +139,95 @@
                 </div>
             </fieldset>
 
-
-
-            <!-- Add User Account (shown after selection) -->
-            @if (Model.SelectedEmployee != null)
+			<!-- User Account Selection (shown after employee selection) -->
+            @if (Model.SelectedEmployee != null && Model.UserAccounts.Any())
             {
-                <form asp-action="Modify" method="post">
-                    @Html.AntiForgeryToken()
-                    <fieldset class="form-section" id="modifyUserAccountFormSection">
+                <form asp-action="SelectUserAccount" method="post">
+                    <input type="hidden" name="employeeId" value="@Model.SelectedEmployee.Id" />
+                    <fieldset class="form-section">
                         <legend class="section-header">
                             <span class="section-number">2</span>
-                            <h3 class="section-title">Modify User Account Details</h3>
+                            <h3 class="section-title">Select User Account</h3>
                         </legend>
 
-                        <input type="hidden" asp-for="SelectedEmployee.Id" />
-                        <input type="hidden" name="EmployeeId" value="@Model.SelectedEmployee.Id" />
-
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label class="form-label">Employee ID</label>
-                                <input type="text" class="form-input" value="@Model.SelectedEmployee.Id" readonly />
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label">Login ID</label>
-                                <input type="text" class="form-input" asp-for="LoginId"
-                                       placeholder="Enter username / login ID" required />
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label">Password</label>
-                                <input type="password" class="form-input" asp-for="Password"
-                                       placeholder="Leave blank to keep current" />
-                            </div>
-                            <div class="form-group checkbox-group">
-                                <label class="form-label">User Active Status</label>
-                                <label class="checkbox-label">
-                                    <input type="checkbox" asp-for="IsActive" class="form-checkbox" />
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label">Department</label>
-                                <select asp-for="RoleId" asp-items="Model.Roles" class="form-select" required>
-                                    <option value="Model.Roles">-- Select Department --</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-actions">
-                            <button type="reset" class="form-button secondary-button">
-                                <span class="button-icon">↻</span> Reset
-                            </button>
-
-                            <button type="submit" class="form-button primary-button">
-                                <span class="button-icon">✓</span> Update User Account
-                            </button>
-                        </div>
+                        <table class="results-table">
+                            <thead>
+                                <tr>
+                                    <th>Select</th>
+                                    <th>Login ID</th>
+                                    <th>Is Active</th>
+                                    <th>Role</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var account in Model.UserAccounts)
+                                {
+                                    <tr>
+                                        <td onclick="highlightRow(this.parentElement)">
+                                            <input type="radio" name="selectedAccountId" value="@account.Id"
+                                                   onclick="event.stopPropagation(); this.form.submit();" />
+                                        </td>
+                                        <td>@account.LoginId</td>
+                                        <td>@account.IsActive</td>
+                                        <td>@account.Role.Name</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
                     </fieldset>
                 </form>
             }
 
 
+            <!-- Modify User Account (shown after account selection) -->
+            @if (Model.SelectedAccount != null)
+            {
+                <form asp-action="Modify" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="EmployeeId" value="@Model.SelectedEmployee.Id" />
+                    <input type="hidden" name="UserAccountId" value="@Model.SelectedAccount.Id" />
+
+                    <fieldset class="form-section" id="modifyUserAccountFormSection">
+                        <legend class="section-header">
+                            <span class="section-number">3</span>
+                            <h3 class="section-title">Modify Selected User Account</h3>
+                        </legend>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">Login ID</label>
+                                <input type="text" class="form-input" name="LoginId" value="@Model.LoginId" required />
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Password</label>
+                                <input type="password" class="form-input" name="Password" placeholder="Leave blank to keep current" />
+                            </div>
+
+                            <div class="form-group checkbox-group">
+                                <label class="form-label">User Active Status</label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="IsActive" class="form-checkbox" @(Model.IsActive ? "checked" : "") />
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+
+                            <div class="form-group">
+
+                                <select asp-for="RoleId" asp-items="Model.Roles" class="form-select"></select>
+
+                            </div>
+
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="form-button primary-button">
+                                <span class="button-icon">✓</span> Update Account
+                            </button>
+                        </div>
+                    </fieldset>
+                </form>
+            }
 
         </form>
     </div>

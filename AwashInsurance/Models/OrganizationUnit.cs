@@ -1,6 +1,8 @@
 ﻿using AwashInsurance.Models;
 
 namespace AwashInsurance.Models
+
+
 {
     public class OrganizationUnit
     {

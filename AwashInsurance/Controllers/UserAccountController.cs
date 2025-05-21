@@ -55,6 +55,8 @@ namespace AwashInsurance.Controllers
             return View(returnView, viewModel); // "Add" or other view name
         }
 
+
+
         // ------------------------------
         // SELECT EMPLOYEE FROM RESULT
         // ------------------------------
@@ -63,17 +65,56 @@ namespace AwashInsurance.Controllers
         public IActionResult SelectEmployee(int selectedEmployeeId, string returnView)
         {
             var employee = _context.Employees.FirstOrDefault(e => e.Id == selectedEmployeeId);
+            var userAccounts = _context.UserAccounts
+                .Where(u => u.EmployeeId == selectedEmployeeId)
+                .Include(u => u.Role) // Include role for display
+                .ToList();
 
             var viewModel = new AddUserAccountViewModel
             {
                 SelectedEmployee = employee,
-                Employees = new List<Employee> { employee }, // or keep previous search results
+                UserAccounts = userAccounts,
+                Employees = new List<Employee> { employee },
                 Roles = new SelectList(_context.Roles.ToList(), "Id", "Name")
             };
 
             return View(returnView, viewModel);
         }
 
+
+
+
+
+
+        // ------------------------------
+        // SELECT USERACCOUNT FOR EMPLOYEE FROM RESULT
+        // ------------------------------
+        [HttpPost]
+        public IActionResult SelectUserAccount(int employeeId, int selectedAccountId)
+        {
+            var employee = _context.Employees.FirstOrDefault(e => e.Id == employeeId);
+            var userAccounts = _context.UserAccounts
+                .Where(u => u.EmployeeId == employeeId)
+                .Include(u => u.Role)
+                .ToList();
+
+            var selectedAccount = userAccounts.FirstOrDefault(u => u.Id == selectedAccountId);
+
+            var viewModel = new AddUserAccountViewModel
+            {
+                SelectedEmployee = employee,
+                UserAccounts = userAccounts,
+                SelectedAccount = selectedAccount,
+                Employees = new List<Employee> { employee },
+                Roles = new SelectList(_context.Roles.ToList(), "Id", "Name"),
+                SelectedAccountId = selectedAccountId,
+                LoginId = selectedAccount.LoginId,
+                RoleId = selectedAccount.RoleId,
+                IsActive = selectedAccount.IsActive
+            };
+
+            return View("Modify", viewModel);
+        }
 
 
 
@@ -91,8 +132,6 @@ namespace AwashInsurance.Controllers
             };
             return View(viewModel);
         }
-
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -155,9 +194,6 @@ namespace AwashInsurance.Controllers
         }
 
 
-
-
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Modify(AddUserAccountViewModel model)
@@ -165,7 +201,8 @@ namespace AwashInsurance.Controllers
             try
             {
                 var existingAccount = await _context.UserAccounts
-                    .FirstOrDefaultAsync(u => u.EmployeeId == model.SelectedEmployee.Id);
+                    .FirstOrDefaultAsync(u => u.EmployeeId == model.EmployeeId);
+
 
                 if (existingAccount == null)
                 {
@@ -176,7 +213,7 @@ namespace AwashInsurance.Controllers
                 // Update the account
                 existingAccount.LoginId = model.LoginId;
                 existingAccount.RoleId = model.RoleId;
-                existingAccount.IsActive = model.IsActive; // Now using the bool value
+                existingAccount.IsActive = model.IsActive;
 
                 // Only update password if provided
                 if (!string.IsNullOrEmpty(model.Password))
