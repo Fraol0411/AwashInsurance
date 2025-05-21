@@ -1,19 +1,20 @@
-﻿ @model List<AwashInsurance.Models.Customer>
+﻿@* @model List<AwashInsurance.Models.Employee> *@
+@model AwashInsurance.Models.AddUserAccountViewModel
 
 @{
-    var selected = ViewBag.SelectedCustomer as AwashInsurance.Models.Customer;
+    var selected = ViewBag.SelectedEmployee as AwashInsurance.Models.Employee;
 }
  @using Newtonsoft.Json
 
 @{
-    ViewData["Title"] = "Remove Customer";
+    ViewData["Title"] = "Delete UserAccount";
     Layout = "~/Views/Shared/_CustomLayout.cshtml";
 }
 
 <div class="form-container">
     <!-- Form Header -->
     <div class="form-header">
-        <h2 class="form-title">Remove Customer</h2>
+        <h2 class="form-title">Delete UserAccount</h2>
     </div>
 
     @if (TempData["Success"] != null)
@@ -30,28 +31,29 @@
         </div>
     }
 
+
     @{
         string currentAction = ViewContext.RouteData.Values["action"]?.ToString() ?? "";
         string currentController = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
     }
 
     <div class="action-buttons">
-        <a href="/Custom/Add" class="action-btn @(currentAction == "Add" && currentController == "Custom" ? "active" : "")"
+        <a href="/UserAccount/Add" class="action-btn @(currentAction == "Add" && currentController == "UserAccount" ? "active" : "")"
            data-action="Add">Add</a>
-        <a href="/Custom/Modify" class="action-btn @(currentAction == "Modify" && currentController == "Custom" ? "active" : "")"
+        <a href="/UserAccount/Modify" class="action-btn @(currentAction == "Modify" && currentController == "UserAccount" ? "active" : "")"
            data-action="Modify">Modify</a>
-        <a href="/Custom/Delete" class="action-btn delete @(currentAction == "Delete" && currentController == "Custom" ? "active" : "")"
+        <a href="/UserAccount/Delete" class="action-btn delete @(currentAction == "Delete" && currentController == "UserAccount" ? "active" : "")"
            data-action="Delete">Delete</a>
-        <a href="/Custom/Inquire" class="action-btn inquire @(currentAction == "Inquire" && currentController == "Custom" ? "active" : "")"
+        <a href="/UserAccount/Inquire" class="action-btn inquire @(currentAction == "Inquire" && currentController == "UserAccount" ? "active" : "")"
            data-action="Inquire">Inquire</a>
     </div>
 
 
-
-
-    <!-- Delete Form -->
+    <!-- Registration Form -->
     <div class="form-body">
-        <form class="form-main">
+        <form asp-action="Delete" method="post" class="form-main">
+            @Html.AntiForgeryToken()
+
             <!-- Search Section -->
             <fieldset class="form-section">
                 <legend class="section-header">
@@ -61,8 +63,8 @@
 
                 <div class="form-grid">
                     <div class="form-group">
-                        <form method="get" asp-action="SearchUser">
-                            <input type="hidden" name="searchBy" value="CustomerId" />
+                        <form method="get" asp-action="SearchEmployee">
+                            <input type="hidden" name="searchBy" value="Id" />
                             <input type="hidden" name="returnView" value="Delete" /> <!-- Add this -->
                             <label class="form-label">Customer ID</label>
                             <div class="input-group">
@@ -75,8 +77,8 @@
                     </div>
 
                     <div class="form-group">
-                        <form method="get" asp-action="SearchUser">
-                            <input type="hidden" name="searchBy" value="CustomerName" />
+                        <form method="get" asp-action="SearchEmployee">
+                            <input type="hidden" name="searchBy" value="FirstName" />
                             <input type="hidden" name="returnView" value="Delete" /> <!-- Add this -->
                             <label class="form-label">Customer Name</label>
                             <div class="input-group">
@@ -89,10 +91,12 @@
                     </div>
                 </div>
 
+
+
                 <!--  radio section that populates searched value -->
                 <div class="form-group full-width">
                     <div class="search-results">
-                        <form asp-action="SelectCustomer" method="post">
+                        <form asp-action="SelectEmployee" method="post">
                             <input type="hidden" name="returnView" value="Delete" />
                             <table class="results-table">
                                 <thead>
@@ -105,19 +109,19 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @if (Model != null && Model.Any())
+                                    @if (Model != null && Model.Employees.Any())
                                     {
-                                        foreach (var customer in Model)
+                                        foreach (var employee in Model.Employees)
                                         {
                                             <tr>
                                                 <td onclick="highlightRow(this.parentElement)">
-                                                    <input type="radio" name="selectedCustomerId" value="@customer.CustomerId"
+                                                    <input type="radio" name="selectedEmployeeId" value="@employee.Id"
                                                            onclick="event.stopPropagation(); this.form.submit();" />
                                                 </td>
-                                                <td>@customer.CustomerId</td>
-                                                <td>@customer.FullName</td>
-                                                <td>@customer.Phone</td>
-                                                <td>@customer.Email</td>
+                                                <td>@employee.Id</td>
+                                                <td>@employee.FirstName</td>
+                                                <td>@employee.PhoneNumber</td>
+                                                <td>@employee.Email</td>
                                             </tr>
                                         }
                                     }
@@ -126,7 +130,7 @@
                         </form>
 
 
-                        @if (!Model.Any())
+                        @if (!Model.Employees.Any())
                         {
                             <p></p>
                         }
@@ -135,10 +139,58 @@
                 </div>
             </fieldset>
 
-            <!-- Confirmation Section (shown after selection) -->
-            @if (selected != null)
+            <!-- User Account Selection (shown after employee selection) -->
+            @if (Model.SelectedEmployee != null && Model.UserAccounts.Any())
             {
+                <form asp-action="SelectUserAccount" method="post">
+                    <input type="hidden" name="employeeId" value="@Model.SelectedEmployee.Id" />
+                    <input type="hidden" name="returnView" value="Delete" />
+                    <fieldset class="form-section">
+                        <legend class="section-header">
+                            <span class="section-number">2</span>
+                            <h3 class="section-title">Select User Account</h3>
+                        </legend>
+
+                        <table class="results-table">
+                            <thead>
+                                <tr>
+                                    <th>Select</th>
+                                    <th>Login ID</th>
+                                    <th>Is Active</th>
+                                    <th>Role</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var account in Model.UserAccounts)
+                                {
+                                    <tr>
+                                        <td onclick="highlightRow(this.parentElement)">
+                                            <input type="radio" name="selectedAccountId" value="@account.Id"
+                                                   onclick="event.stopPropagation(); this.form.submit();" />
+                                        </td>
+                                        <td>@account.LoginId</td>
+                                        <td>@account.IsActive</td>
+                                        <td>@account.Role.Name</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </fieldset>
+                </form>
+            }
+
+
+            <!-- Delete User Account (shown after account selection) -->
+            @if (Model.SelectedAccount != null)
+            {
+                var account = Model.SelectedAccount;
+
                 <form asp-action="Delete" method="post">
+
+                    <input type="hidden" name="UserAccountId" value="@Model.SelectedAccount.Id" />
+                    <input type="hidden" name="returnView" value="Delete" />
+
+                    <input type="hidden" name="UserAccountId" value="@account.Id" />
                     <fieldset class="form-section" id="deleteConfirmationSection">
                         <legend class="section-header">
                             <span class="section-number">2</span>
@@ -149,15 +201,15 @@
                             <div class="confirmation-message">
                                 <p>You are about to remove the following customer:</p>
                                 <div class="customer-details">
-                                    <p><strong>Customer ID:</strong> @selected.CustomerId</p>
-                                    <p><strong>Customer Name:</strong> @selected.FullName</p>
-                                    <p><strong>Phone Number:</strong> @selected.Phone</p>
+                                    <p><strong>Account LoginId:</strong> @account.LoginId</p>
+                                    <p><strong>Account Status:</strong> @account.IsActive</p>
+                                    <p><strong>User Role:</strong> @account.Role.Name</p>
                                 </div>
                                 <p class="warning-text">⚠️ This action cannot be undone. Are you sure you want to proceed?</p>
                             </div>
                         </div>
 
-                        <input type="hidden" name="CustomerId" value="@selected.CustomerId" />
+                        
 
                         <div class="form-group full-width">
                             <label class="form-label">Removal Reason</label>
@@ -185,12 +237,12 @@
 <link href="~/css/pagestyle.css" rel="stylesheet" />
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Focus the first input
+    document.addEventListener('DOMContentLoaded', function() {
+        // Focus first input field
         const firstInput = document.querySelector('.form-input');
         if (firstInput) firstInput.focus();
 
-        // Animate form sections
+        // Add animation to form sections when they come into view
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -208,18 +260,7 @@
         });
     });
 
-    function highlightRow(row) {
-        document.querySelectorAll('.results-table tr').forEach(r => r.classList.remove('highlight'));
-        row.classList.add('highlight');
-    }
-
-
-
-
-
-
-
-        document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function() {
         // Check if there's a saved active action in localStorage
         const savedAction = localStorage.getItem("activeAction");
 
@@ -245,5 +286,6 @@
             });
         });
     });
+
 
 </script>

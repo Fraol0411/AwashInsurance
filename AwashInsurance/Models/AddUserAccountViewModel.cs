@@ -18,6 +18,7 @@ namespace AwashInsurance.Models
 
         public int SelectedAccountId { get; set; } // 🔥 New: To track which one is selected
 
+        public int UserAccountId { get; set; }
         public int RoleId { get; set; }
         public string LoginId { get; set; }
         public string Password { get; set; }

@@ -90,7 +90,7 @@ namespace AwashInsurance.Controllers
         // SELECT USERACCOUNT FOR EMPLOYEE FROM RESULT
         // ------------------------------
         [HttpPost]
-        public IActionResult SelectUserAccount(int employeeId, int selectedAccountId)
+        public IActionResult SelectUserAccount(int employeeId, int selectedAccountId, string returnView)
         {
             var employee = _context.Employees.FirstOrDefault(e => e.Id == employeeId);
             var userAccounts = _context.UserAccounts
@@ -113,7 +113,7 @@ namespace AwashInsurance.Controllers
                 IsActive = selectedAccount.IsActive
             };
 
-            return View("Modify", viewModel);
+            return View(returnView, viewModel);
         }
 
 
@@ -201,7 +201,7 @@ namespace AwashInsurance.Controllers
             try
             {
                 var existingAccount = await _context.UserAccounts
-                    .FirstOrDefaultAsync(u => u.EmployeeId == model.EmployeeId);
+                    .FirstOrDefaultAsync(u => u.Id == model.UserAccountId);
 
 
                 if (existingAccount == null)
@@ -246,49 +246,43 @@ namespace AwashInsurance.Controllers
         [HttpGet]
         public IActionResult Delete()
         {
-            return View(new List<Employee>());
+            var viewModel = new AddUserAccountViewModel
+            {
+                Roles = new SelectList(_context.Roles.ToList(), "Id", "Name")
+            };
+            return View(viewModel);
         }
+        
 
         [HttpPost]
-        public IActionResult Delete(string EmployeeId, string RemovalReason)
+        public async Task<IActionResult> Delete(AddUserAccountViewModel model)
         {
-            if (string.IsNullOrWhiteSpace(EmployeeId))
-            {
-                TempData["Error"] = "Invalid employee ID. Cannot proceed with deletion.";
-                return View(new List<Employee>());
-            }
-
-            if (!int.TryParse(EmployeeId, out int id))
-            {
-                TempData["Error"] = "Employee ID must be a valid number.";
-                return View(new List<Employee>());
-            }
 
             try
             {
-                var employee = _context.Employees.FirstOrDefault(e => e.Id == id);
-                if (employee == null)
+                var account = _context.UserAccounts.FirstOrDefault(e => e.Id == model.UserAccountId);
+
+                if (account == null)
                 {
-                    TempData["Error"] = "Employee not found.";
+                    TempData["Error"] = "UserAccount not found.";
                     return View(new List<Employee>());
                 }
 
                 // Optional: Log reason
-                Console.WriteLine($"Employee deleted successfully. Reason: {RemovalReason}");
+                Console.WriteLine($"UserAccount deleted successfully. Reason: ");
 
-                _context.Employees.Remove(employee);
+                _context.UserAccounts.Remove(account);
                 _context.SaveChanges();
 
-                TempData["Success"] = $"Employee (ID: {id}) deleted successfully. Reason: {RemovalReason}";
-                return View(new List<Employee>());
+                TempData["Success"] = $"UserAccount (ID: {model.UserAccountId}) deleted successfully. Reason:";
+                return View(model);
             }
             catch (Exception ex)
             {
-                TempData["Error"] = "Error deleting employee: " + ex.Message;
-                return View(new List<Employee>());
+                TempData["Error"] = "Error deleting UserAccount: " + ex.Message;
+                return View(model);
             }
         }
-
 
 
 
@@ -299,7 +293,11 @@ namespace AwashInsurance.Controllers
 
         public IActionResult Inquire()
         {
-            return View(new List<Employee>());
+            var viewModel = new AddUserAccountViewModel
+            {
+                Roles = new SelectList(_context.Roles.ToList(), "Id", "Name")
+            };
+            return View(viewModel);
         }
     }
 }

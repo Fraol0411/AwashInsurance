@@ -51,7 +51,7 @@
 
     <!-- Registration Form -->
     <div class="form-body">
-        <form asp-action="Add" method="post" class="form-main">
+        <form asp-action="Modify" method="post" class="form-main">
             @Html.AntiForgeryToken()
 
             <!-- Search Section -->
@@ -206,10 +206,12 @@
 
                             <div class="form-group checkbox-group">
                                 <label class="form-label">User Active Status</label>
+                                <input type="hidden" name="IsActive" value="false" />
                                 <label class="checkbox-label">
-                                    <input type="checkbox" name="IsActive" class="form-checkbox" @(Model.IsActive ? "checked" : "") />
+                                    <input type="checkbox" name="IsActive" value="true" class="form-checkbox" @(Model.IsActive ? "checked" : "") />
                                     <span class="checkmark"></span>
                                 </label>
+
                             </div>
 
                             <div class="form-group">
